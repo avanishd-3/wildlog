@@ -1,0 +1,24 @@
+{
+  "name": "@wildlog/auth",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {},
+  "dependencies": {
+    "@wildlog/db": "workspace:*",
+    "@wildlog/env": "workspace:*",
+    "better-auth": "catalog:",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@wildlog/config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

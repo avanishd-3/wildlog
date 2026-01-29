@@ -1,0 +1,3 @@
+{
+  "extends": "@wildlog/config/tsconfig.base.json"
+}
