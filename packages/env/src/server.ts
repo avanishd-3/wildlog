@@ -5,6 +5,9 @@ import { z } from "zod";
 export const env = createEnv({
   server: {
     DATABASE_URL: z.string().min(1),
+    NEO4J_URL: z.string().min(1),
+    NEO4J_USERNAME: z.string().min(1),
+    NEO4J_PASSWORD: z.string().min(1),
     BETTER_AUTH_SECRET: z.string().min(32),
     BETTER_AUTH_URL: z.url(),
     CORS_ORIGIN: z.url(),

@@ -1,0 +1,26 @@
+name: wildlog-graph-db
+
+services:
+  neo4j:
+    image: neo4j
+    container_name: wildlog-neo4j
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      - NEO4J_AUTH=neo4j/password
+      - NEO4J_apoc_export_file_enabled=true
+      - NEO4J_apoc_import_file_enabled=true
+      - NEO4j_apoc_import_file_use__neo4j__config=true
+      - NEO4J_PLUGINS=["apoc", "graph-data-science"]
+    volumes:
+      - wildlog_neo4j_data:/data
+      - wildlog_neo4j_logs:/logs
+      - wildlog_neo4j_import:/var/lib/neo4j/import
+      - wildlog_neo4j_plugins:/plugins
+
+volumes:
+  wildlog_neo4j_data:
+  wildlog_neo4j_logs:
+  wildlog_neo4j_import:
+  wildlog_neo4j_plugins:

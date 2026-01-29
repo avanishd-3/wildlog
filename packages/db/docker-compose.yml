@@ -1,4 +1,4 @@
-name: wildlog
+name: wildlog-relational-db
 
 services:
   postgres:
