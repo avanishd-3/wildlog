@@ -2,13 +2,32 @@
 
 This project was created with [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack), a modern TypeScript stack that combines Fastify, and more.
 
-## Features
+## Tech Stack
+
+### Languages
 
 - **TypeScript** - For type safety and improved developer experience
+- **Swift** - For iOS app (using SwiftUI and Swift Data)
+
+### Server
+
 - **Fastify** - Fast, low-overhead web framework
 - **Node.js** - Runtime environment
-- **Drizzle** - TypeScript-first ORM
-- **PostgreSQL** - Database engine
+
+### Database
+
+- **PostgreSQL** - Relational Database engine
+- **Neo4J** - Graph DB
+- **Drizzle** - TypeScript-first ORM (for PostgreSQL only)
+
+### GraphQL
+
+- **Pothos** - TS schema builder for GraphQL
+- **Mercurius** - Easily run Graph QL server on Fastify
+- **Apollo client** - **_To set up_** (so iOS app can make graph ql queries)
+
+### Other
+
 - **Authentication** - Better-Auth
 - **Husky** - Git hooks for code quality
 - **Oxlint** - Oxlint + Oxfmt (linting & formatting)
@@ -24,12 +43,11 @@ pnpm install
 
 ## Database Setup
 
-This project uses PostgreSQL with Drizzle ORM.
+This project uses PostgreSQL with Drizzle ORM and Neo4j.
 
-1. Make sure you have a PostgreSQL database set up.
-2. Update your `apps/server/.env` file with your PostgreSQL connection details.
+1. Update your `apps/server/.env` file with your connection details.
 
-3. Apply the schema to your database:
+2. Apply the schema to your PostgreSQL database:
 
 ```bash
 pnpm run db:push
@@ -54,10 +72,13 @@ The API is running at [http://localhost:3000](http://localhost:3000).
 wildlog/
 ├── apps/
 │   └── server/      # Backend API (Fastify)
+│   └── ios/         # iOS app (SwiftUI)
 ├── packages/
-│   ├── api/         # API layer / business logic
 │   ├── auth/        # Authentication configuration & logic
-│   └── db/          # Database schema & queries
+│   ├── config/      # Base config
+│   ├── env/         # Make build fail if missing any env vars
+│   └── db/          # Relational database schema & queries
+│   └── graph-db/    # Graph database queries
 ```
 
 ## Available Scripts
