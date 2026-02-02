@@ -1,13 +1,13 @@
 //
-//  wildlogUITestsLaunchTests.swift
-//  wildlogUITests
+//  WildLogUITestsLaunchTests.swift
+//  WildLogUITests
 //
-//  Created by Avanish Davuluri on 1/29/26.
+//  Created by Avanish Davuluri on 2/1/26.
 //
 
 import XCTest
 
-final class wildlogUITestsLaunchTests: XCTestCase {
+final class WildLogUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

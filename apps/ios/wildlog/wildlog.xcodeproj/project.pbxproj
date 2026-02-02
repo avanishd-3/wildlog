@@ -6,63 +6,70 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		A285AAA92F3055CD00C0D9FA /* WildLog.icon in Resources */ = {isa = PBXBuildFile; fileRef = A285AAA82F3055CD00C0D9FA /* WildLog.icon */; };
+		A285AAAA2F3055CD00C0D9FA /* WildLog.icon in Resources */ = {isa = PBXBuildFile; fileRef = A285AAA82F3055CD00C0D9FA /* WildLog.icon */; };
+		A285AAAB2F3055CD00C0D9FA /* WildLog.icon in Resources */ = {isa = PBXBuildFile; fileRef = A285AAA82F3055CD00C0D9FA /* WildLog.icon */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
-		A21D2FE02F2C3E1700097DEA /* PBXContainerItemProxy */ = {
+		A27E39AB2F30542F0079200D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = A21D2FC52F2C3E1700097DEA /* Project object */;
+			containerPortal = A27E39902F30542E0079200D /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = A21D2FCC2F2C3E1700097DEA;
-			remoteInfo = wildlog;
+			remoteGlobalIDString = A27E39972F30542E0079200D;
+			remoteInfo = WildLog;
 		};
-		A21D2FEA2F2C3E1700097DEA /* PBXContainerItemProxy */ = {
+		A27E39B52F30542F0079200D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = A21D2FC52F2C3E1700097DEA /* Project object */;
+			containerPortal = A27E39902F30542E0079200D /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = A21D2FCC2F2C3E1700097DEA;
-			remoteInfo = wildlog;
+			remoteGlobalIDString = A27E39972F30542E0079200D;
+			remoteInfo = WildLog;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A21D2FCD2F2C3E1700097DEA /* wildlog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wildlog.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A21D2FDF2F2C3E1700097DEA /* wildlogTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = wildlogTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A21D2FE92F2C3E1700097DEA /* wildlogUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = wildlogUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A27E39982F30542E0079200D /* WildLog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WildLog.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A27E39AA2F30542F0079200D /* WildLogTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WildLogTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A27E39B42F30542F0079200D /* WildLogUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WildLogUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A285AAA82F3055CD00C0D9FA /* WildLog.icon */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WildLog.icon; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		A21D2FCF2F2C3E1700097DEA /* wildlog */ = {
+		A27E399A2F30542E0079200D /* WildLog */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = wildlog;
+			path = WildLog;
 			sourceTree = "<group>";
 		};
-		A21D2FE22F2C3E1700097DEA /* wildlogTests */ = {
+		A27E39AD2F30542F0079200D /* WildLogTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = wildlogTests;
+			path = WildLogTests;
 			sourceTree = "<group>";
 		};
-		A21D2FEC2F2C3E1700097DEA /* wildlogUITests */ = {
+		A27E39B72F30542F0079200D /* WildLogUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = wildlogUITests;
+			path = WildLogUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		A21D2FCA2F2C3E1700097DEA /* Frameworks */ = {
+		A27E39952F30542E0079200D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A21D2FDC2F2C3E1700097DEA /* Frameworks */ = {
+		A27E39A72F30542F0079200D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A21D2FE62F2C3E1700097DEA /* Frameworks */ = {
+		A27E39B12F30542F0079200D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -72,22 +79,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A21D2FC42F2C3E1700097DEA = {
+		A27E398F2F30542E0079200D = {
 			isa = PBXGroup;
 			children = (
-				A21D2FCF2F2C3E1700097DEA /* wildlog */,
-				A21D2FE22F2C3E1700097DEA /* wildlogTests */,
-				A21D2FEC2F2C3E1700097DEA /* wildlogUITests */,
-				A21D2FCE2F2C3E1700097DEA /* Products */,
+				A27E399A2F30542E0079200D /* WildLog */,
+				A27E39AD2F30542F0079200D /* WildLogTests */,
+				A27E39B72F30542F0079200D /* WildLogUITests */,
+				A27E39992F30542E0079200D /* Products */,
+				A285AAA82F3055CD00C0D9FA /* WildLog.icon */,
 			);
 			sourceTree = "<group>";
 		};
-		A21D2FCE2F2C3E1700097DEA /* Products */ = {
+		A27E39992F30542E0079200D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A21D2FCD2F2C3E1700097DEA /* wildlog.app */,
-				A21D2FDF2F2C3E1700097DEA /* wildlogTests.xctest */,
-				A21D2FE92F2C3E1700097DEA /* wildlogUITests.xctest */,
+				A27E39982F30542E0079200D /* WildLog.app */,
+				A27E39AA2F30542F0079200D /* WildLogTests.xctest */,
+				A27E39B42F30542F0079200D /* WildLogUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,158 +103,161 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A21D2FCC2F2C3E1700097DEA /* wildlog */ = {
+		A27E39972F30542E0079200D /* WildLog */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A21D2FF32F2C3E1700097DEA /* Build configuration list for PBXNativeTarget "wildlog" */;
+			buildConfigurationList = A27E39BE2F30542F0079200D /* Build configuration list for PBXNativeTarget "WildLog" */;
 			buildPhases = (
-				A21D2FC92F2C3E1700097DEA /* Sources */,
-				A21D2FCA2F2C3E1700097DEA /* Frameworks */,
-				A21D2FCB2F2C3E1700097DEA /* Resources */,
+				A27E39942F30542E0079200D /* Sources */,
+				A27E39952F30542E0079200D /* Frameworks */,
+				A27E39962F30542E0079200D /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				A21D2FCF2F2C3E1700097DEA /* wildlog */,
+				A27E399A2F30542E0079200D /* WildLog */,
 			);
-			name = wildlog;
+			name = WildLog;
 			packageProductDependencies = (
 			);
-			productName = wildlog;
-			productReference = A21D2FCD2F2C3E1700097DEA /* wildlog.app */;
+			productName = WildLog;
+			productReference = A27E39982F30542E0079200D /* WildLog.app */;
 			productType = "com.apple.product-type.application";
 		};
-		A21D2FDE2F2C3E1700097DEA /* wildlogTests */ = {
+		A27E39A92F30542F0079200D /* WildLogTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A21D2FF62F2C3E1700097DEA /* Build configuration list for PBXNativeTarget "wildlogTests" */;
+			buildConfigurationList = A27E39C12F30542F0079200D /* Build configuration list for PBXNativeTarget "WildLogTests" */;
 			buildPhases = (
-				A21D2FDB2F2C3E1700097DEA /* Sources */,
-				A21D2FDC2F2C3E1700097DEA /* Frameworks */,
-				A21D2FDD2F2C3E1700097DEA /* Resources */,
+				A27E39A62F30542F0079200D /* Sources */,
+				A27E39A72F30542F0079200D /* Frameworks */,
+				A27E39A82F30542F0079200D /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				A21D2FE12F2C3E1700097DEA /* PBXTargetDependency */,
+				A27E39AC2F30542F0079200D /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				A21D2FE22F2C3E1700097DEA /* wildlogTests */,
+				A27E39AD2F30542F0079200D /* WildLogTests */,
 			);
-			name = wildlogTests;
+			name = WildLogTests;
 			packageProductDependencies = (
 			);
-			productName = wildlogTests;
-			productReference = A21D2FDF2F2C3E1700097DEA /* wildlogTests.xctest */;
+			productName = WildLogTests;
+			productReference = A27E39AA2F30542F0079200D /* WildLogTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		A21D2FE82F2C3E1700097DEA /* wildlogUITests */ = {
+		A27E39B32F30542F0079200D /* WildLogUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A21D2FF92F2C3E1700097DEA /* Build configuration list for PBXNativeTarget "wildlogUITests" */;
+			buildConfigurationList = A27E39C42F30542F0079200D /* Build configuration list for PBXNativeTarget "WildLogUITests" */;
 			buildPhases = (
-				A21D2FE52F2C3E1700097DEA /* Sources */,
-				A21D2FE62F2C3E1700097DEA /* Frameworks */,
-				A21D2FE72F2C3E1700097DEA /* Resources */,
+				A27E39B02F30542F0079200D /* Sources */,
+				A27E39B12F30542F0079200D /* Frameworks */,
+				A27E39B22F30542F0079200D /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				A21D2FEB2F2C3E1700097DEA /* PBXTargetDependency */,
+				A27E39B62F30542F0079200D /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				A21D2FEC2F2C3E1700097DEA /* wildlogUITests */,
+				A27E39B72F30542F0079200D /* WildLogUITests */,
 			);
-			name = wildlogUITests;
+			name = WildLogUITests;
 			packageProductDependencies = (
 			);
-			productName = wildlogUITests;
-			productReference = A21D2FE92F2C3E1700097DEA /* wildlogUITests.xctest */;
+			productName = WildLogUITests;
+			productReference = A27E39B42F30542F0079200D /* WildLogUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		A21D2FC52F2C3E1700097DEA /* Project object */ = {
+		A27E39902F30542E0079200D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
-					A21D2FCC2F2C3E1700097DEA = {
+					A27E39972F30542E0079200D = {
 						CreatedOnToolsVersion = 16.2;
 					};
-					A21D2FDE2F2C3E1700097DEA = {
+					A27E39A92F30542F0079200D = {
 						CreatedOnToolsVersion = 16.2;
-						TestTargetID = A21D2FCC2F2C3E1700097DEA;
+						TestTargetID = A27E39972F30542E0079200D;
 					};
-					A21D2FE82F2C3E1700097DEA = {
+					A27E39B32F30542F0079200D = {
 						CreatedOnToolsVersion = 16.2;
-						TestTargetID = A21D2FCC2F2C3E1700097DEA;
+						TestTargetID = A27E39972F30542E0079200D;
 					};
 				};
 			};
-			buildConfigurationList = A21D2FC82F2C3E1700097DEA /* Build configuration list for PBXProject "wildlog" */;
+			buildConfigurationList = A27E39932F30542E0079200D /* Build configuration list for PBXProject "WildLog" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = A21D2FC42F2C3E1700097DEA;
+			mainGroup = A27E398F2F30542E0079200D;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = A21D2FCE2F2C3E1700097DEA /* Products */;
+			productRefGroup = A27E39992F30542E0079200D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A21D2FCC2F2C3E1700097DEA /* wildlog */,
-				A21D2FDE2F2C3E1700097DEA /* wildlogTests */,
-				A21D2FE82F2C3E1700097DEA /* wildlogUITests */,
+				A27E39972F30542E0079200D /* WildLog */,
+				A27E39A92F30542F0079200D /* WildLogTests */,
+				A27E39B32F30542F0079200D /* WildLogUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		A21D2FCB2F2C3E1700097DEA /* Resources */ = {
+		A27E39962F30542E0079200D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A285AAAB2F3055CD00C0D9FA /* WildLog.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A21D2FDD2F2C3E1700097DEA /* Resources */ = {
+		A27E39A82F30542F0079200D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A285AAA92F3055CD00C0D9FA /* WildLog.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A21D2FE72F2C3E1700097DEA /* Resources */ = {
+		A27E39B22F30542F0079200D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A285AAAA2F3055CD00C0D9FA /* WildLog.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		A21D2FC92F2C3E1700097DEA /* Sources */ = {
+		A27E39942F30542E0079200D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A21D2FDB2F2C3E1700097DEA /* Sources */ = {
+		A27E39A62F30542F0079200D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A21D2FE52F2C3E1700097DEA /* Sources */ = {
+		A27E39B02F30542F0079200D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -256,20 +267,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		A21D2FE12F2C3E1700097DEA /* PBXTargetDependency */ = {
+		A27E39AC2F30542F0079200D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A21D2FCC2F2C3E1700097DEA /* wildlog */;
-			targetProxy = A21D2FE02F2C3E1700097DEA /* PBXContainerItemProxy */;
+			target = A27E39972F30542E0079200D /* WildLog */;
+			targetProxy = A27E39AB2F30542F0079200D /* PBXContainerItemProxy */;
 		};
-		A21D2FEB2F2C3E1700097DEA /* PBXTargetDependency */ = {
+		A27E39B62F30542F0079200D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A21D2FCC2F2C3E1700097DEA /* wildlog */;
-			targetProxy = A21D2FEA2F2C3E1700097DEA /* PBXContainerItemProxy */;
+			target = A27E39972F30542E0079200D /* WildLog */;
+			targetProxy = A27E39B52F30542F0079200D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		A21D2FF12F2C3E1700097DEA /* Debug */ = {
+		A27E39BC2F30542F0079200D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -332,7 +343,7 @@
 			};
 			name = Debug;
 		};
-		A21D2FF22F2C3E1700097DEA /* Release */ = {
+		A27E39BD2F30542F0079200D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -388,28 +399,31 @@
 			};
 			name = Release;
 		};
-		A21D2FF42F2C3E1700097DEA /* Debug */ = {
+		A27E39BF2F30542F0079200D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = WildLog;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"wildlog/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"WildLog/Preview Content\"";
 				DEVELOPMENT_TEAM = US3QA8NCX7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = wildlog.wildlog;
+				PRODUCT_BUNDLE_IDENTIFIER = wildlog.WildLog;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -417,28 +431,31 @@
 			};
 			name = Debug;
 		};
-		A21D2FF52F2C3E1700097DEA /* Release */ = {
+		A27E39C02F30542F0079200D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = WildLog;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"wildlog/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"WildLog/Preview Content\"";
 				DEVELOPMENT_TEAM = US3QA8NCX7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = wildlog.wildlog;
+				PRODUCT_BUNDLE_IDENTIFIER = wildlog.WildLog;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -446,7 +463,7 @@
 			};
 			name = Release;
 		};
-		A21D2FF72F2C3E1700097DEA /* Debug */ = {
+		A27E39C22F30542F0079200D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -456,16 +473,16 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = wildlog.wildlogTests;
+				PRODUCT_BUNDLE_IDENTIFIER = wildlog.WildLogTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/wildlog.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/wildlog";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WildLog.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WildLog";
 			};
 			name = Debug;
 		};
-		A21D2FF82F2C3E1700097DEA /* Release */ = {
+		A27E39C32F30542F0079200D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -475,16 +492,16 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = wildlog.wildlogTests;
+				PRODUCT_BUNDLE_IDENTIFIER = wildlog.WildLogTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/wildlog.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/wildlog";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WildLog.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WildLog";
 			};
 			name = Release;
 		};
-		A21D2FFA2F2C3E1700097DEA /* Debug */ = {
+		A27E39C52F30542F0079200D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -492,16 +509,16 @@
 				DEVELOPMENT_TEAM = US3QA8NCX7;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = wildlog.wildlogUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = wildlog.WildLogUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = wildlog;
+				TEST_TARGET_NAME = WildLog;
 			};
 			name = Debug;
 		};
-		A21D2FFB2F2C3E1700097DEA /* Release */ = {
+		A27E39C62F30542F0079200D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -509,55 +526,55 @@
 				DEVELOPMENT_TEAM = US3QA8NCX7;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = wildlog.wildlogUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = wildlog.WildLogUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = wildlog;
+				TEST_TARGET_NAME = WildLog;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A21D2FC82F2C3E1700097DEA /* Build configuration list for PBXProject "wildlog" */ = {
+		A27E39932F30542E0079200D /* Build configuration list for PBXProject "WildLog" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A21D2FF12F2C3E1700097DEA /* Debug */,
-				A21D2FF22F2C3E1700097DEA /* Release */,
+				A27E39BC2F30542F0079200D /* Debug */,
+				A27E39BD2F30542F0079200D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A21D2FF32F2C3E1700097DEA /* Build configuration list for PBXNativeTarget "wildlog" */ = {
+		A27E39BE2F30542F0079200D /* Build configuration list for PBXNativeTarget "WildLog" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A21D2FF42F2C3E1700097DEA /* Debug */,
-				A21D2FF52F2C3E1700097DEA /* Release */,
+				A27E39BF2F30542F0079200D /* Debug */,
+				A27E39C02F30542F0079200D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A21D2FF62F2C3E1700097DEA /* Build configuration list for PBXNativeTarget "wildlogTests" */ = {
+		A27E39C12F30542F0079200D /* Build configuration list for PBXNativeTarget "WildLogTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A21D2FF72F2C3E1700097DEA /* Debug */,
-				A21D2FF82F2C3E1700097DEA /* Release */,
+				A27E39C22F30542F0079200D /* Debug */,
+				A27E39C32F30542F0079200D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A21D2FF92F2C3E1700097DEA /* Build configuration list for PBXNativeTarget "wildlogUITests" */ = {
+		A27E39C42F30542F0079200D /* Build configuration list for PBXNativeTarget "WildLogUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A21D2FFA2F2C3E1700097DEA /* Debug */,
-				A21D2FFB2F2C3E1700097DEA /* Release */,
+				A27E39C52F30542F0079200D /* Debug */,
+				A27E39C62F30542F0079200D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = A21D2FC52F2C3E1700097DEA /* Project object */;
+	rootObject = A27E39902F30542E0079200D /* Project object */;
 }

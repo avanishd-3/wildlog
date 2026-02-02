@@ -1,15 +1,15 @@
 //
-//  wildlogApp.swift
-//  wildlog
+//  WildLogApp.swift
+//  WildLog
 //
-//  Created by Avanish Davuluri on 1/29/26.
+//  Created by Avanish Davuluri on 2/1/26.
 //
 
 import SwiftUI
 import SwiftData
 
 @main
-struct wildlogApp: App {
+struct WildLogApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,

@@ -1,8 +1,8 @@
 //
 //  Item.swift
-//  wildlog
+//  WildLog
 //
-//  Created by Avanish Davuluri on 1/29/26.
+//  Created by Avanish Davuluri on 2/1/26.
 //
 
 import Foundation
