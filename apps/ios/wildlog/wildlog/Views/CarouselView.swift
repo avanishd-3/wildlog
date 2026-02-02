@@ -23,7 +23,7 @@ struct CarouselView: View {
                     Image(trip)
                         .resizable()
                         .scaledToFill()
-                        .frame(width: 150, height: 300)
+                        .frame(width: 150, height: 250)
                         .clipShape(RoundedRectangle(cornerRadius: 16))
                         .padding(.horizontal, 10)
                 }

@@ -10,10 +10,11 @@ import SwiftUI
 struct HomeView: View {
     var body: some View {
         VStack {
+            Text("Popular this week")
+            CarouselView()
             Spacer()
-            Text("Home View")
-                .font(.largeTitle)
-            Spacer()
+            Text("Popular with friends")
+            CarouselView()
         }.frame(maxWidth: .infinity)
     }
 }
