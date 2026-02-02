@@ -2,60 +2,42 @@
 //  ContentView.swift
 //  WildLog
 //
-//  Created by Avanish Davuluri on 2/1/26.
+//  Created by Avanish Davuluri on 2/2/26.
 //
 
+// Landing page view for the app
+// Just contains all the 
+
 import SwiftUI
-import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
-
+    @State private var selectedTab: Tabs = .home
+    
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-                    }
+        if #available(iOS 18.0, *) {
+            TabView(selection: $selectedTab) {
+                Tab("Home", systemImage: "house", value: .home) {
+                    HomeView()
                 }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
+                Tab("Your Lists", systemImage: "list.bullet", value: .lists) {
+                    ListView()
                 }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
+                Tab("Search", systemImage: "magnifyingglass", value: .map) {
+                    SearchView()
                 }
-            }
-        } detail: {
-            Text("Select an item")
-        }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
+                Tab("Reviews", systemImage: "sparkles", value: .reviews) {
+                    ReviewView()
+                }
+                Tab("Profile", systemImage: "person.crop.circle", value: .profile) {
+                    ProfileView()
+                }
+            }.accentColor(.green)
+        } else {
+            // Fallback on earlier versions
         }
     }
 }
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
 }
