@@ -36,9 +36,26 @@
 		A285AAA82F3055CD00C0D9FA /* WildLog.icon */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WildLog.icon; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		A28823022F31473100148C3E /* Exceptions for "WildLog" folder in "WildLogUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Views/ContentView.swift,
+				Views/ListView.swift,
+				Views/ProfileView.swift,
+				Views/ReviewView.swift,
+				Views/SearchView.swift,
+			);
+			target = A27E39B32F30542F0079200D /* WildLogUITests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		A27E399A2F30542E0079200D /* WildLog */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A28823022F31473100148C3E /* Exceptions for "WildLog" folder in "WildLogUITests" target */,
+			);
 			path = WildLog;
 			sourceTree = "<group>";
 		};

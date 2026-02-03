@@ -103,6 +103,10 @@ So, to develop the mobile app, **only use Xcode** and don't worry about Turborep
 
 In the Xcode top middle panel, to the left of the simulator settings, there is a button that says WildLog. If you click that, you can edit the schemes. Schemes configure how you perform your actions (e.g., build, run, test, etc...). Usually, there's one for each app (e.g., one iOS scheme and one watch scheme), but we're only doing an iOS app, so we only have 1 scheme for now. Schemes are where you set environment variables, among other things.
 
+#### Git
+Comitting in Xcode **will not work**, because it cannot run the husky linter. So, review the changes in Xcode and commit in the termianl or somewhere else.
+Switching branches in Xcode will work, though.
+
 ### Why is there a WildLog/WildLog
 
 The first WildLog is the workspace, where tests and dependencies live. The second WildLog is the app itself. Technically, the workspace can contain multiple apps and frameworks, but we will not be doing that,
@@ -129,7 +133,7 @@ I've left the .icon file in the project. It serves as the ***single source of tr
 
 ### Other
 
-The minimum deployment is iOS 18.2, as most people have not updated to iOS 26. I think for the Swift UI nice stuff, we only need iOS 17 at a minimum, but having it higher isn't that bad. Once we're done, we can set the target down if we can. If there's something that iOS 26 makes nicer, which I doubt, we can think about bumping up the minimum deployment. But most of the Swift UI nice stuff is in iOS 17. I think Swift Data might be buggy on iOS 17, so if we use that a lot, we shouldn't downgrade the minimum deployment.
+The minimum deployment is iOS 18, which is about 88-90% of all iOS users. Wer're already using some stuff from iOS 18, like the new TabView and there is no fallback implemented. If we add fallbacks to everything we use that's at least iOS 18, we can downgrade the minimum deployment to iOS 17. However, Swift Data may be buggy with iOS 17, so if we have issues with it, we shouldn't worry about reducing the minimum deployument.
 
 I set the App categpry for social networking. but category only matters when publishing to the App store, so this shouldn't be too much of a concern.
 
