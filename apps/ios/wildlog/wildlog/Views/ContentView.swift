@@ -13,6 +13,8 @@ import SwiftUI
 struct ContentView: View {
     @State private var selectedTab: Tabs = .home
     
+    @EnvironmentObject private var launchScreenState: LaunchScreenStateManager
+    
     var body: some View {
         if #available(iOS 18.0, *) {
             TabView(selection: $selectedTab) {
@@ -31,13 +33,23 @@ struct ContentView: View {
                 Tab("Profile", systemImage: "person.crop.circle", value: .profile) {
                     ProfileView()
                 }
-            }.accentColor(.green)
+            }
+            .accentColor(.green)
+            .task {
+                // TODO: Replace with actual API call
+                // This is just a placeholder for now
+                try? await Task.sleep(for: .seconds(3))
+                self.launchScreenState.dismiss()
+            }
         } else {
             // Fallback on earlier versions
         }
     }
 }
 
-#Preview {
-    ContentView()
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+            .environmentObject(LaunchScreenStateManager())
+    }
 }
