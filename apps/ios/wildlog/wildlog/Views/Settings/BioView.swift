@@ -27,7 +27,7 @@ struct BioView: View {
                         isFocused = false
                         dimiss()
                     }
-                    .tint(.green) // Save should be green
+                    .tint(Color(.systemGreen)) // Save should be green
                 }
             }
             // toolbarRole is iOS 16+
