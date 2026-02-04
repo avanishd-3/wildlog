@@ -149,7 +149,7 @@ See the README in the Components folder for when to use the custom components. F
 
 ### Other
 
-The minimum deployment is iOS 18, which is about 88-90% of all iOS users. Wer're already using some stuff from iOS 18, like the new TabView and there is no fallback implemented. If we add fallbacks to everything we use that's at least iOS 18, we can downgrade the minimum deployment to iOS 17. However, Swift Data may be buggy with iOS 17, so if we have issues with it, we shouldn't worry about reducing the minimum deployument.
+The minimum deployment is iOS 18, which is about 88-90% of all iOS users. We might need some Map stuff that requires iOS 18, but right now, we're at iOS 17+ with the Map stuff. So, we might be able to downgrade the minimum deployment. However, Swift Data may be buggy with iOS 17, so if we have issues with it, we shouldn't worry about reducing the minimum deployument.
 
 I set the App categpry for social networking. but category only matters when publishing to the App store, so this shouldn't be too much of a concern.
 
