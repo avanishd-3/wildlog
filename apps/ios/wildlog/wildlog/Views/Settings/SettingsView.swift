@@ -1,5 +1,5 @@
 //
-//  SettingsPageView.swift
+//  SettingsView.swift
 //  WildLog
 //
 //  Created by Avanish Davuluri on 2/3/26.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SettingsPageView: View {
+struct SettingsView: View {
     
     @AppStorage(.settingsNameKey)
     private var name: String = ""
@@ -68,5 +68,5 @@ struct SettingsPageView: View {
 }
 
 #Preview {
-    SettingsPageView()
+    SettingsView()
 }

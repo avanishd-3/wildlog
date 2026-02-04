@@ -14,7 +14,7 @@ struct ProfileView: View {
             // Should not be scrollable
             HStack {
                 NavigationLink {
-                    SettingsPageView()
+                    SettingsView()
                 } label: {
                     Image(systemName: "gearshape")
                         .font(.title2)
