@@ -46,6 +46,7 @@
 				Views/ProfileView.swift,
 				Views/ReviewView.swift,
 				Views/SearchView.swift,
+				Views/SettingsView.swift,
 			);
 			target = A27E39B32F30542F0079200D /* WildLogUITests */;
 		};
@@ -197,7 +198,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1620;
-				LastUpgradeCheck = 1620;
+				LastUpgradeCheck = 1630;
 				TargetAttributes = {
 					A27E39972F30542E0079200D = {
 						CreatedOnToolsVersion = 16.2;
@@ -212,7 +213,7 @@
 					};
 				};
 			};
-			buildConfigurationList = A27E39932F30542E0079200D /* Build configuration list for PBXProject "WildLog" */;
+			buildConfigurationList = A27E39932F30542E0079200D /* Build configuration list for PBXProject "wildlog" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -426,7 +427,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"WildLog/Preview Content\"";
-				DEVELOPMENT_TEAM = US3QA8NCX7;
+				DEVELOPMENT_TEAM = Y43F7CMHZ5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
@@ -458,7 +459,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"WildLog/Preview Content\"";
-				DEVELOPMENT_TEAM = US3QA8NCX7;
+				DEVELOPMENT_TEAM = Y43F7CMHZ5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
@@ -556,7 +557,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A27E39932F30542E0079200D /* Build configuration list for PBXProject "WildLog" */ = {
+		A27E39932F30542E0079200D /* Build configuration list for PBXProject "wildlog" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A27E39BC2F30542F0079200D /* Debug */,
