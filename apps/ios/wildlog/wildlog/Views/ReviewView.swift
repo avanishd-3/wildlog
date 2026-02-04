@@ -8,13 +8,25 @@
 import SwiftUI
 
 struct ReviewView: View {
+    @State private var selectedTab = 0
+    
     var body: some View {
         VStack {
+            // Tab Picker
+            Picker("", selection: $selectedTab) {
+                Text("Friends").tag(0)
+                Text("You").tag(1)
+            }
+            .pickerStyle(.segmented)
+            .padding()
+            
             Spacer()
-            Text("Review View")
-                .font(.largeTitle)
+            
+            Text("Reviews")
+                .foregroundColor(.secondary)
+            
             Spacer()
-        }.frame(maxWidth: .infinity)
+        }
     }
 }
 
