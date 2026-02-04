@@ -82,11 +82,6 @@ struct ProfileView: View {
                     .padding(.horizontal)
 
                     // Form-style sections
-                    Form {
-                        Section(header: Text("Your Outdoors")) {
-                            Text("This is a sample form section.")
-                        }
-                    }
                     VStack(spacing: 24) {
                         // 1st part is text
                         // 2nd part is destination view
