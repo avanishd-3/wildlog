@@ -6,15 +6,23 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct SearchView: View {
+    // Center map on user location
+    @State private var position: MapCameraPosition = .userLocation(fallback: .automatic)
+    
+    
     var body: some View {
-        VStack {
-            Spacer()
-            Text("Search View")
-                .font(.largeTitle)
-            Spacer()
-        }.frame(maxWidth: .infinity)
+        Map(position: $position)
+            .mapStyle(.standard(elevation: .realistic))
+            .mapControls {
+                // Add all of these to get native experience
+                MapUserLocationButton()
+                MapScaleView()
+                MapCompass()
+                MapPitchToggle()
+            }
     }
 }
 
