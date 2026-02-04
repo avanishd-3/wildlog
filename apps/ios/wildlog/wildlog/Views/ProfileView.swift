@@ -62,6 +62,7 @@ struct ProfileView: View {
                         }
                     }
                     .padding(.horizontal)
+                    
 
                     // Recent Activity
                     VStack(alignment: .leading, spacing: 8) {
@@ -69,6 +70,8 @@ struct ProfileView: View {
                             .font(.headline)
 
                         HStack {
+                            // Placeholder
+                            // TODO: Replace
                             ForEach(0..<4) { _ in
                                 RoundedRectangle(cornerRadius: 16)
                                     .fill(Color(.systemGray5))
@@ -85,6 +88,9 @@ struct ProfileView: View {
                         }
                     }
                     VStack(spacing: 24) {
+                        // 1st part is text
+                        // 2nd part is destination view
+                        // TODO: Replace placeholder text("") with actual view
                         CustomFormSection("Your Outdoors") {
                             CustomFormRow("Parks") {
                                 Text("Parks")
