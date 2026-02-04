@@ -131,6 +131,22 @@ Once you have the images, you can drag and drop them in the Xcode grid for the a
 
 I've left the .icon file in the project. It serves as the ***single source of truth*** for what the icon should look like in all conditions. If you update the icon, change the file after you're done updating WildLog.appiconset.
 
+
+### Color
+
+When doing anything with Color, **always** use Color(.systemColor). This is much more accessible than using Color.green, for example.
+People can re-bind the colors in their phones to different ones, and they also change with light/dark mode. For example, dark mode uses a darker shade of green.
+
+There's a WWDC video on this somewhere. Watch it if you need more info.
+
+### Navigation
+
+**Do not** use NavigationLink with destination. This creates the view with the navigation link, instead of when the user clicks into that view. This is super inefficient when there's a lot of NavigationLinks present in a view.
+
+### Custom UI components
+
+See the README in the Components folder for when to use the custom components. For most use cases, you shouldn't need them.
+
 ### Other
 
 The minimum deployment is iOS 18, which is about 88-90% of all iOS users. Wer're already using some stuff from iOS 18, like the new TabView and there is no fallback implemented. If we add fallbacks to everything we use that's at least iOS 18, we can downgrade the minimum deployment to iOS 17. However, Swift Data may be buggy with iOS 17, so if we have issues with it, we shouldn't worry about reducing the minimum deployument.
