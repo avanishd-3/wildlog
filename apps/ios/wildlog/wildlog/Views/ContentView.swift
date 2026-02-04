@@ -34,7 +34,7 @@ struct ContentView: View {
                     ProfileView()
                 }
             }
-            .accentColor(.green)
+            .accentColor(Color(.systemGreen))
             .task {
                 // TODO: Replace with actual API call
                 // This is just a placeholder for now

@@ -29,7 +29,7 @@ struct LaunchScreenView: View {
         // Ignore safe area makes the top part near the pill green too
         // I think using green is fine for both light and dark mode
         // The background remover tool I used isn't perfect, so using green hides this too
-        Color.green.ignoresSafeArea()
+        Color(.systemGreen).ignoresSafeArea()
     }
     
     private let animationTimer = Timer.publish(every: 0.5, on: .current, in: .common).autoconnect()
