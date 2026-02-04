@@ -14,7 +14,10 @@ struct SearchView: View {
     
     
     var body: some View {
-        Map(position: $position)
+        Map(position: $position) {
+            // Keep location circle even if user moves around
+            UserAnnotation()
+        }
             .mapStyle(.standard(elevation: .realistic))
             .mapControls {
                 // Add all of these to get native experience
