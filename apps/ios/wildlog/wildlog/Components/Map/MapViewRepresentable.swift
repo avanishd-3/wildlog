@@ -50,13 +50,14 @@ struct MapViewRepresentable: UIViewRepresentable {
             blur.widthAnchor.constraint(equalToConstant: 44),
             blur.heightAnchor.constraint(equalToConstant: 44),
             
-            blur.trailingAnchor.constraint(equalTo: mapView.trailingAnchor, constant: -16),
-            blur.bottomAnchor.constraint(equalTo: mapView.bottomAnchor, constant: -16),
+//            blur.trailingAnchor.constraint(equalTo: mapView.trailingAnchor, constant: -16),
+//            blur.bottomAnchor.constraint(equalTo: mapView.bottomAnchor, constant: -16),
+            blur.leadingAnchor.constraint(greaterThanOrEqualTo: mapView.leadingAnchor, constant: 16),
+            blur.topAnchor.constraint(equalTo: mapView.topAnchor, constant: 36),
             
             trackingButton.centerXAnchor.constraint(equalTo: blur.centerXAnchor),
             trackingButton.centerYAnchor.constraint(equalTo: blur.centerYAnchor),
         ])
-        
         mapView.delegate = context.coordinator
         return mapView
     }
