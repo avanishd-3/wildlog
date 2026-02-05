@@ -143,6 +143,10 @@ There's a WWDC video on this somewhere. Watch it if you need more info.
 
 **Do not** use NavigationLink with destination. This creates the view with the navigation link, instead of when the user clicks into that view. This is super inefficient when there's a lot of NavigationLinks present in a view.
 
+### Maps
+
+Unfortunately, map stuff doesn't work in the preview. Use the simulator instead.
+
 ### Custom UI components
 
 See the README in the Components folder for when to use the custom components. For most use cases, you shouldn't need them.
