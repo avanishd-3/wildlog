@@ -57,11 +57,25 @@ struct MapViewRepresentable: UIViewRepresentable {
             trackingButton.centerYAnchor.constraint(equalTo: blur.centerYAnchor),
         ])
         
+        mapView.delegate = context.coordinator
         return mapView
     }
     
     func updateUIView(_ view: MKMapView, context: Context) {
         // Update map configuration if needed
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    
+    // This is for communicating marker changes to map view
+    class Coordinator: NSObject, MKMapViewDelegate {
+        var parent: MapViewRepresentable
+        
+        init(_ parent: MapViewRepresentable) {
+            self.parent = parent
+        }
     }
     
     static func dismantleUIView(_ uiView: MKMapView, coordinator: Coordinator) {
