@@ -6,15 +6,12 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct SearchView: View {
+    
     var body: some View {
-        VStack {
-            Spacer()
-            Text("Search View")
-                .font(.largeTitle)
-            Spacer()
-        }.frame(maxWidth: .infinity)
+        CustomMapView()
     }
 }
 
