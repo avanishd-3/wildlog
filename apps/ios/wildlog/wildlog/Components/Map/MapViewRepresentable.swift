@@ -5,6 +5,9 @@
 //  Created by Avanish Davuluri on 2/4/26.
 //
 
+
+// See: https://stackoverflow.com/questions/79502649/swiftui-tabbar-appearance-doesnt-work-in-only-those-views-which-have-map
+
 import SwiftUI
 import MapKit
 
