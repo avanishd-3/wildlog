@@ -9,23 +9,9 @@ import SwiftUI
 import MapKit
 
 struct SearchView: View {
-    // Center map on user location
-    @State private var position: MapCameraPosition = .userLocation(fallback: .automatic)
-    
     
     var body: some View {
-        Map(position: $position) {
-            // Keep location circle even if user moves around
-            UserAnnotation()
-        }
-            .mapStyle(.standard(elevation: .realistic))
-            .mapControls {
-                // Add all of these to get native experience
-                MapUserLocationButton()
-                MapScaleView()
-                MapCompass()
-                MapPitchToggle()
-            }
+        CustomMapView()
     }
 }
 
