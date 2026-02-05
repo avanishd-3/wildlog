@@ -33,13 +33,28 @@ struct MapViewRepresentable: UIViewRepresentable {
         // Equivalent to MapUserLocationButton()
         let trackingButton = MKUserTrackingButton(mapView: mapView)
         trackingButton.translatesAutoresizingMaskIntoConstraints = false
-        mapView.addSubview(trackingButton)
+        
+        // Blur button so text doesn't make it hard to see
+        let blur = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterial))
+        blur.translatesAutoresizingMaskIntoConstraints = false
+        blur.layer.cornerRadius = 10
+        blur.clipsToBounds = true
+        
+        blur.contentView.addSubview(trackingButton)
+        
+        mapView.addSubview(blur)
         
         // Put layout on top right
         // TODO: Make this look more native and not overlap content
         NSLayoutConstraint.activate([
-            trackingButton.trailingAnchor.constraint(equalTo: mapView.trailingAnchor, constant: -16),
-            trackingButton.topAnchor.constraint(equalTo: mapView.topAnchor, constant: 8)
+            blur.widthAnchor.constraint(equalToConstant: 44),
+            blur.heightAnchor.constraint(equalToConstant: 44),
+            
+            blur.trailingAnchor.constraint(equalTo: mapView.trailingAnchor, constant: -16),
+            blur.bottomAnchor.constraint(equalTo: mapView.bottomAnchor, constant: -16),
+            
+            trackingButton.centerXAnchor.constraint(equalTo: blur.centerXAnchor),
+            trackingButton.centerYAnchor.constraint(equalTo: blur.centerYAnchor),
         ])
         
         return mapView

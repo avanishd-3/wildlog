@@ -17,3 +17,7 @@ struct CustomMapView: View {
         }
     }
 }
+
+#Preview {
+    CustomMapView()
+}
