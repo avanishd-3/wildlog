@@ -7,13 +7,16 @@
 
 
 // See: https://stackoverflow.com/questions/79502649/swiftui-tabbar-appearance-doesnt-work-in-only-those-views-which-have-map
+// We need to customize the map using the old-school approach b/c we need custom tab color and will eventually add filter buttons
 
 import SwiftUI
 import MapKit
 
 struct MapViewRepresentable: UIViewRepresentable {
+    // UIViewRepresentable is a way to put UI Kit views into the Swift UI view hierarchy
+    
     func makeUIView(context: Context) -> MKMapView {
-        let mapView = MKMapView()
+        let mapView = CustomMkMapView()
         
         // Map style
         let config = MKStandardMapConfiguration()
