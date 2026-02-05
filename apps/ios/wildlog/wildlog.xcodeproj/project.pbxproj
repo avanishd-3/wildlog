@@ -44,9 +44,9 @@
 				Views/ContentView.swift,
 				Views/LaunchScreenView.swift,
 				Views/ListView.swift,
+				Views/Map/SheetView.swift,
 				Views/ProfileView.swift,
 				Views/ReviewView.swift,
-				Views/SearchView.swift,
 				Views/Settings/BioView.swift,
 				Views/Settings/SettingsView.swift,
 			);
