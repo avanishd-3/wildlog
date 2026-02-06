@@ -36,10 +36,14 @@ struct MapViewRepresentable: UIViewRepresentable {
         mapView.isZoomEnabled = true
         
         // User tracking
+        
+        // TODO: Make buttons look like Apple Maps
+        // TODO: 2D to 3D animation like Apple Maps
         // Equivalent to MapUserLocationButton()
         let trackingButton = MKUserTrackingButton(mapView: mapView)
         trackingButton.translatesAutoresizingMaskIntoConstraints = false
         trackingButton.tintColor = .secondarySystemBackground
+        trackingButton.backgroundColor = .clear
         trackingButton.accessibilityLabel = "User Location"
         
         // Blur button so text doesn't make it hard to see
@@ -47,6 +51,7 @@ struct MapViewRepresentable: UIViewRepresentable {
         blur.translatesAutoresizingMaskIntoConstraints = false
         blur.layer.cornerRadius = 10
         blur.clipsToBounds = true
+        blur.backgroundColor = .clear
         
         blur.contentView.addSubview(trackingButton)
         
@@ -57,10 +62,10 @@ struct MapViewRepresentable: UIViewRepresentable {
         // Use text like Apple Maps
         let pitchButton = UIButton(type: .system)
         pitchButton.translatesAutoresizingMaskIntoConstraints = false
-        pitchButton.setTitle("3D", for: .normal) // Apple Maps initial label is 3D
+        let initialTitle = mapView.camera.pitch == 0 ? "2D" : "3D"
+        pitchButton.setTitle(initialTitle, for: .normal) // Set initial title based on actual pitch
         pitchButton.setTitleColor(UIColor.label, for: .normal)
         pitchButton.titleLabel?.font = .systemFont(ofSize: 13, weight: .semibold)
-        pitchButton.tintColor = .secondarySystemBackground
         pitchButton.backgroundColor = .clear // Weird stuff happens without this
         pitchButton.accessibilityLabel = "Toggle 3D"
         
@@ -68,6 +73,7 @@ struct MapViewRepresentable: UIViewRepresentable {
         pitchBlur.translatesAutoresizingMaskIntoConstraints = false
         pitchBlur.layer.cornerRadius = 10
         pitchBlur.clipsToBounds = true
+        pitchBlur.backgroundColor = .clear
         
         pitchBlur.contentView.addSubview(pitchButton)
         
