@@ -62,7 +62,7 @@ struct MapViewRepresentable: UIViewRepresentable {
         // Use text like Apple Maps
         let pitchButton = UIButton(type: .system)
         pitchButton.translatesAutoresizingMaskIntoConstraints = false
-        let initialTitle = mapView.camera.pitch == 0 ? "2D" : "3D"
+        let initialTitle = mapView.camera.pitch == 0 ? "3D" : "3D"
         pitchButton.setTitle(initialTitle, for: .normal) // Set initial title based on actual pitch
         pitchButton.setTitleColor(UIColor.label, for: .normal)
         pitchButton.titleLabel?.font = .systemFont(ofSize: 13, weight: .semibold)
