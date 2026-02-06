@@ -17,11 +17,16 @@ The default map over-rides the tab color, and it's quite limited, so we need to 
 
 For more information on this and the approach to combat it: https://stackoverflow.com/questions/79502649/swiftui-tabbar-appearance-doesnt-work-in-only-those-views-which-have-map
 
-The custom MKMap view is where the actual map interface is provided. We need to have one, because Apple does not provide a simple way to move the compass position with the regular MKMapView.
+The CustomMKMapView is where the actual map interface is provided. We need to have one, because Apple does not provide a simple way to move the compass position with the regular MKMapView.
 
-The Map View Representable component customizes the Map View, providing buttons and setting the controls the user is allowed to do.
+The MapViewRepresentable component customizes the Map View, providing buttons and setting the controls the user is allowed to do.
 
-The custom map view is just wrapping the map view representable into a VStack.
+The CustomMap view is just wrapping the map view representable into a VStack.
+
+The custom buttons add the styling and icon/text changes for those buttons. I had trouble getting the default user tracking button to look like Apple Maps, since it was just applying the system styling. So, I created a custom one.
+
+The MapsControlContainer is for the blur around the buttons. Previously, I was doing this individually for the user tracking button and pitch toggle button, so I put in one class, because all the buttons should look the same. 
+
 
 We will have to use this quite a bit, especially because maps are a prominent part of our app.
 
