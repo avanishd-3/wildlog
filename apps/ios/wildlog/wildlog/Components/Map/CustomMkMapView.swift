@@ -24,9 +24,12 @@ class CustomMkMapView: MKMapView {
     override func layoutSubviews() {
         super.layoutSubviews()
         showsCompass = false // This name is bad, it actually refers to the defaultCompass
+        
+        // Making it as close to Apple Maps as I could
+        // The Stack Overflow post is wrong and Apple does not publish UI info for Maps
         comp.frame = CGRect(
-                    origin: CGPoint(x: bounds.width - 64 - comp.bounds.size.width,
-                                    y: 49),
+                    origin: CGPoint(x: bounds.width - 16 - comp.bounds.size.width,
+                                    y: (bounds.height - comp.bounds.size.height) * 0.25),
                     size: comp.bounds.size)
     }
 }

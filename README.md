@@ -162,6 +162,8 @@ See the README in the Components folder for when to use the custom components. F
 
 ### Other
 
+**Do not** use private APIs. Apple rejects apps for doing this, and it's not good practice. Depcreated stuff is bad, but at least it's still valid for a while.
+
 The minimum deployment is iOS 18, which is about 88-90% of all iOS users. So, we might be able to downgrade the minimum deployment. However, Swift Data may be buggy with iOS 17, so if we have issues with it, we shouldn't worry about reducing the minimum deployument.
 
 I set the App categpry for social networking. but category only matters when publishing to the App store, so this shouldn't be too much of a concern.
