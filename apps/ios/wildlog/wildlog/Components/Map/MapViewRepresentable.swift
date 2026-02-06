@@ -113,6 +113,9 @@ final class Coordinator: NSObject, MKMapViewDelegate {
     weak var mapView: MKMapView?
     weak var locationButton: CustomUserTrackingButton?
     weak var pitchButton: CustomPitchButton?
+    
+    // Track whether we've centered on the user's location once
+    private var hasCenteredOnUser = false
 
     @objc func didTapLocation() {
         guard let mapView else { return }
@@ -149,5 +152,16 @@ final class Coordinator: NSObject, MKMapViewDelegate {
                  didChange mode: MKUserTrackingMode,
                  animated: Bool) {
         locationButton?.update(for: mode)
+    }
+    
+    // Initially center the map on the user
+    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+        guard !hasCenteredOnUser, let coord = userLocation.location?.coordinate else { return }
+        hasCenteredOnUser = true
+
+        // Span values are what Apple uses
+        // So clicking the user tracking button doesn't change region view
+        let region = MKCoordinateRegion(center: coord, span: MKCoordinateSpan(latitudeDelta: 0.024721442510596603, longitudeDelta: 0.01724951020932508))
+        mapView.setRegion(region, animated: true)
     }
 }
