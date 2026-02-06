@@ -135,12 +135,19 @@ final class Coordinator: NSObject, MKMapViewDelegate {
     @objc func didTapPitch() {
         debugPrint("In did tap pitch")
         guard let mapView else { return }
+        
+        // Without using the old distance, the pitch change would zoom out the view
+        // TODO: Apple Maps animation when moving between 2D and 3D (on text as well)
 
         let camera = mapView.camera
+        let oldDistance = camera.centerCoordinateDistance
         debugPrint("Old pitch: \(camera.pitch)")
+        
+        
         let newPitch = camera.pitch == 0.0 ? 60.0 : 0.0
         debugPrint("New pitch: \(newPitch)")
         camera.pitch = newPitch
+        camera.centerCoordinateDistance = oldDistance
         mapView.setCamera(camera, animated: true)
 
         // Camera pitch changes async
