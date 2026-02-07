@@ -28,7 +28,7 @@ final class CustomPitchButton: UIButton {
     }
 
     required init?(coder: NSCoder) {
-        fatalError()
+        fatalError("We aren't using Storyboards")
     }
 
     func update(for pitch: CGFloat) {

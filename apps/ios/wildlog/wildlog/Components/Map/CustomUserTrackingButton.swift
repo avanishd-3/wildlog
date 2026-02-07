@@ -20,7 +20,7 @@ final class CustomUserTrackingButton: UIControl {
     }
 
     required init?(coder: NSCoder) {
-        fatalError()
+        fatalError("We aren't using Storyboards")
     }
 
     private func setup() {
