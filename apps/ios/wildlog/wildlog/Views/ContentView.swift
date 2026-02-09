@@ -75,7 +75,9 @@ struct SwiftUITabView: View {
         if #available(iOS 18.0, *) {
             TabView(selection: $selectedTab) {
                 Tab("Home", systemImage: "house", value: .home) {
-                    HomeView()
+                    NavigationStack {
+                        HomeView()
+                    }
                 }
                 Tab("Your Lists", systemImage: "list.bullet", value: .lists) {
                     ListView()
@@ -87,37 +89,47 @@ struct SwiftUITabView: View {
                     ReviewView()
                 }
                 Tab("Profile", systemImage: "person.crop.circle", value: .profile) {
-                    ProfileView()
+                    NavigationStack {
+                        ProfileView()
+                    }
                 }
             }
         } else {
             // Fallback for iOS < 18
             TabView(selection: $selectedTab) {
-                HomeView().tabItem {
-                    Label("Home", systemImage: "house")
-                        .tag(Tabs.home)
+                NavigationStack {
+                    HomeView()
                 }
+                .tabItem {
+                    Label("Home", systemImage: "house")
+                }
+                .tag(Tabs.home)
+                
                 ListView()
                     .tabItem {
                         Label("Your Lists", systemImage: "list.bullet")
                     }
                     .tag(Tabs.lists)
+                
                 SearchView()
                     .tabItem {
                         Label("Search", systemImage: "magnifyingglass")
                     }
                     .tag(Tabs.map)
-                    .tint(Color(.systemGreen))
+                
                 ReviewView()
                     .tabItem {
                         Label("Reviews", systemImage: "sparkles")
                     }
                     .tag(Tabs.reviews)
-                ProfileView()
-                    .tabItem {
-                        Label("Profile", systemImage: "person.crop.circle")
-                    }
-                    .tag(Tabs.profile)
+                
+                NavigationStack {
+                    ProfileView()
+                }
+                .tabItem {
+                    Label("Profile", systemImage: "person.crop.circle")
+                }
+                .tag(Tabs.profile)
             }
         }
     }

@@ -16,22 +16,30 @@ struct CarouselView: View {
         "glacier",
         "bryce"
     ]
+    
     var body: some View {
         ScrollView(.horizontal) {
             LazyHStack(spacing: 0) {
                 ForEach(sampleTrips, id: \.self) { trip in
-                    Image(trip)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 150, height: 250)
-                        .clipShape(RoundedRectangle(cornerRadius: 16))
-                        .padding(.horizontal, 10)
+                    if let park = ParkData.getPark(byImageName: trip) {
+                        NavigationLink(destination: ParkDetailView(park: park)) {
+                            Image(trip)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 150, height: 250)
+                                .clipShape(RoundedRectangle(cornerRadius: 16))
+                                .padding(.horizontal, 10)
+                        }
+                    }
                 }
             }
-        }.scrollTargetBehavior(.paging) // Requires iOS 17
+        }
+        .scrollTargetBehavior(.paging)
     }
 }
 
 #Preview {
-    CarouselView()
+    NavigationStack {
+        CarouselView()
+    }
 }
