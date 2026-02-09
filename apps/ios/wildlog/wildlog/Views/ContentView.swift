@@ -116,6 +116,7 @@ struct SwiftUITabView: View {
                         Label("Search", systemImage: "magnifyingglass")
                     }
                     .tag(Tabs.map)
+                    .tint(Color(.systemGreen))
                 
                 ReviewView()
                     .tabItem {

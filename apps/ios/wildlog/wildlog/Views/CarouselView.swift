@@ -34,7 +34,7 @@ struct CarouselView: View {
                 }
             }
         }
-        .scrollTargetBehavior(.paging)
+        .scrollTargetBehavior(.paging) // Requires IOS 17
     }
 }
 
