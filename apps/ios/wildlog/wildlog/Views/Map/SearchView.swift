@@ -10,17 +10,21 @@ import MapKit
 
 struct SearchView: View {
     @State private var position = MapCameraPosition.automatic
-    @State private var isSheetPresented: Bool = true
+    
+    @Binding var isSheetPresented: Bool
+    @Binding var selectedTab: Tabs
+    
     
     var body: some View {
-        CustomMapView()
-            .ignoresSafeArea()
+        
+        CustomMapView(selectedTab: $selectedTab, isSheetPresented: $isSheetPresented)
             .sheet(isPresented: $isSheetPresented) {
+                let _ = debugPrint("Is sheet present: \(isSheetPresented)")
                 SheetView()
             }
     }
 }
 
 #Preview {
-    SearchView()
+    SearchView(isSheetPresented: .constant(true), selectedTab: .constant(.home))
 }

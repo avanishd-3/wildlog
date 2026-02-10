@@ -32,10 +32,12 @@ struct SheetView: View {
             
         }
         .padding()
-        // Allow user to dismiss sheet to go to other tabs
+        // Do not allow user to dismiss sheet
+        // Since Swift UI maintains views, they cannot bring it back up
+        // Have a back button in the map instead
         // I think this is fine UX, but maybe having search as a tab is not the best option
-        // TODO: Look at Beli to see how they handle it
-        .interactiveDismissDisabled(false)
+        // TODO: See if memory is an issue w/ keeping the map and how to handle it
+        .interactiveDismissDisabled(true)
         .presentationDetents([.height(200), .large]) // Sheet view will auto-resize when user types in search
         .presentationBackground(.regularMaterial) // Apple Maps-like blur for sheet
         // User can interact with map view behind sheet

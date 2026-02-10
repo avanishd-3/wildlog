@@ -49,6 +49,7 @@
 				Views/ReviewView.swift,
 				Views/Settings/BioView.swift,
 				Views/Settings/SettingsView.swift,
+				Views/TabView.swift,
 			);
 			target = A27E39B32F30542F0079200D /* WildLogUITests */;
 		};

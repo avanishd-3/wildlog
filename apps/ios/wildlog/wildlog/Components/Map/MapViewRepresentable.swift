@@ -15,6 +15,9 @@ import MapKit
 struct MapViewRepresentable: UIViewRepresentable {
     // UIViewRepresentable is a way to put UI Kit views into the Swift UI view hierarchy
     
+    @Binding var selectedTab: Tabs
+    @Binding var isSheetPresented: Bool
+    
     func makeUIView(context: Context) -> MKMapView {
         let mapView = CustomMkMapView()
         mapView.delegate = context.coordinator
@@ -47,9 +50,18 @@ struct MapViewRepresentable: UIViewRepresentable {
 
         pitchContainer.contentView.addSubview(pitchButton)
         mapView.addSubview(pitchContainer)
+        
+        // ---- Back button ----
+        let backContainer = MapsControlContainer()
+        let backButton = CustomBackButton()
+        
+        backContainer.contentView.addSubview(backButton)
+        mapView.addSubview(backContainer)
 
         // ---- Layout (Apple Maps spacing) ----
         NSLayoutConstraint.activate([
+            
+            // Location and pitch button on top right
             locationContainer.topAnchor.constraint(
                 equalTo: mapView.safeAreaLayoutGuide.topAnchor,
                 constant: 12
@@ -76,12 +88,29 @@ struct MapViewRepresentable: UIViewRepresentable {
 
             pitchButton.centerXAnchor.constraint(equalTo: pitchContainer.centerXAnchor),
             pitchButton.centerYAnchor.constraint(equalTo: pitchContainer.centerYAnchor),
+            
+            // Back button on top left
+            backContainer.topAnchor.constraint(
+                equalTo: mapView.safeAreaLayoutGuide.topAnchor,
+                constant: 12
+            ),
+            backContainer.leadingAnchor.constraint(
+                equalTo: mapView.leadingAnchor,
+                constant: 12
+            ),
+            
+            backContainer.widthAnchor.constraint(equalToConstant: 44),
+            backContainer.heightAnchor.constraint(equalToConstant: 44),
+            
+            backButton.centerXAnchor.constraint(equalTo: backContainer.centerXAnchor),
+            backButton.centerYAnchor.constraint(equalTo: backContainer.centerYAnchor),
         ])
 
         // ---- Wiring (so buttons actually do stuff) ----
         context.coordinator.mapView = mapView
         context.coordinator.locationButton = locationButton
         context.coordinator.pitchButton = pitchButton
+        context.coordinator.backButton = backButton
 
         locationButton.addTarget(
             context.coordinator,
@@ -94,25 +123,45 @@ struct MapViewRepresentable: UIViewRepresentable {
             action: #selector(Coordinator.didTapPitch),
             for: .touchUpInside
         )
+        
+        backButton.addTarget(
+            context.coordinator,
+            action: #selector(Coordinator.didTapBackButton),
+            for: .touchUpInside
+        )
 
         return mapView
     }
     
     func updateUIView(_ view: MKMapView, context: Context) {
-        // Update map configuration if needed
     }
     
     func makeCoordinator() -> Coordinator {
-        Coordinator()
+        Coordinator(selectedTab: $selectedTab, isSheetPresented: $isSheetPresented)
     }
 }
 
 // This is for communicating marker changes to map view
 final class Coordinator: NSObject, MKMapViewDelegate {
-
+    
+    init(selectedTab: Binding<Tabs>, isSheetPresented: Binding<Bool>, mapView: MKMapView? = nil, locationButton: CustomUserTrackingButton? = nil, pitchButton: CustomPitchButton? = nil, backButton: CustomBackButton? = nil, hasCenteredOnUser: Bool = false) {
+        self.selectedTab = selectedTab
+        self.isSheetPresented = isSheetPresented
+        self.mapView = mapView
+        self.locationButton = locationButton
+        self.pitchButton = pitchButton
+        self.backButton = backButton
+        self.hasCenteredOnUser = hasCenteredOnUser
+    }
+    
+    var selectedTab: Binding<Tabs>
+    var isSheetPresented: Binding<Bool>
+    
+    /* Weak references */
     weak var mapView: MKMapView?
     weak var locationButton: CustomUserTrackingButton?
     weak var pitchButton: CustomPitchButton?
+    weak var backButton: CustomBackButton?
     
     // Track whether we've centered on the user's location once
     private var hasCenteredOnUser = false
@@ -153,6 +202,12 @@ final class Coordinator: NSObject, MKMapViewDelegate {
         // Camera pitch changes async
         // so need to use the newPitch value
         pitchButton?.update(for: newPitch)
+    }
+    
+    @objc func didTapBackButton() {
+        debugPrint("In did tap back button")
+        self.selectedTab.wrappedValue = .home
+        self.isSheetPresented.wrappedValue = false
     }
 
     func mapView(_ mapView: MKMapView,
