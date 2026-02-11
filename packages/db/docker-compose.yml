@@ -1,19 +1,20 @@
 name: wildlog-relational-db
 
 services:
-  postgres:
-    image: postgres
-    container_name: wildlog-postgres
+  postgis:
+    image: postgis/postgis:18-3.6-alpine
+    container_name: wildlog-postgis
+    platform: linux/amd64
     environment:
       POSTGRES_DB: wildlog
-      POSTGRES_USER: postgres
+      POSTGRES_USER: postgis
       POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
     volumes:
       - wildlog_postgres_data:/var/lib/postgresql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U postgis"]
       interval: 10s
       timeout: 5s
       retries: 5

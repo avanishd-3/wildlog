@@ -50,7 +50,7 @@ This project uses PostgreSQL with Drizzle ORM and Neo4j.
 2. Apply the schema to your PostgreSQL database:
 
 ```bash
-pnpm run db:push
+pnpm run db:migrate
 ```
 
 Then, run the development server:
