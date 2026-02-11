@@ -56,6 +56,8 @@ export const park = pgTable(
     // Using PostGIS geometry type for spatial data
     // 4326 means use the latitude and longitude coordinate system
     // See: https://orm.drizzle.team/docs/guides/postgis-geometry-point
+
+    // x is longitude and y is latitude, which is the standard for geographic coordinates.
     location: geometry("location", { type: "point", mode: "xy", srid: 4326 }).notNull(),
     states: text("states").notNull(),
     type: parkTypeEnum("type").notNull(),
