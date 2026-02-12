@@ -117,6 +117,15 @@ which is why the workspace is also called WildLog.
 These are all configured in Xcode by clicking on the project folder (which is ios/WildLog) in Xcode. You may come across documentation online that references Info.plist, but Apple removed it, and the
 only way to update app stuff and build settings is by using this UI. For phone capabilities that need authorization, like HealthKit, follow the Apple documentation to learn how to add them.
 
+### SwiftUI vs UIKit
+
+SwiftUI is an abstraction over UIKit and is much less verbose. Unfortunately, if you want a lot of customization and control over the UI, you need to go back to using a UIKit component.
+
+To integrate the UI Kit View into the Swift UI View hierarchy, you need to use a View Representable, which is why all our UIKit stuff has one.
+
+SwiftUI is declarative (like React). You write what the UI should look like and it handles updates automatically.
+UIKit is imperative. You define how the UI behaves and need to manage updates manually (which is where the boilerplate comes from).
+
 ### Icons
 
 The WildLog icon was created in Icon Composer, so if you want to make changes, open it in Icon Composer and **look at all modes** (even mono and tinted).
@@ -152,6 +161,8 @@ Unfortunately, map stuff doesn't work in the preview. Use the simulator instead.
 See the README in the Components folder for when to use the custom components. For most use cases, you shouldn't need them.
 
 ### Other
+
+**Do not** use private APIs. Apple rejects apps for doing this, and it's not good practice. Depcreated stuff is bad, but at least it's still valid for a while.
 
 The minimum deployment is iOS 18, which is about 88-90% of all iOS users. So, we might be able to downgrade the minimum deployment. However, Swift Data may be buggy with iOS 17, so if we have issues with it, we shouldn't worry about reducing the minimum deployument.
 

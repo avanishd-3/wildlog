@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct CustomMapView: View {
+    @Binding var selectedTab: Tabs
+    @Binding var isSheetPresented: Bool
     var body: some View {
         VStack {
-            MapViewRepresentable()
+            MapViewRepresentable(selectedTab: $selectedTab, isSheetPresented: $isSheetPresented)
                 .ignoresSafeArea()
             
             Spacer()
@@ -19,5 +21,5 @@ struct CustomMapView: View {
 }
 
 #Preview {
-    CustomMapView()
+    CustomMapView(selectedTab: .constant(.home), isSheetPresented: .constant(false))
 }
