@@ -55,7 +55,8 @@ export const seed = async () => {
         const { name, description, designation, latitude, longitude, states, type, cost } = r;
 
         // X longitude, Y latitude, SRID 4326 tells PostGIS this is a GPS coordinate
-        const location = sql`ST_SetSRID(ST_MakePoint(${longitude}::double precision, ${latitude}::double precision), 4326)`;
+        // See: https://orm.drizzle.team/docs/guides/postgis-geometry-point
+        const location = sql`ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 4326)`;
 
         return {
           name,
