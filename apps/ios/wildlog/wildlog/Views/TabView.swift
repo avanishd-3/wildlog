@@ -13,14 +13,11 @@ import SwiftUI
 // so we need to dip into UIKit
 struct UIKitTabView: UIViewControllerRepresentable {
     @Binding var selectedTab: Tabs
-//    weak var tabController: UIHostingController<SwiftUITabView>?
     
     func makeUIViewController(context: Context) -> UIViewController {
         let controller = UIHostingController(rootView: SwiftUITabView(selectedTab: $selectedTab))
         
         // See: https://code-examples.net/en/q/4c170ed/mastering-uitabbarappearance-solving-icon-color-bugs-in-ios-26
-        
-        // TODO: The search one is still over-ridden. I don't know if this map taking over weirdly but I have no idea how to fix it
         
         let appearance = UITabBarAppearance()
         let itemAppearance = UITabBarItemAppearance()
@@ -91,8 +88,8 @@ struct SwiftUITabView: View {
             }) {
                 HomeView().tabItem {
                     Label("Home", systemImage: "house")
-                        .tag(Tabs.home)
                 }
+                .tag(Tabs.home)
                 ListView()
                     .tabItem {
                         Label("Your Lists", systemImage: "list.bullet")
