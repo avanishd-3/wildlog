@@ -1,16 +1,12 @@
 import SchemaBuilder from "@pothos/core";
 
-const builder = new SchemaBuilder({});
+import SimpleObjectsPlugin from "@pothos/plugin-simple-objects";
 
-builder.queryType({
-  fields: (t) => ({
-    hello: t.string({
-      args: {
-        name: t.arg.string(),
-      },
-      resolve: (_parent, { name }) => `hello, ${name || "World"}`,
-    }),
-  }),
+export const builder = new SchemaBuilder({
+  plugins: [SimpleObjectsPlugin],
 });
 
-export const apiSchema = builder.toSchema();
+// Create root Query and Mutation type
+// Need this to prevent missing root type error
+builder.queryType({});
+builder.mutationType({});

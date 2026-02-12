@@ -12,6 +12,7 @@
   "dependencies": {
     "@fastify/cors": "^11.0.1",
     "@pothos/core": "^4.12.0",
+    "@pothos/plugin-simple-objects": "^4.1.3",
     "@wildlog/auth": "workspace:*",
     "@wildlog/db": "workspace:*",
     "@wildlog/env": "workspace:*",

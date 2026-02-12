@@ -1,6 +1,6 @@
 import Fastify from "fastify";
 import mercurius from "mercurius";
-import { apiSchema } from "./builder";
+import { apiSchema } from "./schema/schema";
 
 import { seed } from "@wildlog/db/seed";
 
