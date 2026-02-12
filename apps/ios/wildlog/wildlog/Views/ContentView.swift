@@ -6,7 +6,7 @@
 //
 
 // Landing page view for the app
-// Just contains all the 
+// Just contains all the
 
 import SwiftUI
 
@@ -93,31 +93,36 @@ struct SwiftUITabView: View {
         } else {
             // Fallback for iOS < 18
             TabView(selection: $selectedTab) {
-                HomeView().tabItem {
+                HomeView()
+                .tabItem {
                     Label("Home", systemImage: "house")
-                        .tag(Tabs.home)
                 }
+                .tag(Tabs.home)
+                
                 ListView()
                     .tabItem {
                         Label("Your Lists", systemImage: "list.bullet")
                     }
                     .tag(Tabs.lists)
+                
                 SearchView()
                     .tabItem {
                         Label("Search", systemImage: "magnifyingglass")
                     }
                     .tag(Tabs.map)
                     .tint(Color(.systemGreen))
+                
                 ReviewView()
                     .tabItem {
                         Label("Reviews", systemImage: "sparkles")
                     }
                     .tag(Tabs.reviews)
+                
                 ProfileView()
-                    .tabItem {
-                        Label("Profile", systemImage: "person.crop.circle")
-                    }
-                    .tag(Tabs.profile)
+                .tabItem {
+                    Label("Profile", systemImage: "person.crop.circle")
+                }
+                .tag(Tabs.profile)
             }
         }
     }

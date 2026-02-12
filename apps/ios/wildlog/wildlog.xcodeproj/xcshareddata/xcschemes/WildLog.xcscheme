@@ -18,7 +18,7 @@
                BlueprintIdentifier = "A27E39972F30542E0079200D"
                BuildableName = "WildLog.app"
                BlueprintName = "WildLog"
-               ReferencedContainer = "container:WildLog.xcodeproj">
+               ReferencedContainer = "container:wildlog.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -38,7 +38,7 @@
                BlueprintIdentifier = "A27E39A92F30542F0079200D"
                BuildableName = "WildLogTests.xctest"
                BlueprintName = "WildLogTests"
-               ReferencedContainer = "container:WildLog.xcodeproj">
+               ReferencedContainer = "container:wildlog.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -49,7 +49,7 @@
                BlueprintIdentifier = "A27E39B32F30542F0079200D"
                BuildableName = "WildLogUITests.xctest"
                BlueprintName = "WildLogUITests"
-               ReferencedContainer = "container:WildLog.xcodeproj">
+               ReferencedContainer = "container:wildlog.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -71,7 +71,7 @@
             BlueprintIdentifier = "A27E39972F30542E0079200D"
             BuildableName = "WildLog.app"
             BlueprintName = "WildLog"
-            ReferencedContainer = "container:WildLog.xcodeproj">
+            ReferencedContainer = "container:wildlog.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -88,7 +88,7 @@
             BlueprintIdentifier = "A27E39972F30542E0079200D"
             BuildableName = "WildLog.app"
             BlueprintName = "WildLog"
-            ReferencedContainer = "container:WildLog.xcodeproj">
+            ReferencedContainer = "container:wildlog.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
