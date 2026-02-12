@@ -8,7 +8,7 @@
 import Foundation
 
 struct Park: Identifiable, Codable {
-    let id = UUID()
+    let id: UUID
     let name: String
     let description: String
     let designation: String
