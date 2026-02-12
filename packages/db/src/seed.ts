@@ -52,12 +52,9 @@ export const seed = async () => {
       console.log(`Parsed ${parks.length} parks from CSV.`);
 
       const rows = parks.map((r) => {
-        // console.log(`Raw CSV row: ${JSON.stringify(r)}`);
         const { name, description, designation, latitude, longitude, states, type, cost } = r;
 
-        // console.log(`Processing park: ${name}, lat: ${latitude}, long: ${longitude}`);
-
-        // Per instruction: for postgis locations, x = latitude and y = longitude
+        // X longitude, Y latitude, SRID 4326 tells PostGIS this is a GPS coordinate
         const location = sql`ST_SetSRID(ST_MakePoint(${longitude}::double precision, ${latitude}::double precision), 4326)`;
 
         return {
