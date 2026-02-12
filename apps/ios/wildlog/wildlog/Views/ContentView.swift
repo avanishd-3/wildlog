@@ -6,7 +6,7 @@
 //
 
 // Landing page view for the app
-// Just contains all the 
+// Just contains all the
 
 import SwiftUI
 

@@ -9,13 +9,15 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        VStack {
-            Text("Popular this week")
-            CarouselView()
-            Spacer()
-            Text("Popular with friends")
-            CarouselView()
-        }.frame(maxWidth: .infinity)
+        NavigationStack {
+            VStack {
+                Text("Popular this week")
+                CarouselView()
+                Spacer()
+                Text("Popular with friends")
+                CarouselView()
+            }.frame(maxWidth: .infinity)
+        }
     }
 }
 
