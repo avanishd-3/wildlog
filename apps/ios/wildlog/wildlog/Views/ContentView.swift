@@ -6,7 +6,7 @@
 //
 
 // Landing page view for the app
-// Just contains all the 
+// Just contains all the
 
 import SwiftUI
 
@@ -75,9 +75,7 @@ struct SwiftUITabView: View {
         if #available(iOS 18.0, *) {
             TabView(selection: $selectedTab) {
                 Tab("Home", systemImage: "house", value: .home) {
-                    NavigationStack {
-                        HomeView()
-                    }
+                    HomeView()
                 }
                 Tab("Your Lists", systemImage: "list.bullet", value: .lists) {
                     ListView()
@@ -89,17 +87,13 @@ struct SwiftUITabView: View {
                     ReviewView()
                 }
                 Tab("Profile", systemImage: "person.crop.circle", value: .profile) {
-                    NavigationStack {
-                        ProfileView()
-                    }
+                    ProfileView()
                 }
             }
         } else {
             // Fallback for iOS < 18
             TabView(selection: $selectedTab) {
-                NavigationStack {
-                    HomeView()
-                }
+                HomeView()
                 .tabItem {
                     Label("Home", systemImage: "house")
                 }
@@ -124,9 +118,7 @@ struct SwiftUITabView: View {
                     }
                     .tag(Tabs.reviews)
                 
-                NavigationStack {
-                    ProfileView()
-                }
+                ProfileView()
                 .tabItem {
                     Label("Profile", systemImage: "person.crop.circle")
                 }

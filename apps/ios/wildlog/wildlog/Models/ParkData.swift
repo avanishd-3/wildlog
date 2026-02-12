@@ -7,8 +7,8 @@
 
 import Foundation
 
-// This is just manually inputed data for the sample set of the carousel
-// TODO: Import entire dataset as a json file
+// This is just sample data for previews only.
+// TODO: Replace with data from recommendation system API
 class ParkData {
     static let sampleParks: [Park] = [
         Park(
