@@ -148,6 +148,9 @@ importers:
       '@wildlog/env':
         specifier: workspace:*
         version: link:../env
+      csv-parse:
+        specifier: ^6.1.0
+        version: 6.1.0
       dotenv:
         specifier: 'catalog:'
         version: 17.2.3
@@ -207,22 +210,6 @@ importers:
       neo4j-driver:
         specifier: ^6.0.1
         version: 6.0.1
-
-  packages/graphql:
-    dependencies:
-      '@pothos/core':
-        specifier: ^4.12.0
-        version: 4.12.0(graphql@16.12.0)
-      graphql:
-        specifier: ^16.12.0
-        version: 16.12.0
-    devDependencies:
-      '@wildlog/config':
-        specifier: workspace:*
-        version: link:../config
-      typescript:
-        specifier: 'catalog:'
-        version: 5.9.3
 
 packages:
 
@@ -1347,6 +1334,9 @@ packages:
   cookie@1.1.1:
     resolution: {integrity: sha512-ei8Aos7ja0weRpFzJnEA9UHJ/7XQmqglbRwnf2ATjcB9Wq874VKH9kfjjirM6UhU2/E5fFYadylyhFldcqSidQ==}
     engines: {node: '>=18'}
+
+  csv-parse@6.1.0:
+    resolution: {integrity: sha512-CEE+jwpgLn+MmtCpVcPtiCZpVtB6Z2OKPTr34pycYYoL7sxdOkXDdQ4lRiw6ioC0q6BLqhc6cKweCVvral8yhw==}
 
   debug@4.4.3:
     resolution: {integrity: sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==}
@@ -2910,6 +2900,8 @@ snapshots:
   content-disposition@1.0.1: {}
 
   cookie@1.1.1: {}
+
+  csv-parse@6.1.0: {}
 
   debug@4.4.3:
     dependencies:
