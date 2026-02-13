@@ -25,8 +25,7 @@ The CustomMap view is just wrapping the map view representable into a VStack.
 
 The custom buttons add the styling and icon/text changes for those buttons. I had trouble getting the default user tracking button to look like Apple Maps, since it was just applying the system styling. So, I created a custom one.
 
-The MapsControlContainer is for the blur around the buttons. Previously, I was doing this individually for the user tracking button and pitch toggle button, so I put in one class, because all the buttons should look the same. 
-
+The MapsControlContainer is for the blur around the buttons. Previously, I was doing this individually for the user tracking button and pitch toggle button, so I put in one class, because all the buttons should look the same.
 
 We will have to use this quite a bit, especially because maps are a prominent part of our app.
 

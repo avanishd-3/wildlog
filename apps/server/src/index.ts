@@ -3,6 +3,7 @@ import mercurius from "mercurius";
 import { apiSchema } from "./schema/schema";
 
 import { seed } from "@wildlog/db/seed";
+import { getParkLocation } from "@wildlog/db/queries/test";
 
 import { readFileSync } from "fs";
 
@@ -41,6 +42,15 @@ app.get("/seed", async (_request, reply) => {
     console.error("Error seeding database:", error);
     reply.status(500).send({ error: "Failed to seed database" });
   }
+});
+
+app.get("/lat-checker", async (_request: any, reply: any) => {
+  // Query db for id = 1 and return lat and long
+  const result = await getParkLocation();
+
+  reply.send({
+    data: result.rows,
+  });
 });
 
 // Route to Neo4j Browser for convenience
