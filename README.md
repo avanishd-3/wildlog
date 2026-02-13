@@ -99,4 +99,6 @@ This is what we want, since Swift apps should be entirely under Xcode's control.
 
 So, to develop the mobile app, **only use Xcode** and don't worry about Turborepo or build pipelines.
 
+**Important**: Minimum Xcode 16.3 (Apollo iOS requires Swift 6.1).
+
 Read the README in the ios folder for more info on IOS-specific stuff.
