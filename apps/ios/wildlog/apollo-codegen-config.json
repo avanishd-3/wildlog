@@ -1,0 +1,45 @@
+{
+  "schemaNamespace" : "WildLogAPI",
+  "input" : {
+    "operationSearchPaths" : [
+      "**/*.graphql",
+      "graphql/**/*.graphql"
+    ],
+    "schemaSearchPaths" : [
+      "**/*.graphqls",
+      "graphql/**/*.graphqls"
+    ]
+  },
+  "output" : {
+    "testMocks" : {
+      "none" : {
+      }
+    },
+    "schemaTypes" : {
+      "path" : "./WildLogAPI",
+      "moduleType" : {
+        "swiftPackage" : {
+        }
+      }
+    },
+    "operations" : {
+      "inSchemaModule" : {
+      }
+    }
+  },
+  "schemaDownload": {
+    "downloadMethod": {
+      "introspection": {
+        "endpointURL": "http://localhost:3000/graphql",
+        "httpMethod": {
+          "POST": {}
+        },
+        "includeDeprecatedInputValues": false,
+        "outputFormat": "SDL"
+      }
+    },
+    "downloadTimeout": 60,
+    "headers": [],
+    "outputPath": "./graphql/schema.graphql"
+  }
+}

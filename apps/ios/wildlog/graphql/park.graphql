@@ -1,0 +1,17 @@
+mutation CreatePark($description: String!, $designation: ParkDesignationEnum!, $name: String!) {
+  createPark(description: $description, designation: $designation, name: $name) {
+    id
+    name
+    description
+    designation
+  }
+}
+
+query GetPark {
+  getPark {
+    id
+    name
+    description
+    designation
+  }
+}

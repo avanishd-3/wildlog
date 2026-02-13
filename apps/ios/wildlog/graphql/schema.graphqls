@@ -1,0 +1,96 @@
+"""
+A directive used by the Apollo iOS client to annotate operations or fragments that should be used exclusively for generating local cache mutations instead of as standard operations.
+"""
+directive @apollo_client_ios_localCacheMutation on QUERY | MUTATION | SUBSCRIPTION | FRAGMENT_DEFINITION
+
+"""
+A directive used by the Apollo iOS code generation engine to generate custom import statements in operation or fragment definition files. An import statement to import a module with the name provided in the `module` argument will be added to the generated definition file.
+"""
+directive @import(
+  """The name of the module to import."""
+  module: String!
+) repeatable on QUERY | MUTATION | SUBSCRIPTION | FRAGMENT_DEFINITION
+
+"""Attach extra information to a given type."""
+directive @typePolicy(
+  """
+  A selection set containing fields used to compute the cache key of an object. Referenced fields must have non-nullable scalar types. Order is important.
+  """
+  keyFields: String!
+) on OBJECT | INTERFACE
+
+"""
+A directive used by Apollo iOS to map query input data to cache keys of objects.
+"""
+directive @fieldPolicy(
+  """The field you are setting the @fieldPolicy for."""
+  forField: String!
+
+  """Set of fields used to compute the cache key."""
+  keyArgs: String!
+) repeatable on OBJECT | INTERFACE
+
+"""
+Directs the executor to defer this fragment when the `if` argument is true or undefined.
+"""
+directive @defer(
+  """Deferred when true or undefined."""
+  if: Boolean
+
+  """Unique name"""
+  label: String
+) on FRAGMENT_SPREAD | INLINE_FRAGMENT
+
+type Mutation {
+  createPark(description: String!, designation: ParkDesignationEnum!, name: String!): Park
+}
+
+type Park {
+  description: String!
+  designation: ParkDesignationEnum!
+  id: String!
+  latitude: Float
+  longitude: Float
+  name: String!
+  states: String!
+  type: ParkTypeEnum!
+}
+
+enum ParkDesignationEnum {
+  MEMORIAL
+  NATIONAL_HISTORICAL_PARK
+  NATIONAL_HISTORIC_PARK
+  NATIONAL_HISTORIC_SITE
+  NATIONAL_LAKESHORE
+  NATIONAL_MEMORIAL
+  NATIONAL_MILITARY_PARK
+  NATIONAL_MILITARY_PARK_SITE
+  NATIONAL_MONUMENT
+  NATIONAL_PARK
+  NATIONAL_PARKWAY
+  NATIONAL_PRESERVE
+  NATIONAL_RECREATION_AREA
+  NATIONAL_RESERVE
+  NATIONAL_RIVER
+  NATIONAL_SEASHORE
+  NATIONAL_TRAIL
+  PARK_PROPERTY
+  POINT_OF_INTEREST
+  STATE_BEACH
+  STATE_HISTORIC_PARK
+  STATE_HISTORIC_SITE
+  STATE_MARINE_RESERVE
+  STATE_NATURAL_RESERVE
+  STATE_PARK
+  STATE_RECREATION_AREA
+  STATE_VEHICULAR_RECREATION_AREA
+}
+
+enum ParkTypeEnum {
+  NATIONAL
+  STATE
+}
+
+type Query {
+  getPark: Park
+}
