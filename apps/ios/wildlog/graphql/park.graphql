@@ -15,3 +15,16 @@ query GetPark {
     designation
   }
 }
+
+query GetParksByBounds($x_max: Float!, $x_min: Float!, $y_max: Float!, $y_min: Float!) {
+  getParksByBounds(x_max: $x_max, x_min: $x_min, y_max: $y_max, y_min: $y_min) {
+    id
+    name
+    description
+    designation
+    latitude
+    longitude
+    states
+    type
+  }
+}

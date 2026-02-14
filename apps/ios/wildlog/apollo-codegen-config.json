@@ -30,7 +30,7 @@
   "schemaDownload": {
     "downloadMethod": {
       "introspection": {
-        "endpointURL": "http://localhost:3000/graphql",
+        "endpointURL": "https://localhost:3000/graphql",
         "httpMethod": {
           "POST": {}
         },
@@ -40,6 +40,6 @@
     },
     "downloadTimeout": 60,
     "headers": [],
-    "outputPath": "./graphql/schema.graphql"
+    "outputPath": "./graphql/schema.graphqls"
   }
 }
