@@ -58,7 +58,9 @@
 				Views/ListView.swift,
 				Views/ParkView.swift,
 				Views/ProfileView.swift,
-				Views/ReviewView.swift,
+				Views/Reviews/ReviewCard.swift,
+				Views/Reviews/ReviewView.swift,
+				Views/Reviews/WriteReview.swift,
 				Views/Settings/BioView.swift,
 				Views/Settings/SettingsView.swift,
 				Views/TabView.swift,
@@ -245,7 +247,7 @@
 					};
 				};
 			};
-			buildConfigurationList = A27E39932F30542E0079200D /* Build configuration list for PBXProject "WildLog" */;
+			buildConfigurationList = A27E39932F30542E0079200D /* Build configuration list for PBXProject "wildlog" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -601,7 +603,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A27E39932F30542E0079200D /* Build configuration list for PBXProject "WildLog" */ = {
+		A27E39932F30542E0079200D /* Build configuration list for PBXProject "wildlog" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A27E39BC2F30542F0079200D /* Debug */,
