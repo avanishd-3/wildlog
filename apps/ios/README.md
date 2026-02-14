@@ -93,18 +93,18 @@ Now that the schema has been fetched, run `./apollo-ios-cli generate` to create 
 
 ## Certification
 
-**Important**: You need to do this or you will not be able to use the API from the server. 
-
-iOS does not allow making HTTP requests without HTTPS & valid SSL certificates. To create a local SSL certificate, follow these instructions.
+**Important**: You need to do this or the client will not be able to make API requests. because iOS does not allow making HTTP requests without HTTPS & valid SSL certificates. 
 Simulator instructions from [here](https://stackoverflow.com/questions/2219707/adding-a-self-signed-certificate-to-iphone-simulator).
 
-1. Install [mkcert](https://github.com/FiloSottile/mkcert)
-2. Run `mkcert -install`
-3. Run `mkcert -cert-file localhost.pem -key-file localhost-key.pem localhost 127.0.0.01 ::1`
-4. Put localhost.pem and localhost-key.pem in apps/server
-5. Go to Xcode and launch the simulator
-6. In the terminal, run `mkcert -CAROOT`. This will tell you where the mkcert root certificates are.
-7. In finder, navigate to the folder outputted in step 6 (I got the format /Users/username/Library/Application Support/mkcert), but your's may be different.
-8. Drag and drop rootCA.pem onto the simulator homescreen.
-9. On the simulator, go to Settings -> General -> About -> Certificate Trust Settings and verify that you see the certificate there.
-10. On the simulator, re-open the app and go to the Lists tab. If you click the fetch park info button, you should see the text Yellowstone National Park.
+Make sure you have followed the certificate instructions in the main README first and verify the server can run without issues.
+
+Once you have done that, you can add the root certificate to the simulator by following these instructions.
+
+1. Go to Xcode and launch the simulator
+2. In the terminal, run `mkcert -CAROOT`. This will tell you where the mkcert root certificates are.
+3. In finder, navigate to the folder outputted in step 6 (I got the format /Users/username/Library/Application Support/mkcert), but your's may be different.
+4. Drag and drop rootCA.pem onto the simulator homescreen.
+5. On the simulator, go to Settings -> General -> About -> Certificate Trust Settings and verify that you see the certificate there.
+6. On the simulator, re-open the app and go to the Lists tab. If you click the fetch park info button, you should see the text Yellowstone National Park.
+
+Keep in mind that this only works in the simulator. I don't think you can add a certificate to the preview, but the preview isn't meant for trying API requests anyways.

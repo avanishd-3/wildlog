@@ -41,6 +41,17 @@ First, install the dependencies:
 pnpm install
 ```
 
+## Server Setup
+
+Because iOS apps can only make HTTPS requests (technically you can disable this, but your app will not be approved), the server is configured to **require** a certificate and key to run. If you try to run the server without these, the server will error.
+
+To create a local SSL certificate, follow these instructions.
+
+1. Install [mkcert](https://github.com/FiloSottile/mkcert)
+2. Run `mkcert -install`
+3. Run `mkcert -cert-file localhost.pem -key-file localhost-key.pem localhost 127.0.0.01 ::1`
+4. Put localhost.pem and localhost-key.pem in apps/server
+
 ## Database Setup
 
 This project uses PostgreSQL with Drizzle ORM and Neo4j.
