@@ -2,6 +2,8 @@ import { createGraphQLEnumFromPgEnum } from "@/utils/create-graphql-enum";
 import { builder } from "@/builder";
 import { parkDesignationEnum, parkTypeEnum } from "@wildlog/db/schema/park";
 
+import { getParksByBoundingBox } from "@wildlog/db/queries/park_queries";
+
 const ParkDesignationEnum = createGraphQLEnumFromPgEnum(
   builder,
   "ParkDesignationEnum",
@@ -55,6 +57,31 @@ builder.queryField("getPark", (t) =>
         states: "WY, MT, ID",
         type: "National",
       };
+    },
+  }),
+);
+
+builder.queryField("getParksByBounds", (t) =>
+  t.field({
+    type: [park],
+    args: {
+      x_min: t.arg.float({ required: true }),
+      y_min: t.arg.float({ required: true }),
+      x_max: t.arg.float({ required: true }),
+      y_max: t.arg.float({ required: true }),
+    },
+    resolve: async (_, args) => {
+      const parks = await getParksByBoundingBox(args.x_min, args.x_max, args.y_min, args.y_max);
+      return parks.map((park) => ({
+        id: park.id,
+        name: park.name,
+        description: park.description,
+        designation: park.designation,
+        latitude: typeof park.latitude === "number" ? park.latitude : null,
+        longitude: typeof park.longitude === "number" ? park.longitude : null,
+        states: park.states,
+        type: park.type,
+      }));
     },
   }),
 );
