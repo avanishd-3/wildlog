@@ -1,7 +1,12 @@
 from openai import OpenAI
+from dotenv import load_dotenv
+import os
 import gspread
 
-CHATGPT_API_KEY = "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"
+# Load environment variables from .env file
+load_dotenv()
+
+CHATGPT_API_KEY = os.getenv("CHATGPT_API_KEY")
 PROMPT = ("\"This region that enticed and influenced President Theodore Roosevelt consists of a park of three units in the northern badlands. "
             "Besides Roosevelt's historic cabin, there are numerous scenic drives and backcountry hiking opportunities. Wildlife includes American "
             "bison, pronghorn, bighorn sheep, and wild horses.\" - Theodore Roosevelt \"Covering most of Mount Desert Island and other coastal "
