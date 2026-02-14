@@ -2,7 +2,7 @@ import json
 import gspread
 import time
 
-gc = gspread.service_account(filename="nature-letterbox-b9eba28111c4.json")
+gc = gspread.service_account(filename="PLACEHOLDER")
 sh = gc.open("National Park Data")
 ws = sh.sheet1
 
