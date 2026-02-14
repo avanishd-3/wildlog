@@ -7,9 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A20373232F3FACAC00DE929C /* park.graphql in Resources */ = {isa = PBXBuildFile; fileRef = A20373202F3FACAC00DE929C /* park.graphql */; };
+		A20373242F3FACAC00DE929C /* schema.graphqls in Resources */ = {isa = PBXBuildFile; fileRef = A20373212F3FACAC00DE929C /* schema.graphqls */; };
+		A20373252F3FACAC00DE929C /* park.graphql in Resources */ = {isa = PBXBuildFile; fileRef = A20373202F3FACAC00DE929C /* park.graphql */; };
+		A20373262F3FACAC00DE929C /* schema.graphqls in Resources */ = {isa = PBXBuildFile; fileRef = A20373212F3FACAC00DE929C /* schema.graphqls */; };
+		A20373272F3FACAC00DE929C /* park.graphql in Resources */ = {isa = PBXBuildFile; fileRef = A20373202F3FACAC00DE929C /* park.graphql */; };
+		A20373282F3FACAC00DE929C /* schema.graphqls in Resources */ = {isa = PBXBuildFile; fileRef = A20373212F3FACAC00DE929C /* schema.graphqls */; };
+		A20373322F3FAF9400DE929C /* WildLogAPI in Frameworks */ = {isa = PBXBuildFile; productRef = A20373312F3FAF9400DE929C /* WildLogAPI */; };
+		A27F90E02F3FCA5400380225 /* WildLogAPI in Frameworks */ = {isa = PBXBuildFile; productRef = A27F90DF2F3FCA5400380225 /* WildLogAPI */; };
 		A285AAA92F3055CD00C0D9FA /* WildLog.icon in Resources */ = {isa = PBXBuildFile; fileRef = A285AAA82F3055CD00C0D9FA /* WildLog.icon */; };
 		A285AAAA2F3055CD00C0D9FA /* WildLog.icon in Resources */ = {isa = PBXBuildFile; fileRef = A285AAA82F3055CD00C0D9FA /* WildLog.icon */; };
 		A285AAAB2F3055CD00C0D9FA /* WildLog.icon in Resources */ = {isa = PBXBuildFile; fileRef = A285AAA82F3055CD00C0D9FA /* WildLog.icon */; };
+		A2B963BC2F3F9EEB00E86543 /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = A2B963BB2F3F9EEB00E86543 /* Apollo */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -30,6 +39,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A203731F2F3FAC9000DE929C /* WildLogAPI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WildLogAPI; sourceTree = "<group>"; };
+		A20373202F3FACAC00DE929C /* park.graphql */ = {isa = PBXFileReference; lastKnownFileType = text; path = park.graphql; sourceTree = "<group>"; };
+		A20373212F3FACAC00DE929C /* schema.graphqls */ = {isa = PBXFileReference; lastKnownFileType = text; path = schema.graphqls; sourceTree = "<group>"; };
 		A27E39982F30542E0079200D /* WildLog.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WildLog.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A27E39AA2F30542F0079200D /* WildLogTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WildLogTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A27E39B42F30542F0079200D /* WildLogUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WildLogUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -81,6 +93,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A27F90E02F3FCA5400380225 /* WildLogAPI in Frameworks */,
+				A20373322F3FAF9400DE929C /* WildLogAPI in Frameworks */,
+				A2B963BC2F3F9EEB00E86543 /* Apollo in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,6 +116,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A20373222F3FACAC00DE929C /* graphql */ = {
+			isa = PBXGroup;
+			children = (
+				A20373202F3FACAC00DE929C /* park.graphql */,
+				A20373212F3FACAC00DE929C /* schema.graphqls */,
+			);
+			path = graphql;
+			sourceTree = "<group>";
+		};
 		A27E398F2F30542E0079200D = {
 			isa = PBXGroup;
 			children = (
@@ -109,6 +133,8 @@
 				A27E39B72F30542F0079200D /* WildLogUITests */,
 				A27E39992F30542E0079200D /* Products */,
 				A285AAA82F3055CD00C0D9FA /* WildLog.icon */,
+				A203731F2F3FAC9000DE929C /* WildLogAPI */,
+				A20373222F3FACAC00DE929C /* graphql */,
 			);
 			sourceTree = "<group>";
 		};
@@ -142,6 +168,9 @@
 			);
 			name = WildLog;
 			packageProductDependencies = (
+				A2B963BB2F3F9EEB00E86543 /* Apollo */,
+				A20373312F3FAF9400DE929C /* WildLogAPI */,
+				A27F90DF2F3FCA5400380225 /* WildLogAPI */,
 			);
 			productName = WildLog;
 			productReference = A27E39982F30542E0079200D /* WildLog.app */;
@@ -216,7 +245,7 @@
 					};
 				};
 			};
-			buildConfigurationList = A27E39932F30542E0079200D /* Build configuration list for PBXProject "wildlog" */;
+			buildConfigurationList = A27E39932F30542E0079200D /* Build configuration list for PBXProject "WildLog" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -225,6 +254,10 @@
 			);
 			mainGroup = A27E398F2F30542E0079200D;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				A2B963BA2F3F9EEB00E86543 /* XCRemoteSwiftPackageReference "apollo-ios" */,
+				A20373302F3FAF9400DE929C /* XCLocalSwiftPackageReference "WildLogAPI" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A27E39992F30542E0079200D /* Products */;
 			projectDirPath = "";
@@ -242,6 +275,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A20373272F3FACAC00DE929C /* park.graphql in Resources */,
+				A20373282F3FACAC00DE929C /* schema.graphqls in Resources */,
 				A285AAAB2F3055CD00C0D9FA /* WildLog.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -251,6 +286,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A285AAA92F3055CD00C0D9FA /* WildLog.icon in Resources */,
+				A20373252F3FACAC00DE929C /* park.graphql in Resources */,
+				A20373262F3FACAC00DE929C /* schema.graphqls in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,6 +296,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A285AAAA2F3055CD00C0D9FA /* WildLog.icon in Resources */,
+				A20373232F3FACAC00DE929C /* park.graphql in Resources */,
+				A20373242F3FACAC00DE929C /* schema.graphqls in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -430,7 +469,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"WildLog/Preview Content\"";
-				DEVELOPMENT_TEAM = Y43F7CMHZ5;
+				DEVELOPMENT_TEAM = US3QA8NCX7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
@@ -440,7 +479,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -463,7 +502,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"WildLog/Preview Content\"";
-				DEVELOPMENT_TEAM = Y43F7CMHZ5;
+				DEVELOPMENT_TEAM = US3QA8NCX7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
@@ -473,7 +512,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -562,7 +601,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A27E39932F30542E0079200D /* Build configuration list for PBXProject "wildlog" */ = {
+		A27E39932F30542E0079200D /* Build configuration list for PBXProject "WildLog" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A27E39BC2F30542F0079200D /* Debug */,
@@ -599,6 +638,40 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		A20373302F3FAF9400DE929C /* XCLocalSwiftPackageReference "WildLogAPI" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = WildLogAPI;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A2B963BA2F3F9EEB00E86543 /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apollographql/apollo-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.6;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A20373312F3FAF9400DE929C /* WildLogAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WildLogAPI;
+		};
+		A27F90DF2F3FCA5400380225 /* WildLogAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WildLogAPI;
+		};
+		A2B963BB2F3F9EEB00E86543 /* Apollo */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A2B963BA2F3F9EEB00E86543 /* XCRemoteSwiftPackageReference "apollo-ios" */;
+			productName = Apollo;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A27E39902F30542E0079200D /* Project object */;
 }

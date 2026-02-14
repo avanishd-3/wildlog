@@ -1,12 +1,18 @@
 import Fastify from "fastify";
 import mercurius from "mercurius";
-import { apiSchema } from "./builder";
+import { apiSchema } from "./schema/schema";
 
 import { seed } from "@wildlog/db/seed";
 import { getParkLocation } from "@wildlog/db/queries/test";
 
+import { readFileSync } from "fs";
+
 const app = Fastify({
   logger: false,
+  https: {
+    key: readFileSync("localhost-key.pem"),
+    cert: readFileSync("localhost.pem"),
+  },
 });
 
 app.register(mercurius, {
@@ -14,7 +20,13 @@ app.register(mercurius, {
   graphiql: true, // Enable GraphQL UI
 });
 
-app.listen({ port: 3000 });
+app.listen({ port: 3000 }, (err, address) => {
+  if (err) {
+    console.error("Error starting server:", err);
+    process.exit(1);
+  }
+  console.log(`Server is running at ${address}`);
+});
 
 // Route get requests to the GraphiQL endpoint so loading the root URL doesn't show an error
 app.get("/", async (_request, reply) => {

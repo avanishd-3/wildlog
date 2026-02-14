@@ -53,3 +53,7 @@ lerna-debug.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# SSL Keys (git already ignores .pem files, but just to be sure)
+localhost.pem
+localhost-key.pem

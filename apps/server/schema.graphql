@@ -1,0 +1,53 @@
+type Mutation {
+  createPark(description: String!, designation: ParkDesignationEnum!, name: String!): Park
+}
+
+type Park {
+  description: String!
+  designation: ParkDesignationEnum!
+  id: String!
+  latitude: Float
+  longitude: Float
+  name: String!
+  states: String!
+  type: ParkTypeEnum!
+}
+
+enum ParkDesignationEnum {
+  MEMORIAL
+  NATIONAL_HISTORICAL_PARK
+  NATIONAL_HISTORIC_PARK
+  NATIONAL_HISTORIC_SITE
+  NATIONAL_LAKESHORE
+  NATIONAL_MEMORIAL
+  NATIONAL_MILITARY_PARK
+  NATIONAL_MILITARY_PARK_SITE
+  NATIONAL_MONUMENT
+  NATIONAL_PARK
+  NATIONAL_PARKWAY
+  NATIONAL_PRESERVE
+  NATIONAL_RECREATION_AREA
+  NATIONAL_RESERVE
+  NATIONAL_RIVER
+  NATIONAL_SEASHORE
+  NATIONAL_TRAIL
+  PARK_PROPERTY
+  POINT_OF_INTEREST
+  STATE_BEACH
+  STATE_HISTORIC_PARK
+  STATE_HISTORIC_SITE
+  STATE_MARINE_RESERVE
+  STATE_NATURAL_RESERVE
+  STATE_PARK
+  STATE_RECREATION_AREA
+  STATE_VEHICULAR_RECREATION_AREA
+}
+
+enum ParkTypeEnum {
+  NATIONAL
+  STATE
+}
+
+type Query {
+  getPark: Park
+}
