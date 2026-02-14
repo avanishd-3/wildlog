@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "nature-letterbox",
+  "private_key_id": "b9eba28111c4a5ae55d03cbe253961a628a81478",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCbwsjlUf2mYbHf\n1JNTvzjGLIjSrorWo2rNsYTmd7msvwfrwKYI08uTNggiRdhgxIECMQuK0DK6jNSw\nXKBulzm2v42zelUgXv0/gpNGAoxPM2IYoOTwIpzsNrXFoo7YKK0clMFqTNWWQpvd\nGeYb8BthtGLmyi4IWtEHez2cOa6CLyqoJxFRNXWL4BxU17s8bpxJKQTm29yAguJ0\ngputLjQEXmrKYq4igXgbYYV9IVKOEqjmmER66i6VJu9uwnW9mLzKUJTNFQFyZKVS\nyktu3zzstBdMfwA7+PbDnznw75vs2TZPDnKl7tVpwmGebVCvdG0Bp3a5JF+d9ty9\nPZn3138XAgMBAAECggEAB0xkZcZmkxNp0Rn2AKBpqcjawmXLpfdd9knBTJvt4dJz\nrbrHAjaLspf/X+e+QKPZ2FScUgKjwIpVHvcVd15zpa9VFZn/qiF5Tq6wyuuB+pC8\nTHjMMWpVyFsJ6mWjDtgyawVCCNfqfCdz2TOGTOcpHqC5Wk9n7Rv1m8WiYz3FV7Pe\nSCbpezTMkZ3kfGiQpoxbp/o7LOfZfbwsxEfL6+eFryUAxwBWcRjgoKvyU7lcc+8y\nwjP/lseMgcPR8FULYwIxCRaOnp1qEBPds3YAxpt5rDYvEUam0hWEFAkXKLybwc9N\nYohr7394lZW/aBC+5PdnBAchc8pCsGLbeLfwnthKdQKBgQDb2G3+oaPTtw1LZIrL\nK/j2N6diYlRh+C3HbBIbUV0VDk9MdtdZhsIQE4DbFB2oSoMTxMc0DLFiu9381zR4\nX+EET3oV+EMpbNGTCZA9Zyasc4trtobWiaBsg25oM4Q/c/B484J5hGWTmQQqk1Ru\njZgANL+cKdr1skK60CGZUdCJIwKBgQC1YF9xy6AoCscb1Ldj0i9pGcFJAAS6sFHl\nWYGzDjyOoOn1RMr/kVB4cxe6dSfxIJcuMs07mragMecISDFMILAd6WZhRyp1vDEC\nzvgJrA3Z5vn2bFL+sD9gyUjFP+QdrXAi0AmmBdbHmP/vZJAczbUFy317TtPwuTx1\nxWvPZdRjfQKBgGA7MZKnEH4o/2HEBdj/S4ADRnqTThqANxG25YodqGACHoX68zLW\nAPZmgx3ihUTYMN4jYYsQD0mHsJjvXqFeXrGzVF5viH6GiooRQpkOIOiVvy6L/CPG\npHk7YsWr3zSjPFzFQpSMdqYP8bntOaUWx7U3YbQqwhSQThNV7Y8eN+j/AoGAac2c\nH6+e73zKBUwi5pH3oiGqBMGEALtWKqn55M+LN9Baaf8FQ+wquvi4gMZS1HAkgIiV\n/A0WN4CkusoSJ8xxsCE03c470I5FMNQ3EL1THyeD7OHn0DZT4kvIrXfFxCImZchh\nuH1zet+ffLB2+LZuwMChpEqpi6UixbiyWTuXl6kCgYB3roq1/ZRzALeOxujr2X55\ns4q/UVFMpsry/Cp4nrH20LtGRlQiFoXxQu3n+88rHocW3SKRcEhp5WtXqHIxOiKo\nURpbKR0fTbxMwsx1iMRk96eV4bG/69rKO4yaLGapirogpBvZPZVDrWAdz8KgulUl\nEn1xJl2jyTQaVSXjzr5Vog==\n-----END PRIVATE KEY-----\n",
+  "client_email": "timqn22@nature-letterbox.iam.gserviceaccount.com",
+  "client_id": "106751597309664255409",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/timqn22%40nature-letterbox.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
