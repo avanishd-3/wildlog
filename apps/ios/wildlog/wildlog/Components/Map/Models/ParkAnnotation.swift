@@ -11,13 +11,13 @@ import MapKit
 final class ParkAnnotation: NSObject, MKAnnotation {
     let coordinate: CLLocationCoordinate2D
     
-    // Error if these 2 are not optional
+    // Subtitles look weird and Apple Maps doesn't use them
+    
+    // Error if not optional
     let title: String?
-    let subtitle: String?
     
     init(park: Park) {
         self.coordinate = CLLocationCoordinate2D(latitude: park.latitude, longitude: park.longitude)
         self.title = park.name
-        self.subtitle = park.designation
     }
 }

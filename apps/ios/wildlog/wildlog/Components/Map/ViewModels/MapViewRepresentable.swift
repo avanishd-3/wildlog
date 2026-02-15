@@ -308,11 +308,11 @@ final class Coordinator: NSObject, MKMapViewDelegate {
         guard !hasCenteredOnUser, let coord = userLocation.location?.coordinate else { return }
         hasCenteredOnUser = true
         
-        // Have initial region be w/in 50 miles of user location
+        // Have initial region be w/in 25 miles of user location
         // Otherwise starting off w/ no parks recommended is common
         //
         
-        let miles: CLLocationDistance = 50
+        let miles: CLLocationDistance = 25
         let regionRadius: CLLocationDistance = miles * 1609.344 // B/c 1 degree latitude is ~69 miles
         let region = MKCoordinateRegion(center: coord, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
         mapView.setRegion(region, animated: true)

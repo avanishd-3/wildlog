@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import MapKit
 
-final class CustomMarker: MKAnnotationView {
+final class CustomMarker: MKMarkerAnnotationView {
     static let identifier = "ParkMarker" // I think this might help w/ accessibility
     
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
@@ -23,9 +23,13 @@ final class CustomMarker: MKAnnotationView {
     }
     
     private func setup() {
-        let config = UIImage.SymbolConfiguration(pointSize: 28, weight: .bold)
-        let image = UIImage(systemName: "tree.fill", withConfiguration: config)?.withTintColor(.systemGreen, renderingMode: .alwaysOriginal)
-        self.image = image
-        self.centerOffset = CGPoint(x: 0, y: -14)
+        self.markerTintColor = .systemGreen
+        self.glyphTintColor = .white
+        self.displayPriority = .required
+        self.animatesWhenAdded = true
+        
+        let config = UIImage.SymbolConfiguration(pointSize: 17, weight: .semibold)
+        
+        self.glyphImage = UIImage(systemName: "tree.fill", withConfiguration: config)
     }
 }
