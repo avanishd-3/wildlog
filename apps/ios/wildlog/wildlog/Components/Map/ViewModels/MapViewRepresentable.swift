@@ -20,8 +20,13 @@ struct MapViewRepresentable: UIViewRepresentable {
     @Binding var selectedTab: Tabs
     @Binding var isSheetPresented: Bool
     
+    // Filter bindings
+    @Binding var filters: ParkFiltersInput?
+    
+    @Binding var mapView: CustomMkMapView
+    
     func makeUIView(context: Context) -> MKMapView {
-        let mapView = CustomMkMapView()
+//        let mapView = CustomMkMapView()
         mapView.delegate = context.coordinator
         mapView.showsUserLocation = true
         
@@ -169,14 +174,29 @@ struct MapViewRepresentable: UIViewRepresentable {
     }
     
     func makeCoordinator() -> Coordinator {
-        Coordinator(selectedTab: $selectedTab, isSheetPresented: $isSheetPresented)
+        Coordinator(
+            selectedTab: $selectedTab,
+            isSheetPresented: $isSheetPresented,
+            filters: $filters
+        )
     }
 }
 
 // This is for communicating marker changes to map view
 final class Coordinator: NSObject, MKMapViewDelegate {
     
-    init(selectedTab: Binding<Tabs>, isSheetPresented: Binding<Bool>, mapView: MKMapView? = nil, locationButton: CustomUserTrackingButton? = nil, pitchButton: CustomPitchButton? = nil, backButton: CustomBackButton? = nil, hasCenteredOnUser: Bool = false, searchButton: SearchThisAreaButton? = nil) {
+    init(
+        selectedTab: Binding<Tabs>,
+        isSheetPresented: Binding<Bool>,
+        mapView: MKMapView? = nil,
+        locationButton: CustomUserTrackingButton? = nil,
+        pitchButton: CustomPitchButton? = nil,
+        backButton: CustomBackButton? = nil,
+        hasCenteredOnUser: Bool = false,
+        searchButton: SearchThisAreaButton? = nil,
+        filters: Binding<ParkFiltersInput?>
+    ) {
+            
         self.selectedTab = selectedTab
         self.isSheetPresented = isSheetPresented
         self.mapView = mapView
@@ -185,10 +205,12 @@ final class Coordinator: NSObject, MKMapViewDelegate {
         self.backButton = backButton
         self.hasCenteredOnUser = hasCenteredOnUser
         self.searchButton = searchButton
+        self.filters = filters
     }
     
     var selectedTab: Binding<Tabs>
     var isSheetPresented: Binding<Bool>
+    var filters: Binding<ParkFiltersInput?>
     
     /* Weak references */
     weak var mapView: MKMapView?
@@ -244,6 +266,7 @@ final class Coordinator: NSObject, MKMapViewDelegate {
         self.isSheetPresented.wrappedValue = false
     }
     
+    // Handle when user clicks the search this area button
     @objc func didTapSearchThisArea() {
         debugPrint("In did tap search this area button")
         fetchParksForVisibleRegion()
@@ -258,6 +281,8 @@ final class Coordinator: NSObject, MKMapViewDelegate {
         
         let region = mapView.region
         
+        let currFilters = filters.wrappedValue
+        
         // Get coordinates for api
         let x_min = region.center.longitude - (region.span.longitudeDelta / 2)
         let x_max = region.center.longitude + (region.span.longitudeDelta / 2)
@@ -266,7 +291,8 @@ final class Coordinator: NSObject, MKMapViewDelegate {
         
         Task {
                 do {
-                    let query = GetParksByBoundsQuery(x_max: x_max, x_min: x_min, y_max: y_max, y_min: y_min)
+                    let query = GetParksByBoundsQuery(filters: currFilters.map { .some($0) } ?? .none, x_max: x_max, x_min: x_min, y_max: y_max, y_min: y_min)
+                    
                     let response = try await apolloClient.fetch(query: query)
                     let parks = response.data?.getParksByBounds?.compactMap { Park(from: $0) } ?? []
                     DispatchQueue.main.async {

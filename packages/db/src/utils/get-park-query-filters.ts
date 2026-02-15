@@ -6,7 +6,7 @@ import { eq, lte } from "drizzle-orm";
 export function getParksFilters(filters?: any | null) {
   /**
    * Create array of where clauses based on provided filters. This will be used in the getParksByBoundingBox query to
-   * filter parks based on the provided criteria.
+   * Filter parks based on the provided criteria (and only, or would be too confusing for the user)
    *
    * See: https://brockherion.dev/blog/posts/dynamic-where-statements-in-drizzle/
    */
@@ -20,9 +20,13 @@ export function getParksFilters(filters?: any | null) {
 
   if (filters?.search) {
     // TODO: Implement search using Levenshtein distance for fuzzy matching
-  } else if (filters?.type) {
+  }
+
+  if (filters?.type) {
     where.push(eq(park.type, filters?.type));
-  } else if (filters?.cost) {
+  }
+
+  if (filters?.cost) {
     if (filters.cost === "Free") {
       where.push(eq(park.free, true));
     } else {
@@ -37,9 +41,9 @@ export function getParksFilters(filters?: any | null) {
           filters.cost = 50;
           break;
         default:
-          filters.cost = 1000; // Arbitrary high number to catch any parks with cost above the defined categories
+          filters.cost = 0; // Default to 0 if cost filter is somehow invalid, though this should be prevented by GraphQL enum validation
       }
-      where.push(lte(park.cost, filters.cost));
+      where.push(lte(park.cost, filters.cost)); // Park cost <= filter cost
     }
   }
 

@@ -85,6 +85,7 @@ builder.queryField("getParksByBounds", (t) =>
       filters: t.arg({ type: parkFilters, required: false }),
     },
     resolve: async (_, args) => {
+      console.log("Received filters:", args.filters);
       const filters = getParksFilters(args.filters);
       const parks = await getParksByBoundingBox(
         args.x_min,
