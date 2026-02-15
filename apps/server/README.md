@@ -8,6 +8,19 @@ The server has the following endpoints.
 - `/graphiql`: UI for testing out queries (similar to Podman)
 - `/graphdb`: redirects to Neo4J browser (which is on localhost:7474)
 
+## File Structure
+
+```text
+/
+├── src
+│   ├── schema (GraphQL schema, not DB schema)
+│   │   └── schema.ts (import all schema files and create server-side GraphQL schema)
+│   ├── utils (Utilities)
+│   ├── builder.ts (where pothos configuration is, add plugins here)
+│   ├── index.ts (fastify server & mercurius configuration)
+```
+
+
 # GraphQL
 
 The way we're using GraphQL in the server is code-first, which means that the TS code is the **source of truth** for what the schema is.
