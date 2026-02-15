@@ -8,20 +8,23 @@ public struct GetParksByBoundsQuery: GraphQLQuery {
   public static let operationName: String = "GetParksByBounds"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query GetParksByBounds($x_max: Float!, $x_min: Float!, $y_max: Float!, $y_min: Float!) { getParksByBounds(x_max: $x_max, x_min: $x_min, y_max: $y_max, y_min: $y_min) { __typename id name description designation latitude longitude states type } }"#
+      #"query GetParksByBounds($filters: ParkFiltersInput, $x_max: Float!, $x_min: Float!, $y_max: Float!, $y_min: Float!) { getParksByBounds( filters: $filters x_max: $x_max x_min: $x_min y_max: $y_max y_min: $y_min ) { __typename id name description designation latitude longitude states type } }"#
     ))
 
+  public var filters: GraphQLNullable<ParkFiltersInput>
   public var x_max: Double
   public var x_min: Double
   public var y_max: Double
   public var y_min: Double
 
   public init(
+    filters: GraphQLNullable<ParkFiltersInput>,
     x_max: Double,
     x_min: Double,
     y_max: Double,
     y_min: Double
   ) {
+    self.filters = filters
     self.x_max = x_max
     self.x_min = x_min
     self.y_max = y_max
@@ -29,6 +32,7 @@ public struct GetParksByBoundsQuery: GraphQLQuery {
   }
 
   @_spi(Unsafe) public var __variables: Variables? { [
+    "filters": filters,
     "x_max": x_max,
     "x_min": x_min,
     "y_max": y_max,
@@ -42,6 +46,7 @@ public struct GetParksByBoundsQuery: GraphQLQuery {
     @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { WildLogAPI.Objects.Query }
     @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
       .field("getParksByBounds", [GetParksByBound]?.self, arguments: [
+        "filters": .variable("filters"),
         "x_max": .variable("x_max"),
         "x_min": .variable("x_min"),
         "y_max": .variable("y_max"),
