@@ -56,7 +56,7 @@ To create a local SSL certificate, follow these instructions.
 
 This project uses PostgreSQL with Drizzle ORM and Neo4j.
 
-1. Update your `apps/server/.env` file with your connection details.
+1. Update your `apps/server/.env` file with your connection details. See `packages/env/src/server.ts` for required fields (for dev, you can take the database info from the docker compose files in the db and graph-db packages).
 
 2. Apply the schema to your PostgreSQL database:
 
