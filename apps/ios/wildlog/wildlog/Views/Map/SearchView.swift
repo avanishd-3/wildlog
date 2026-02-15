@@ -16,6 +16,8 @@ struct SearchView: View {
     @Binding var selectedTab: Tabs
     
     // Need to store filters up here so map can get them
+    
+    // Need to have map here, so the sheet can apply filters to the map
     @State private var mapView: CustomMkMapView = CustomMkMapView()
     @State private var filters: ParkFiltersInput?
     
