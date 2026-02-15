@@ -164,7 +164,7 @@ struct MapViewRepresentable: UIViewRepresentable {
         
         // Fetch parks for initial region
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            context.coordinator.fetchParksForVisibleRegion()
+            context.coordinator.fetchParks()
         }
 
         return mapView
@@ -188,7 +188,7 @@ final class Coordinator: NSObject, MKMapViewDelegate {
     init(
         selectedTab: Binding<Tabs>,
         isSheetPresented: Binding<Bool>,
-        mapView: MKMapView? = nil,
+        mapView: CustomMkMapView? = nil,
         locationButton: CustomUserTrackingButton? = nil,
         pitchButton: CustomPitchButton? = nil,
         backButton: CustomBackButton? = nil,
@@ -213,7 +213,7 @@ final class Coordinator: NSObject, MKMapViewDelegate {
     var filters: Binding<ParkFiltersInput?>
     
     /* Weak references */
-    weak var mapView: MKMapView?
+    weak var mapView: CustomMkMapView?
     weak var locationButton: CustomUserTrackingButton?
     weak var pitchButton: CustomPitchButton?
     weak var backButton: CustomBackButton?
@@ -269,43 +269,17 @@ final class Coordinator: NSObject, MKMapViewDelegate {
     // Handle when user clicks the search this area button
     @objc func didTapSearchThisArea() {
         debugPrint("In did tap search this area button")
-        fetchParksForVisibleRegion()
+        fetchParks()
         UIView.animate(withDuration: 0.2) {
             self.searchButton?.alpha = 0 // Hide search button
         }
     }
     
-    func fetchParksForVisibleRegion() {
-        debugPrint("Fetching parks from API")
-        guard let mapView else { return }
-        
-        let region = mapView.region
-        
-        let currFilters = filters.wrappedValue
-        
-        // Get coordinates for api
-        let x_min = region.center.longitude - (region.span.longitudeDelta / 2)
-        let x_max = region.center.longitude + (region.span.longitudeDelta / 2)
-        let y_min = region.center.latitude - (region.span.latitudeDelta / 2)
-        let y_max = region.center.latitude + (region.span.latitudeDelta / 2)
-        
-        Task {
-                do {
-                    let query = GetParksByBoundsQuery(filters: currFilters.map { .some($0) } ?? .none, x_max: x_max, x_min: x_min, y_max: y_max, y_min: y_min)
-                    
-                    let response = try await apolloClient.fetch(query: query)
-                    let parks = response.data?.getParksByBounds?.compactMap { Park(from: $0) } ?? []
-                    DispatchQueue.main.async {
-                        mapView.removeAnnotations(mapView.annotations)
-                        for park in parks {
-                            mapView.addAnnotation(ParkAnnotation(park: park))
-                        }
-                    }
-                } catch {
-                    debugPrint(error.localizedDescription)
-                }
-            }
+    func fetchParks() {
+        fetchParksForVisibleRegion(mapView: mapView, filters: filters.wrappedValue)
     }
+    
+    
 
     func mapView(_ mapView: MKMapView,
                  didChange mode: MKUserTrackingMode,
