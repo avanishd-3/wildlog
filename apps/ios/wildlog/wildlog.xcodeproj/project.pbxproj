@@ -52,7 +52,7 @@
 		A28823022F31473100148C3E /* Exceptions for "WildLog" folder in "WildLogUITests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Components/Map/MapViewRepresentable.swift,
+				Components/Map/ViewModels/MapViewRepresentable.swift,
 				Views/ContentView.swift,
 				Views/LaunchScreenView.swift,
 				Views/ListView.swift,
@@ -247,7 +247,7 @@
 					};
 				};
 			};
-			buildConfigurationList = A27E39932F30542E0079200D /* Build configuration list for PBXProject "wildlog" */;
+			buildConfigurationList = A27E39932F30542E0079200D /* Build configuration list for PBXProject "WildLog" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -603,7 +603,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A27E39932F30542E0079200D /* Build configuration list for PBXProject "wildlog" */ = {
+		A27E39932F30542E0079200D /* Build configuration list for PBXProject "WildLog" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A27E39BC2F30542F0079200D /* Debug */,
