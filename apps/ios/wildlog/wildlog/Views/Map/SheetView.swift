@@ -59,10 +59,20 @@ struct SheetView: View {
                     set: { newValue in
                         if filters == nil { filters = ParkFiltersInput() }
                         filters?.search = newValue.isEmpty ? .none : .some(newValue)
-                        // TODO: Add debounce on search
-                        onFiltersChanged?()
                     }
                 ))
+                .task(id: filters?.search.unwrapped) {
+                    debugPrint("In debounce task")
+                    Task {
+                        do {
+                            // 300 ms debounce
+                            try await Task.sleep(nanoseconds: 300_000_000)
+                            onFiltersChanged?()
+                        } catch {
+                            print("Error debouncing filters: \(error)")
+                        }
+                    }
+                }
                 .autocorrectionDisabled()
             }
             .modifier(TextFieldGrayBackgroundColor())
