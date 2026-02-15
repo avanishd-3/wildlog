@@ -10,12 +10,25 @@
 
 import SwiftUI
 import MapKit
+import WildLogAPI
 
 struct SheetView: View {
     @State private var search: String = ""
     
+    // Filter options
+    let parkTypes = ["National", "State"]
+    let parkCosts = ["Free", "$", "$$"]
+    let maxDistances = ["25", "50", "75", "100"]
+    
+    @State private var selectedParkType: String?
+    @State private var selectedParkCost: String?
+    @State private var selectedMaxDistance: String?
+    
+    // Closure to notify parent of filter changes
+    var onFiltersChanged: (() -> Void)? = nil
+    
     var body: some View {
-        VStack {
+        VStack(spacing: 16) {
             HStack {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.secondary)
@@ -27,7 +40,38 @@ struct SheetView: View {
             }
             .modifier(TextFieldGrayBackgroundColor())
             
-            Spacer()
+            // Filters
+            VStack(alignment: .leading, spacing: 8) {
+                FilterChips(
+                    title: "Type",
+                    options: parkTypes,
+                    selected: selectedParkType,
+                    onSelect: { type in
+                        selectedParkType = (selectedParkType == type) ? nil : type
+                        onFiltersChanged?()
+                    }
+                )
+                FilterChips(
+                    title: "Cost",
+                    options: parkCosts,
+                    selected: selectedParkCost,
+                    onSelect: { cost in
+                        selectedParkCost = (selectedParkCost == cost) ? nil : cost
+                        onFiltersChanged?()
+                    }
+                )
+                FilterChips(
+                    title: "Max Distance (mi)",
+                    options: maxDistances,
+                    selected: selectedMaxDistance,
+                    onSelect: { dist in
+                        selectedMaxDistance = (selectedMaxDistance == dist) ? nil : dist
+                        onFiltersChanged?()
+                    }
+                )
+            }
+                        
+                        Spacer()
             
             
         }
