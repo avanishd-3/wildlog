@@ -1,5 +1,5 @@
 import { park } from "@wildlog/db/schema/park";
-import { eq, lte } from "drizzle-orm";
+import { eq, gte, lt } from "drizzle-orm";
 
 // TODO: Replace any w/ type from GraphQL schema
 // Will probably require moving GraphQl schema building to its own package to avoid circular dependency between server and db packages.
@@ -27,23 +27,24 @@ export function getParksFilters(filters?: any | null) {
   }
 
   if (filters?.cost) {
-    if (filters.cost === "Free") {
-      where.push(eq(park.free, true));
-    } else {
-      switch (filters.cost) {
-        case "Low":
-          filters.cost = 5;
-          break;
-        case "Medium":
-          filters.cost = 25;
-          break;
-        case "High":
-          filters.cost = 50;
-          break;
-        default:
-          filters.cost = 0; // Default to 0 if cost filter is somehow invalid, though this should be prevented by GraphQL enum validation
-      }
-      where.push(lte(park.cost, filters.cost)); // Park cost <= filter cost
+    switch (filters.cost) {
+      case "Free":
+        where.push(eq(park.free, true));
+        break;
+      case "Low":
+        // 1-14 dollars
+        where.push(eq(park.free, false));
+        where.push(lt(park.cost, 15));
+        break;
+      case "Medium":
+        // 15-29 dollars
+        where.push(gte(park.cost, 15));
+        where.push(lt(park.cost, 30));
+        break;
+      case "High":
+        // Above 30 dollars
+        where.push(gte(park.cost, 30));
+        break;
     }
   }
 
