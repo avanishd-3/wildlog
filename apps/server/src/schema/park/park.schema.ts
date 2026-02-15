@@ -3,6 +3,7 @@ import { builder } from "@/builder";
 import { parkDesignationEnum, parkTypeEnum } from "@wildlog/db/schema/park";
 
 import { getParksByBoundingBox } from "@wildlog/db/queries/park_queries";
+import { getParksFilters } from "@wildlog/db/utils/get-park-query-filters";
 
 const ParkDesignationEnum = createGraphQLEnumFromPgEnum(
   builder,
@@ -10,6 +11,10 @@ const ParkDesignationEnum = createGraphQLEnumFromPgEnum(
   parkDesignationEnum.enumValues,
 );
 const ParkTypeEnum = createGraphQLEnumFromPgEnum(builder, "ParkTypeEnum", parkTypeEnum.enumValues);
+
+const ParkCostFilter = builder.enumType("ParkCostFilterEnum", {
+  values: ["Free", "Low", "Medium", "High"] as const,
+});
 
 const park = builder.simpleObject("Park", {
   fields: (t) => ({
@@ -42,6 +47,14 @@ const park = builder.simpleObject("Park", {
   }),
 });
 
+export const parkFilters = builder.inputType("ParkFiltersInput", {
+  fields: (t) => ({
+    search: t.string(),
+    type: t.field({ type: ParkTypeEnum }),
+    cost: t.field({ type: ParkCostFilter }),
+  }),
+});
+
 builder.queryField("getPark", (t) =>
   t.field({
     type: park,
@@ -69,9 +82,17 @@ builder.queryField("getParksByBounds", (t) =>
       y_min: t.arg.float({ required: true }),
       x_max: t.arg.float({ required: true }),
       y_max: t.arg.float({ required: true }),
+      filters: t.arg({ type: parkFilters, required: false }),
     },
     resolve: async (_, args) => {
-      const parks = await getParksByBoundingBox(args.x_min, args.x_max, args.y_min, args.y_max);
+      const filters = getParksFilters(args.filters);
+      const parks = await getParksByBoundingBox(
+        args.x_min,
+        args.x_max,
+        args.y_min,
+        args.y_max,
+        filters,
+      );
       return parks.map((park) => ({
         id: park.id,
         name: park.name,
