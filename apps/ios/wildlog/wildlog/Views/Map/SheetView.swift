@@ -16,7 +16,10 @@ struct SheetView: View {
     @State private var search: String = ""
     
     // Filter options
-    let parkTypes = ["National", "State"]
+    let parkTypes = ParkTypeEnum.allCases.map { value in
+        // Uppercase first letter of word
+        value.rawValue.lowercased().capitalized(with: Locale.current)
+    }
     let parkCosts = ["Free", "$", "$$"]
     let maxDistances = ["25", "50", "75", "100"]
     
