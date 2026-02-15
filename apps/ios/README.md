@@ -78,7 +78,7 @@ I set the App categpry for social networking. but category only matters when pub
 
 ## GraphQL
 
-Using the [Apollo iOS client] to make API requests. Unlike the code-first approach of Pothos, Apollo is schema-first. This means the schema files located in ios/WildLog/graphql are the **source of truth** for the iOS app.
+Using the [Apollo iOS client](https://www.apollographql.com/docs/ios) to make API requests. Unlike the code-first approach of Pothos, Apollo is schema-first. This means the schema files located in ios/WildLog/graphql are the **source of truth** for the iOS app.
 
 The configuration for Apollo iOS is apollo-codegen-config.json.
 
