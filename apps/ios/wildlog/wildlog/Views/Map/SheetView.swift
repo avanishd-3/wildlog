@@ -78,7 +78,10 @@ struct SheetView: View {
                 }
                 .autocorrectionDisabled()
             }
-            .modifier(TextFieldGrayBackgroundColor())
+            .modifier(TextFieldGrayBackgroundColor()) // Also changes padding and corner radius
+            
+            // So gray background does not extend to edge of sheet
+            .padding(.horizontal, 16)
             
             // Filters
             VStack(alignment: .leading, spacing: 8) {
@@ -126,10 +129,7 @@ struct SheetView: View {
                         onFiltersChanged?()
                     }
                 )
-                
-                Spacer()
             }
-            .padding()
             // Do not allow user to dismiss sheet
             // Since Swift UI maintains views, they cannot bring it back up
             // Have a back button in the map instead
@@ -149,8 +149,8 @@ struct TextFieldGrayBackgroundColor: ViewModifier {
         content
             .padding(12)
             .background(.regularMaterial)
-            .clipShape(RoundedRectangle(cornerRadius: 8.0, style: .continuous))
-            .foregroundColor(.primary)
+            .clipShape(RoundedRectangle(cornerRadius: 16.0, style: .continuous))
+            .foregroundColor(Color(.secondarySystemBackground)) // Mimic Apple Maps
     }
 }
 
