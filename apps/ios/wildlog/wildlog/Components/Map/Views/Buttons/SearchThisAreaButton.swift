@@ -21,12 +21,25 @@ final class SearchThisAreaButton: UIButton {
     
     private func setup() {
         // Make button look like Apple Maps
-        setTitle("Search This Area", for: .normal)
-        setTitleColor(.white, for: .normal)
-        backgroundColor = .systemBlue
-        layer.cornerRadius = 10
-        titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-        translatesAutoresizingMaskIntoConstraints = false
+        
+        // iOS 15 new button API: https://sarunw.com/posts/new-way-to-style-uibutton-in-ios15/#more-customization
+        
+        var container = AttributeContainer()
+        container.font = UIFont.preferredFont(forTextStyle: .headline)
+        
+        var config = UIButton.Configuration.filled()
+        config.attributedTitle = AttributedString("Search here", attributes: container)
+        config.baseBackgroundColor = .tertiarySystemBackground
+        config.baseForegroundColor = .systemBlue
+        config.buttonSize = .large
+        configuration?.background.cornerRadius = 16
+        config.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16) // Distance from text to border
+        
+        self.configuration = config
+        
+        
+        // These are not covered by the iOS 15 new button API above
+        translatesAutoresizingMaskIntoConstraints = false // Button invisible w/o this
         alpha = 0 // Hide by default
     }
 }

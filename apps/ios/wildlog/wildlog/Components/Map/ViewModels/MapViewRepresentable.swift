@@ -123,11 +123,10 @@ struct MapViewRepresentable: UIViewRepresentable {
             backButton.centerYAnchor.constraint(equalTo: backContainer.centerYAnchor),
             
             // Search area button bottom middle (large constant to be above sheet)
-            // TODO: Maybe push button up when sheet moves up
             searchButton.centerXAnchor.constraint(equalTo: mapView.centerXAnchor),
             searchButton.bottomAnchor.constraint(
                 equalTo: mapView.safeAreaLayoutGuide.bottomAnchor,
-                constant: -160
+                constant: -152
             ),
         ])
 
