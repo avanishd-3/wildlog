@@ -63,6 +63,6 @@ struct SearchView: View {
     }
 }
 
-//#Preview {
-//    SearchView(isSheetPresented: .constant(true), selectedTab: .constant(.home), search: "")
-//}
+#Preview {
+    SearchView(isSheetPresented: .constant(true), selectedTab: .constant(.home))
+}

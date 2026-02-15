@@ -180,6 +180,6 @@ struct TextFieldGrayBackgroundColor: ViewModifier {
     }
 }
 
-//#Preview {
-//    SheetView(search: Binding<String("hello")>)
-//}
+#Preview {
+    SheetView(filters: .constant(ParkFiltersInput()))
+}

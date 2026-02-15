@@ -27,6 +27,6 @@ struct CustomMapView: View {
     }
 }
 
-//#Preview {
-//    CustomMapView(selectedTab: .constant(.home), isSheetPresented: .constant(false))
-//}
+#Preview {
+    CustomMapView(selectedTab: .constant(.home), isSheetPresented: .constant(true), filters: .constant(ParkFiltersInput()), mapView: .constant(CustomMkMapView()))
+}
