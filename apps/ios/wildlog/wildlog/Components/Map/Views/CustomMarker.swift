@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 
 final class CustomMarker: MKMarkerAnnotationView {
-    static let identifier = "ParkMarker" // I think this might help w/ accessibility
+    static let identifier = "ParkMarker" // So MapKit can track the type of marker being removed and added
     
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)

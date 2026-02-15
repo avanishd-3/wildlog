@@ -295,10 +295,24 @@ final class Coordinator: NSObject, MKMapViewDelegate {
     }
     
     // Use custom marker for parks
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        guard let parkAnnotation = annotation as? ParkAnnotation else { return nil }
+    // See: https://www.hackingwithswift.com/read/16/3/annotations-and-accessory-views-mkpinannotationview
+    func mapView(_ mapView: MKMapView, viewFor annotation: any MKAnnotation) -> MKAnnotationView? {
         
-        let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: CustomMarker.identifier, for: parkAnnotation)
+        // TODO: When user clicks on marker, they should be redirected to the ParkView for that park
+        
+        // Do not customizer user location
+        guard !(annotation is MKUserLocation) else { return nil }
+        
+        guard let parkAnnotation = annotation as? ParkAnnotation else {
+            debugPrint("Annotation not a ParkAnnotation")
+            return nil }
+        
+        // Does not show custom annotation if you let annotationView equal this
+        // But I think dequeue is important, so I'll leave it in
+        mapView.dequeueReusableAnnotationView(withIdentifier: CustomMarker.identifier, for: parkAnnotation)
+        
+        let annotationView = CustomMarker(annotation: parkAnnotation, reuseIdentifier: CustomMarker.identifier)
+        
         annotationView.annotation = parkAnnotation
         return annotationView
     }
