@@ -33,13 +33,12 @@ export const seed = async () => {
         skip_empty_lines: true,
         // Convert cost column to number
         cast: (value, context) => {
-          if (
-            context.column === "cost" ||
-            context.column === "latitude" ||
-            context.column === "longitude"
-          ) {
+          if (context.column === "cost") {
             const num = parseInt(value, 10);
             return Number.isNaN(num) ? 0 : num;
+          } else if (context.column === "latitude" || context.column === "longitude") {
+            const num = parseFloat(value);
+            return Number.isNaN(num) ? null : num;
           }
           return value;
         },
@@ -56,6 +55,8 @@ export const seed = async () => {
 
         // X longitude, Y latitude, SRID 4326 tells PostGIS this is a GPS coordinate
         // See: https://orm.drizzle.team/docs/guides/postgis-geometry-point
+
+        // Single precision is 7 decimal places, which is more than enough for our use case
         const location = sql`ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 4326)`;
 
         return {
