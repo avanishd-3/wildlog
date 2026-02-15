@@ -221,6 +221,10 @@ final class Coordinator: NSObject, MKMapViewDelegate {
     
     // Tracking variables
     private var hasCenteredOnUser = false
+    
+    // Region changes twice on first load, so need 2 flags
+    private var initializingMapOne = true
+    private var initializingMapTwo = true
 
     @objc func didTapLocation() {
         guard let mapView else { return }
@@ -289,9 +293,26 @@ final class Coordinator: NSObject, MKMapViewDelegate {
     
     //Show the search this area button when the region changes (pan or zoom)
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        UIView.animate(withDuration: 0.2) {
-            self.searchButton?.alpha = 1
+        
+        debugPrint("Region did change")
+        
+        // Hide button when map is first shown (region changes twice on first load)
+        
+        if (!initializingMapOne && !initializingMapTwo) {
+            UIView.animate(withDuration: 0.2) {
+                self.searchButton?.alpha = 1
+            }
         }
+        else {
+            debugPrint("Initializing map")
+            if initializingMapOne {
+                initializingMapOne = false
+            }
+            else {
+                initializingMapTwo = false
+            }
+        }
+        
     }
     
     // Use custom marker for parks
