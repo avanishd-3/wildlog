@@ -62,14 +62,17 @@ struct SheetView: View {
                     }
                 ))
                 .task(id: filters?.search.unwrapped) {
-                    debugPrint("In debounce task")
-                    Task {
-                        do {
-                            // 300 ms debounce
-                            try await Task.sleep(nanoseconds: 300_000_000)
-                            onFiltersChanged?()
-                        } catch {
-                            print("Error debouncing filters: \(error)")
+                    if !(filters?.search.unwrapped == nil) {
+                        
+                        Task {
+                            do {
+                                // 300 ms debounce
+                                debugPrint("In debounce task")
+                                try await Task.sleep(nanoseconds: 300_000_000)
+                                onFiltersChanged?()
+                            } catch {
+                                print("Error debouncing filters: \(error)")
+                            }
                         }
                     }
                 }
