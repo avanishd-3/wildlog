@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import WildLogAPI
 
 struct Park: Identifiable, Codable {
     let id: UUID
@@ -18,6 +19,28 @@ struct Park: Identifiable, Codable {
     let type: String
     let free: Bool
     let cost: String?
-    let imageName: String? 
-    
+    let imageName: String?
+}
+
+// Custom init for Park
+// See: https://www.hackingwithswift.com/example-code/language/how-to-add-a-custom-initializer-to-a-struct-without-losing-its-memberwise-initializer
+extension Park {
+    // Create park based on result of graph ql query
+    // TODO: Add free, cost, and imageName to GraphQL API
+    init?(from gql: GetParksByBoundsQuery.Data.GetParksByBound) {
+        guard let lat = gql.latitude, let lon = gql.longitude else { return nil }
+        self.init(
+            id: UUID(uuidString: gql.id) ?? UUID(),
+            name: gql.name,
+            description: gql.description,
+            designation: gql.designation.rawValue,
+            latitude: lat,
+            longitude: lon,
+            states: gql.states,
+            type: gql.type.rawValue,
+            free: false,
+            cost: nil,
+            imageName: nil
+        )
+    }
 }

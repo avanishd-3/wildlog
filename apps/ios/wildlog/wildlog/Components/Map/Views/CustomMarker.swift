@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 
 final class CustomMarker: MKAnnotationView {
-    static let identifier = "CustomMarker"
+    static let identifier = "ParkMarker" // I think this might help w/ accessibility
     
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)

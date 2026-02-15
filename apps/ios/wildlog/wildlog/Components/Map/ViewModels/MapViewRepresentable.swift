@@ -11,6 +11,8 @@
 
 import SwiftUI
 import MapKit
+import Apollo
+import WildLogAPI
 
 struct MapViewRepresentable: UIViewRepresentable {
     // UIViewRepresentable is a way to put UI Kit views into the Swift UI view hierarchy
@@ -36,6 +38,9 @@ struct MapViewRepresentable: UIViewRepresentable {
         mapView.isZoomEnabled = true
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .none // Default to none like Apple Maps
+        
+        // ---- Register custom marker ----
+        mapView.register(CustomMarker.self, forAnnotationViewWithReuseIdentifier: CustomMarker.identifier)
 
         // ---- Location button ----
         let locationContainer = MapsControlContainer()
@@ -57,6 +62,13 @@ struct MapViewRepresentable: UIViewRepresentable {
         
         backContainer.contentView.addSubview(backButton)
         mapView.addSubview(backContainer)
+        
+        // ---- Search this area button ----
+        
+        // No container b/c want different styling for this
+        let searchButton = SearchThisAreaButton()
+        mapView.addSubview(searchButton)
+        
 
         // ---- Layout (Apple Maps spacing) ----
         NSLayoutConstraint.activate([
@@ -104,6 +116,13 @@ struct MapViewRepresentable: UIViewRepresentable {
             
             backButton.centerXAnchor.constraint(equalTo: backContainer.centerXAnchor),
             backButton.centerYAnchor.constraint(equalTo: backContainer.centerYAnchor),
+            
+            // Search area button bottom middle
+            searchButton.centerXAnchor.constraint(equalTo: mapView.centerXAnchor),
+            searchButton.bottomAnchor.constraint(
+                equalTo: mapView.safeAreaLayoutGuide.bottomAnchor,
+                constant: -160
+            ),
         ])
 
         // ---- Wiring (so buttons actually do stuff) ----
@@ -111,6 +130,7 @@ struct MapViewRepresentable: UIViewRepresentable {
         context.coordinator.locationButton = locationButton
         context.coordinator.pitchButton = pitchButton
         context.coordinator.backButton = backButton
+        context.coordinator.searchButton = searchButton
 
         locationButton.addTarget(
             context.coordinator,
@@ -129,6 +149,17 @@ struct MapViewRepresentable: UIViewRepresentable {
             action: #selector(Coordinator.didTapBackButton),
             for: .touchUpInside
         )
+        
+        searchButton.addTarget(
+            context.coordinator,
+            action: #selector(Coordinator.didTapSearchThisArea),
+            for: .touchUpInside
+        )
+        
+        // Fetch parks for initial region
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            context.coordinator.fetchParksForVisibleRegion()
+        }
 
         return mapView
     }
@@ -144,7 +175,7 @@ struct MapViewRepresentable: UIViewRepresentable {
 // This is for communicating marker changes to map view
 final class Coordinator: NSObject, MKMapViewDelegate {
     
-    init(selectedTab: Binding<Tabs>, isSheetPresented: Binding<Bool>, mapView: MKMapView? = nil, locationButton: CustomUserTrackingButton? = nil, pitchButton: CustomPitchButton? = nil, backButton: CustomBackButton? = nil, hasCenteredOnUser: Bool = false) {
+    init(selectedTab: Binding<Tabs>, isSheetPresented: Binding<Bool>, mapView: MKMapView? = nil, locationButton: CustomUserTrackingButton? = nil, pitchButton: CustomPitchButton? = nil, backButton: CustomBackButton? = nil, hasCenteredOnUser: Bool = false, searchButton: SearchThisAreaButton? = nil) {
         self.selectedTab = selectedTab
         self.isSheetPresented = isSheetPresented
         self.mapView = mapView
@@ -152,6 +183,7 @@ final class Coordinator: NSObject, MKMapViewDelegate {
         self.pitchButton = pitchButton
         self.backButton = backButton
         self.hasCenteredOnUser = hasCenteredOnUser
+        self.searchButton = searchButton
     }
     
     var selectedTab: Binding<Tabs>
@@ -162,8 +194,9 @@ final class Coordinator: NSObject, MKMapViewDelegate {
     weak var locationButton: CustomUserTrackingButton?
     weak var pitchButton: CustomPitchButton?
     weak var backButton: CustomBackButton?
+    weak var searchButton: SearchThisAreaButton?
     
-    // Track whether we've centered on the user's location once
+    // Tracking variables
     private var hasCenteredOnUser = false
 
     @objc func didTapLocation() {
@@ -209,6 +242,43 @@ final class Coordinator: NSObject, MKMapViewDelegate {
         self.selectedTab.wrappedValue = .home
         self.isSheetPresented.wrappedValue = false
     }
+    
+    @objc func didTapSearchThisArea() {
+        debugPrint("In did tap search this area button")
+        fetchParksForVisibleRegion()
+        UIView.animate(withDuration: 0.2) {
+            self.searchButton?.alpha = 0 // Hide search button
+        }
+    }
+    
+    func fetchParksForVisibleRegion() {
+        debugPrint("Fetching parks from API")
+        guard let mapView else { return }
+        
+        let region = mapView.region
+        
+        // Get coordinates for api
+        let x_min = region.center.longitude - (region.span.longitudeDelta / 2)
+        let x_max = region.center.longitude + (region.span.longitudeDelta / 2)
+        let y_min = region.center.latitude - (region.span.latitudeDelta / 2)
+        let y_max = region.center.latitude + (region.span.latitudeDelta / 2)
+        
+        Task {
+                do {
+                    let query = GetParksByBoundsQuery(x_max: x_max, x_min: x_min, y_max: y_max, y_min: y_min)
+                    let response = try await apolloClient.fetch(query: query)
+                    let parks = response.data?.getParksByBounds?.compactMap { Park(from: $0) } ?? []
+                    DispatchQueue.main.async {
+                        mapView.removeAnnotations(mapView.annotations)
+                        for park in parks {
+                            mapView.addAnnotation(ParkAnnotation(park: park))
+                        }
+                    }
+                } catch {
+                    debugPrint(error.localizedDescription)
+                }
+            }
+    }
 
     func mapView(_ mapView: MKMapView,
                  didChange mode: MKUserTrackingMode,
@@ -216,14 +286,34 @@ final class Coordinator: NSObject, MKMapViewDelegate {
         locationButton?.update(for: mode)
     }
     
+    //Show the search this area button when the region changes (pan or zoom)
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        UIView.animate(withDuration: 0.2) {
+            self.searchButton?.alpha = 1
+        }
+    }
+    
+    // Use custom marker for parks
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        guard let parkAnnotation = annotation as? ParkAnnotation else { return nil }
+        
+        let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: CustomMarker.identifier, for: parkAnnotation)
+        annotationView.annotation = parkAnnotation
+        return annotationView
+    }
+    
     // Initially center the map on the user
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
         guard !hasCenteredOnUser, let coord = userLocation.location?.coordinate else { return }
         hasCenteredOnUser = true
-
-        // Span values are what Apple uses
-        // So clicking the user tracking button doesn't change region view
-        let region = MKCoordinateRegion(center: coord, span: MKCoordinateSpan(latitudeDelta: 0.024721442510596603, longitudeDelta: 0.01724951020932508))
+        
+        // Have initial region be w/in 50 miles of user location
+        // Otherwise starting off w/ no parks recommended is common
+        //
+        
+        let miles: CLLocationDistance = 50
+        let regionRadius: CLLocationDistance = miles * 1609.344 // B/c 1 degree latitude is ~69 miles
+        let region = MKCoordinateRegion(center: coord, latitudinalMeters: regionRadius, longitudinalMeters: regionRadius)
         mapView.setRegion(region, animated: true)
     }
 }
