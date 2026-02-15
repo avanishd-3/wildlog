@@ -23,17 +23,18 @@ struct FilterChips: View {
                 ForEach(options, id: \.self) { option in
                     Button(action: { onSelect(option) }) {
                         Text(option)
+                            .foregroundColor(.primary)
                             .padding(.horizontal, 12)
                             .padding(.vertical, 6)
-                            .background(
-                                RoundedRectangle(cornerRadius: 16)
-                                    .stroke(selected == option ? Color.accentColor : Color.gray.opacity(0.3), lineWidth: 2)
-                                    .background(
-                                        selected == option ? Color.accentColor.opacity(0.15) : Color.clear
-                                    )
-                            )
-                            .foregroundColor(.primary)
                     }
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(selected == option ? Color.accentColor.opacity(0.15) : Color.clear)
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(selected == option ? Color.accentColor : Color.gray.opacity(0.3), lineWidth: 2)
+                    )
                 }
             }
         }
