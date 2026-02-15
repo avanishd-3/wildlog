@@ -17,17 +17,13 @@ struct SheetView: View {
     @Binding var filters: ParkFiltersInput?
     var onFiltersChanged: (() -> Void)? = nil // Notify parent of filter change
     
-    // Convert from park typ eenum to string in UI
+    // Convert from park type enum to string in UI
     // This just makes it so NATIONAL -> National and so on
     func typeLabel(for type: ParkTypeEnum) -> String {
         type.rawValue.lowercased().capitalized(with: Locale.current)
     }
 
     // Convert from park cost enum to string in UI
-    // Free -> Free
-    // Low -> $
-    // Medium -> $$
-    // High -> $$$$
     func costLabel(for cost: ParkCostFilterEnum) -> String {
         switch cost {
         case .free: return "Free"
@@ -36,45 +32,18 @@ struct SheetView: View {
         case .high: return "$$$"
         }
     }
-
-    // Selected type as UI label
-    var selectedTypeLabel: String? {
-        if let typeEnum = filters?.type.value {
-            return typeLabel(for: typeEnum!)
-        }
-        return nil
-    }
     
-    // Selected cost as UI label
-    var selectedCostLabel: String? {
-        if let costEnum = filters?.cost.value {
-            return costLabel(for: costEnum!)
-        }
-        return nil
-    }
-    
-
     // Filter options
-    let parkTypes = ParkTypeEnum.allCases.map { value in
-        // Uppercase first letter of word
-        value.rawValue.lowercased().capitalized(with: Locale.current)
-    }
-    let parkCosts = ["Free", "$", "$$", "$$$"]
+    let parkTypes = ParkTypeEnum.allCases.map { $0 }
+    let parkCosts: [ParkCostFilterEnum] = [.free, .low, .medium, .high]
     
-    // Safely unwrap the selected type
-    var selectedType: String? {
-        if let typeEnum = filters?.type, case let .some(enumValue) = typeEnum {
-            return enumValue.value?.rawValue
-        }
-        return nil
+    // Selected values
+    var selectedParkType: ParkTypeEnum? {
+        filters?.type.value ?? .none
     }
-
-    // Safely unwrap the selected cost
-    var selectedCost: String? {
-        if let costEnum = filters?.cost, case let .some(enumValue) = costEnum {
-            return enumValue.value?.rawValue
-        }
-        return nil
+    
+    var selectedParkCost: ParkCostFilterEnum? {
+        filters?.cost.value ?? .none
     }
     
     var body: some View {
@@ -86,12 +55,7 @@ struct SheetView: View {
                 // I think disabling autocorrect makes it less annoying
                 // to type rare words
                 TextField("Search", text: Binding(
-                    get: {
-                        if let search = filters?.search, case let .some(value) = search {
-                            return value
-                        }
-                        return ""
-                    },
+                    get: { filters?.search.unwrapped ?? "" },
                     set: { newValue in
                         if filters == nil { filters = ParkFiltersInput() }
                         filters?.search = newValue.isEmpty ? .none : .some(newValue)
@@ -107,13 +71,15 @@ struct SheetView: View {
             VStack(alignment: .leading, spacing: 8) {
                 FilterChips(
                     title: "Type",
-                    options: parkTypes,
-                    selected: selectedTypeLabel,
-                    onSelect: { type in
+                    options: parkTypes.map(typeLabel),
+                    selected: selectedParkType.map(typeLabel),
+                    onSelect: { label in
                         if filters == nil { filters = ParkFiltersInput() }
-                        // Find the enum case for the selected type
-                        if let enumCase = ParkTypeEnum.allCases.first(where: { typeLabel(for: $0) == type}) {
-                            if selectedType == type {
+                        // Find the enum for selected toggle
+                        if let enumCase = parkTypes.first(where: { typeLabel(for: $0) == label}) {
+                            
+                            // De-select if already selected toggle
+                            if selectedParkType == enumCase {
                                 filters?.type = .none
                             } else {
                                 filters?.type = .some(GraphQLEnum(enumCase))
@@ -127,24 +93,19 @@ struct SheetView: View {
                 
                 FilterChips(
                     title: "Cost",
-                    options: parkCosts,
-                    selected: selectedCostLabel,
+                    options: parkCosts.map(costLabel),
+                    selected: selectedParkCost.map(costLabel),
                     onSelect: { cost in
                         if filters == nil { filters = ParkFiltersInput() }
-                        // Map UI label to enum value
-                        let enumValue: ParkCostFilterEnum? = switch cost {
-                            case "Free": .free
-                            case "$": .low
-                            case "$$": .medium
-                            case "$$$": .high
-                            default: nil
-                        }
                         
-                        if let enumValue {
-                            if selectedCost == cost {
+                        // Find the enum for selected toggle
+                        if let enumCase = parkCosts.first(where: { costLabel(for: $0) == cost}) {
+                            
+                            // De-select if already selected toggle
+                            if selectedParkCost == enumCase {
                                 filters?.cost = .none
                             } else {
-                                filters?.cost = .some(GraphQLEnum(enumValue))
+                                filters?.cost = .some(GraphQLEnum(enumCase))
                             }
                         } else {
                             filters?.cost = .none
