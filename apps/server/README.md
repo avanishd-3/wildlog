@@ -5,7 +5,7 @@ The server has the following endpoints.
 - `/`: root endpoint, which is set to auto-redirect to /graphiql
 - `/seed`: seed script for db (should **not** be used by client)
 - `/graphql`: endpoint for all GraphQL requests
-- `/graphiql`: UI for testing out queries (similar to Podman)
+- `/graphiql`: UI for testing out queries (similar to Postman)
 - `/graphdb`: redirects to Neo4J browser (which is on localhost:7474)
 
 ## File Structure
