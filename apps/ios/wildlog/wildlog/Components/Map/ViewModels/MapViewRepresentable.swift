@@ -334,6 +334,15 @@ final class Coordinator: NSObject, MKMapViewDelegate {
         let annotationView = CustomMarker(annotation: parkAnnotation, reuseIdentifier: CustomMarker.identifier)
         
         annotationView.annotation = parkAnnotation
+        
+        // This fixes search here button being visible when there is a region + filter change
+        // Works b/c new markers = API request has been made, which means search here button should be invisible
+        if self.searchButton?.alpha == 1 {
+            UIView.animate(withDuration: 0.2) {
+                self.searchButton?.alpha = 0 // Hide search button
+            }
+        }
+        
         return annotationView
     }
     
