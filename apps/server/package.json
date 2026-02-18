@@ -17,6 +17,7 @@
     "@wildlog/db": "workspace:*",
     "@wildlog/env": "workspace:*",
     "@wildlog/graph-db": "workspace:*",
+    "@wildlog/embedding": "workspace:*",
     "better-auth": "catalog:",
     "dotenv": "catalog:",
     "fastify": "^5.3.3",

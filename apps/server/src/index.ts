@@ -7,6 +7,9 @@ import { getParkLocation } from "@wildlog/db/queries/test";
 
 import { readFileSync } from "fs";
 
+// Import embedding function to ensure the model is loaded at startup
+import { computeEmbedding } from "@wildlog/embedding";
+
 const app = Fastify({
   logger: false,
   https: {
@@ -51,6 +54,22 @@ app.get("/lat-checker", async (_request: any, reply: any) => {
   reply.send({
     data: result.rows,
   });
+});
+
+app.get("/embedding-test", async (_request: any, reply: any) => {
+  const sentences = [
+    "The cat is on the table.",
+    "A dog is in the garden.",
+    "The sun is shining brightly.",
+  ];
+
+  try {
+    const embeddings = await computeEmbedding(sentences);
+    reply.send({ embeddings });
+  } catch (error) {
+    console.error("Error computing embeddings:", error);
+    reply.status(500).send({ error: "Failed to compute embeddings" });
+  }
 });
 
 // Route to Neo4j Browser for convenience
