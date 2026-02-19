@@ -23,6 +23,7 @@ export const getParkMapRecommendations = async (
     console.log("Search query: ", filters.search);
 
     // Compute trigrams for search query
+    // Ignoring bounding box here b/c user wants a specific park and we should return it even if it's far from them
     const similarTrigramParks = await db
       .select({
         id: park.id,
