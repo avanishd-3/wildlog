@@ -6,7 +6,7 @@ export const extractor = await pipeline("feature-extraction", "Xenova/all-MiniLM
   device: "cpu",
 });
 
-export async function computeEmbedding(sentences: string[]) {
+export async function computeEmbedding(sentences: string[]): Promise<number[][]> {
   const output = await extractor(sentences, { pooling: "mean", normalize: true });
   return output.tolist();
 }

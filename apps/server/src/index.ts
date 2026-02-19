@@ -9,6 +9,7 @@ import { readFileSync } from "fs";
 
 // Import embedding function to ensure the model is loaded at startup
 import { computeEmbedding } from "@wildlog/embedding";
+import { seedEmbeddings } from "@wildlog/embedding/seed";
 
 const app = Fastify({
   logger: false,
@@ -40,6 +41,17 @@ app.get("/", async (_request, reply) => {
 app.get("/seed", async (_request, reply) => {
   try {
     await seed();
+    reply.send({ message: "Database seeded successfully" });
+  } catch (error) {
+    console.error("Error seeding database:", error);
+    reply.status(500).send({ error: "Failed to seed database" });
+  }
+});
+
+app.get("/seed-embed", async (_request, reply) => {
+  // Takes a few seconds
+  try {
+    await seedEmbeddings();
     reply.send({ message: "Database seeded successfully" });
   } catch (error) {
     console.error("Error seeding database:", error);
