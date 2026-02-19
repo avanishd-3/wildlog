@@ -27,10 +27,10 @@ func fetchParksForVisibleRegion(mapView: CustomMkMapView?, filters: ParkFiltersI
     
     Task {
             do {
-                let query = GetParksByBoundsQuery(filters: filters.map { .some($0) } ?? .none, x_max: x_max, x_min: x_min, y_max: y_max, y_min: y_min)
+                let query = GetParkMapRecommendationsQuery(filters: filters.map { .some($0) } ?? .none, x_max: x_max, x_min: x_min, y_max: y_max, y_min: y_min)
                 
                 let response = try await apolloClient.fetch(query: query)
-                let parks = response.data?.getParksByBounds?.compactMap { Park(from: $0) } ?? []
+                let parks = response.data?.getParkMapRecommendations?.compactMap { Park(from: $0) } ?? []
                 DispatchQueue.main.async {
                     mapView.removeAnnotations(mapView.annotations)
                     for park in parks {

@@ -74,7 +74,7 @@ builder.queryField("getPark", (t) =>
   }),
 );
 
-builder.queryField("getParksByBounds", (t) =>
+builder.queryField("getParkMapRecommendations", (t) =>
   t.field({
     type: [park],
     args: {
