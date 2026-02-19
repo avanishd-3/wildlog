@@ -2,7 +2,7 @@ import { createGraphQLEnumFromPgEnum } from "@/utils/create-graphql-enum";
 import { builder } from "@/builder";
 import { parkDesignationEnum, parkTypeEnum } from "@wildlog/db/schema/park";
 
-import { getParksByBoundingBox } from "@wildlog/db/queries/park_queries";
+import { getParkMapRecommendations } from "@wildlog/db/queries/park_queries";
 import { getParksFilters } from "@wildlog/db/utils/get-park-query-filters";
 
 const ParkDesignationEnum = createGraphQLEnumFromPgEnum(
@@ -86,16 +86,17 @@ builder.queryField("getParksByBounds", (t) =>
     },
     resolve: async (_, args) => {
       console.log("Received filters:", args.filters);
-      const filters = getParksFilters(args.filters);
-      const parks = await getParksByBoundingBox(
+      const whereClauses = getParksFilters(args.filters);
+      const parks = await getParkMapRecommendations(
         args.x_min,
         args.x_max,
         args.y_min,
         args.y_max,
-        filters,
+        args.filters,
+        whereClauses,
       );
       return parks.map((park) => ({
-        id: park.id,
+        id: park.publicId,
         name: park.name,
         description: park.description,
         designation: park.designation,

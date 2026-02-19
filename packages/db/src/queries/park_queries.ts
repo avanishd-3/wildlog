@@ -1,8 +1,73 @@
-import { sql, and } from "drizzle-orm";
+import { sql, and, cosineDistance, eq, desc, inArray } from "drizzle-orm";
 import { db } from "..";
-import { park } from "../schema";
+import { park, parkEmbedding } from "../schema";
+import { computeEmbedding } from "@wildlog/embedding";
 
-export const getParksByBoundingBox = async (
+export const getParkMapRecommendations = async (
+  x_min: number,
+  x_max: number,
+  y_min: number,
+  y_max: number,
+  filters?: any | null,
+  where_clauses?: any | null,
+) => {
+  /**
+   * Get list of parks to recommend for the user using a map.
+   * If there are no search filters, default to bounding box + other filters
+   * If there is a search query, use the embedding of the search query to find similar parks within the bounding box and other filters
+   * Also, limit the number of results returned to 10 so the user doesn't have too many options
+   */
+
+  if (filters?.search) {
+    // Need to handle search separately
+    const queryEmbeddingArray = await computeEmbedding(filters.search);
+
+    const queryEmbedding = queryEmbeddingArray[0];
+
+    if (!queryEmbedding) {
+      // Should still return some results even if embedding fails
+      return getParksByBoundingBox(x_min, x_max, y_min, y_max, where_clauses);
+    }
+
+    const similarity = sql<number>`1 - (${cosineDistance(parkEmbedding.embedding, queryEmbedding)})`;
+
+    // Get parks within bounding box and apply filters, then order by similarity to search query
+    const filteredParks = await getParksByBoundingBox(x_min, x_max, y_min, y_max, where_clauses);
+
+    const filteredParkIds = filteredParks.map((park) => park.id);
+
+    // Fields returned should be superset of fields returned in getParksByBoundingBox query below so the GraphQL schema can be consistent
+    return db
+      .select({
+        publicId: park.publicId,
+        name: park.name,
+        description: park.description,
+        designation: park.designation,
+        states: park.states,
+        type: park.type,
+        cost: park.cost,
+        free: park.free,
+        latitude: sql`ST_Y(${park.location})`,
+        longitude: sql`ST_X(${park.location})`,
+        similarity: similarity,
+      })
+      .from(park)
+      .innerJoin(parkEmbedding, eq(park.id, parkEmbedding.parkId)) // Join on internal id to improve cache performance
+      .where(inArray(park.id, filteredParkIds))
+      .orderBy((t) => desc(t.similarity))
+      .limit(10); // Limit to top 10 results so users don't have that many options
+  } else {
+    return getParksByBoundingBox(x_min, x_max, y_min, y_max, where_clauses);
+  }
+};
+
+const getParksByBoundingBox = async (
+  x_min: number,
+  x_max: number,
+  y_min: number,
+  y_max: number,
+  filters?: any | null,
+) => {
   /**
    * Get list of parks within a bounding box.
    * See: https://orm.drizzle.team/docs/guides/postgis-geometry-point
@@ -10,12 +75,7 @@ export const getParksByBoundingBox = async (
    * Also supporting filters, which should be a list of where clauses to be applied to the query
    * Filter idea: https://brockherion.dev/blog/posts/dynamic-where-statements-in-drizzle/
    */
-  x_min: number,
-  x_max: number,
-  y_min: number,
-  y_max: number,
-  filters?: any | null,
-) => {
+
   const point = {
     x1: x_min,
     x2: x_max,
@@ -29,7 +89,8 @@ export const getParksByBoundingBox = async (
 
   return db
     .select({
-      id: park.publicId,
+      id: park.id,
+      publicId: park.publicId,
       name: park.name,
       description: park.description,
       designation: park.designation,
