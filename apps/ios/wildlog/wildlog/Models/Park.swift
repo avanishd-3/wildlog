@@ -8,7 +8,7 @@
 import Foundation
 import WildLogAPI
 
-struct Park: Identifiable, Codable {
+struct Park: Identifiable, Codable, Hashable {
     let id: UUID
     let name: String
     let description: String

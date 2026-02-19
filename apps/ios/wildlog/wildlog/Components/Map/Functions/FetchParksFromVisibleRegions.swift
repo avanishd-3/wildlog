@@ -32,10 +32,22 @@ func fetchParksForVisibleRegion(mapView: CustomMkMapView?, filters: ParkFiltersI
                 let query = GetParkMapRecommendationsQuery(filters: filters.map { .some($0) } ?? .none, x_max: x_max, x_min: x_min, y_max: y_max, y_min: y_min)
                 
                 let response = try await apolloClient.fetch(query: query)
-                let parks = response.data?.getParkMapRecommendations?.compactMap { Park(from: $0) } ?? []
+                let oldParksAnnotations : [ParkAnnotation] = await mapView.annotations.compactMap { $0 as? ParkAnnotation }
+                let oldParks = oldParksAnnotations.map(\.park)
+                
+                let newParks = response.data?.getParkMapRecommendations?.compactMap { Park(from: $0) } ?? []
+                
+                // Do not remove an annotation if it is also in the new park set
+                // So park marker doesn't pop out and in
+                let parksToAdd = Array(Set(newParks).subtracting(Set(oldParks)))
+                let parksToRemove = Array(Set(oldParks).subtracting(Set(newParks)))
+                
                 DispatchQueue.main.async {
-                    mapView.removeAnnotations(mapView.annotations)
-                    for park in parks {
+                    for park in parksToRemove {
+                        mapView.removeAnnotation(ParkAnnotation(park: park))
+                    }
+
+                    for park in parksToAdd {
                         mapView.addAnnotation(ParkAnnotation(park: park))
                     }
                     
@@ -43,8 +55,8 @@ func fetchParksForVisibleRegion(mapView: CustomMkMapView?, filters: ParkFiltersI
                     // Usually happens when search query matches trigram
                     // They shouldn't have to manually scroll to it
                     // The region should also not change if it's already visible
-                    if parks.count == 1 {
-                        let park = parks[0]
+                    if parksToAdd.count == 1 {
+                        let park = newParks[0]
                         let coord = CLLocationCoordinate2D(latitude: park.latitude, longitude: park.longitude)
                         let currRegion = mapView.region
                         
