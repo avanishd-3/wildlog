@@ -9,7 +9,7 @@ import { readFileSync } from "fs";
 
 // Import embedding function to ensure the model is loaded at startup
 import { computeEmbedding } from "@wildlog/embedding";
-import { seedEmbeddings } from "@wildlog/embedding/seed";
+import { seedEmbeddings } from "@wildlog/db/seed-embed";
 
 const app = Fastify({
   logger: false,

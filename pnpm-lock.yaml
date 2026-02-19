@@ -151,6 +151,9 @@ importers:
 
   packages/db:
     dependencies:
+      '@wildlog/embedding':
+        specifier: workspace:*
+        version: link:../embedding
       '@wildlog/env':
         specifier: workspace:*
         version: link:../env
@@ -188,9 +191,6 @@ importers:
       '@huggingface/transformers':
         specifier: ^3.8.1
         version: 3.8.1
-      '@wildlog/db':
-        specifier: workspace:*
-        version: link:../db
       '@wildlog/env':
         specifier: workspace:*
         version: link:../env

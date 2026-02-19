@@ -12,7 +12,6 @@
   "scripts": {},
   "dependencies": {
     "@huggingface/transformers": "^3.8.1",
-    "@wildlog/db": "workspace:*",
     "@wildlog/env": "workspace:*"
   },
   "devDependencies": {

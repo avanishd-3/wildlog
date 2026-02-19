@@ -1,5 +1,5 @@
 import { db } from "@wildlog/db";
-import { computeEmbedding } from ".";
+import { computeEmbedding } from "@wildlog/embedding";
 import { park, parkEmbedding } from "@wildlog/db/schema/park";
 
 export const seedEmbeddings = async () => {
