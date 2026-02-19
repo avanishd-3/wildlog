@@ -15,7 +15,7 @@ import MapKit
 
 // So functionality is extracted here
 
-func fetchParksForVisibleRegion(mapView: CustomMkMapView?, filters: ParkFiltersInput?) {
+func fetchParksForVisibleRegion(mapView: CustomMkMapView?, filters: ParkFiltersInput?, searchButton: UIButton? = nil) {
     debugPrint("Fetching parks from API")
     guard let mapView else { return }
     
@@ -58,7 +58,16 @@ func fetchParksForVisibleRegion(mapView: CustomMkMapView?, filters: ParkFiltersI
                         
                         if !isMarkerVisible {
                             debugPrint("Setting new region b/c there is only one marker")
-                            _smoothPanAndZoom(to: coord, mapView: mapView)
+                            if let coordinator = mapView.delegate as? Coordinator { // Need coordinator to reset animation flag
+                                debugPrint("Setting animating pan and zoom flag to true")
+                                coordinator.isAnimatingPanAndZoom = true
+                                _smoothPanAndZoom(to: coord, mapView: mapView, searchButton: searchButton, coordinator: coordinator)
+                            }
+                            else { // This should not happen, but just to be exhaustive
+                                _smoothPanAndZoom(to: coord, mapView: mapView, searchButton: searchButton)
+                            }
+                            
+                            
                         }
                         
                     }
@@ -73,8 +82,22 @@ func fetchParksForVisibleRegion(mapView: CustomMkMapView?, filters: ParkFiltersI
 /**
     * Internal only function, do not use elsewhere
     * Smooth transition from user's current region to where the marker is, otherwise the map just pops in and out of existence (looks too jarring)
+    * Hide search here button and reset animation flag when pan and zoom is over
  */
-func _smoothPanAndZoom(to coordinate: CLLocationCoordinate2D, mapView: MKMapView, zoomSpan: MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1)) {
+func _smoothPanAndZoom(to coordinate: CLLocationCoordinate2D,
+                       mapView: MKMapView,
+                       zoomSpan: MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1),
+                       searchButton: UIButton? = nil,
+                       coordinator: Coordinator? = nil,
+) {
+    
+    // Disable user interaction and hide search here button
+    mapView.isUserInteractionEnabled = false
+    if let searchButton = searchButton {
+        UIView.animate(withDuration: 0.2) {
+            searchButton.alpha = 0
+        }
+    }
     
     let currentCenter = mapView.centerCoordinate
     let points = [currentCenter, coordinate]
@@ -100,6 +123,7 @@ func _smoothPanAndZoom(to coordinate: CLLocationCoordinate2D, mapView: MKMapView
     
     // 2. After zoom out animation, pan to the new center
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+        
         let panRegion = MKCoordinateRegion(center: coordinate, span: zoomOutSpan)
         mapView.setRegion(panRegion, animated: true) // I think this looks better than changing center
         
@@ -107,6 +131,15 @@ func _smoothPanAndZoom(to coordinate: CLLocationCoordinate2D, mapView: MKMapView
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) { // More jarring if set to lower time
             let zoomInRegion = MKCoordinateRegion(center: coordinate, span: zoomSpan)
             mapView.setRegion(zoomInRegion, animated: true)
+            
+            // Reset user interaction
+            mapView.isUserInteractionEnabled = true
+            
+            // Keep search here button hidden the whole time
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                debugPrint("Setting animating pan and zoom flag to false")
+                coordinator?.isAnimatingPanAndZoom = false
+            }
         }
     }
 }
