@@ -20,6 +20,37 @@ export const getParkMapRecommendations = async (
 
   if (filters?.search) {
     // Need to handle search separately
+    console.log("Search query: ", filters.search);
+
+    // Compute trigrams for search query
+    const similarTrigramParks = await db
+      .select({
+        id: park.id,
+        publicId: park.publicId,
+        name: park.name,
+        description: park.description,
+        designation: park.designation,
+        states: park.states,
+        type: park.type,
+        cost: park.cost,
+        free: park.free,
+        latitude: sql`ST_Y(${park.location})`,
+        longitude: sql`ST_X(${park.location})`,
+      })
+      .from(park)
+      // Word similarity is for trigram matching suitable for matching similarity for parts of words
+      // Better than character similarity but needs lower threshold than you would think
+      // With this threshold, yosem matches to Yosemite National Park alone
+      // See: https://www.postgresql.org/docs/current/pgtrgm.html
+      .where(sql`word_similarity(${park.name}, ${filters.search}) > 0.2`)
+      .limit(5); // Limit to top 5 results so users don't have that many options
+
+    if (similarTrigramParks.length > 0) {
+      // If we have trigram results, we can return those without needing to do the embedding search, which is more expensive
+      console.log("Search query has close trigram matches", filters.search);
+      return similarTrigramParks;
+    }
+
     const queryEmbeddingArray = await computeEmbedding(filters.search);
 
     const queryEmbedding = queryEmbeddingArray[0];
@@ -29,7 +60,7 @@ export const getParkMapRecommendations = async (
       return getParksByBoundingBox(x_min, x_max, y_min, y_max, where_clauses);
     }
 
-    const similarity = sql<number>`1 - (${cosineDistance(parkEmbedding.embedding, queryEmbedding)})`;
+    const cosineSimilarity = sql<number>`1 - (${cosineDistance(parkEmbedding.embedding, queryEmbedding)})`;
 
     // Get parks within bounding box and apply filters, then order by similarity to search query
     const filteredParks = await getParksByBoundingBox(x_min, x_max, y_min, y_max, where_clauses);
@@ -49,7 +80,7 @@ export const getParkMapRecommendations = async (
         free: park.free,
         latitude: sql`ST_Y(${park.location})`,
         longitude: sql`ST_X(${park.location})`,
-        similarity: similarity,
+        similarity: cosineSimilarity,
       })
       .from(park)
       .innerJoin(parkEmbedding, eq(park.id, parkEmbedding.parkId)) // Join on internal id to improve cache performance
