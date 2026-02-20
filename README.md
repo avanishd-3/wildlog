@@ -24,7 +24,7 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 
 - **Pothos** - TS schema builder for GraphQL
 - **Mercurius** - Easily run Graph QL server on Fastify
-- **Apollo client** - **_To set up_** (so iOS app can make graph ql queries)
+- **Apollo client** - GraphQL client for iOS
 
 ### Other
 
@@ -70,7 +70,11 @@ Then, run the development server:
 pnpm run dev
 ```
 
-The API is running at [http://localhost:3000](http://localhost:3000).
+The API is running at [https://localhost:3000](https://localhost:3000).
+
+### Seed Database
+1. Go to the /seed endpoint on the server.
+2. On success of the first step, go to the /seed-embed endpoint.
 
 ## Git Hooks and Formatting
 
