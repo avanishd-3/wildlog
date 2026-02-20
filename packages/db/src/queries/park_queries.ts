@@ -134,5 +134,7 @@ const getParksByBoundingBox = async (
       longitude: sql`ST_X(${park.location})`,
     })
     .from(park)
-    .where(and(...where));
+    .where(and(...where))
+    .orderBy(sql`RANDOM()`)
+    .limit(15); // So people who zoom out heavily don't see a ton of parks
 };
