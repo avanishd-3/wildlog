@@ -8,7 +8,8 @@
 import Foundation
 import MapKit
 
-final class ParkAnnotation: NSObject, MKAnnotation {
+// Using Sendable to avoid race condition issues with automated pan and zoom
+final class ParkAnnotation: NSObject, MKAnnotation, Sendable {
     let coordinate: CLLocationCoordinate2D
     
     // Subtitles look weird and Apple Maps doesn't use them
