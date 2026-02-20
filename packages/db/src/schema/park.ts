@@ -8,6 +8,7 @@ import {
   geometry,
   uuid,
   boolean,
+  vector,
 } from "drizzle-orm/pg-core";
 
 export const parkDesignationEnum = pgEnum("park_designation", [
@@ -74,5 +75,19 @@ export const park = pgTable(
   },
   (t) => [
     index("spatial_index").using("gist", t.location), // Index on location to speed up spatial queries
+  ],
+);
+
+export const parkEmbedding = pgTable(
+  "park_embedding",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    parkId: integer("park_id")
+      .notNull()
+      .references(() => park.id, { onDelete: "cascade" }), // Foreign key to park table
+    embedding: vector("embedding", { dimensions: 384 }).notNull(), // B/c using al-MiniLM-L6-v2
+  },
+  (t) => [
+    index("embeddingIndex").using("hnsw", t.embedding.op("vector_cosine_ops")), // Need to index for good performance
   ],
 );

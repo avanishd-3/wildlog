@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@wildlog/env": "workspace:*",
+    "@wildlog/embedding": "workspace:*",
     "csv-parse": "^6.1.0",
     "dotenv": "catalog:",
     "drizzle-orm": "^0.45.1",

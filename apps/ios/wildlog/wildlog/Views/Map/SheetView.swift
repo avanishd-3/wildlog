@@ -77,6 +77,8 @@ struct SheetView: View {
                     }
                 }
                 .autocorrectionDisabled()
+                // So search text is visible
+                .foregroundStyle(Color(.label))
             }
             .modifier(TextFieldGrayBackgroundColor()) // Also changes padding and corner radius
             
