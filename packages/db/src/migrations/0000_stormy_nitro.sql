@@ -20,6 +20,3 @@ CREATE TABLE "park" (
 	"free" boolean GENERATED ALWAYS AS ("park"."cost" = 0) STORED NOT NULL,
 	CONSTRAINT "park_public_id_unique" UNIQUE("public_id")
 );
-
---> statement-breakpoint
-CREATE INDEX IF NOT EXISTS "spatial_index" ON "park" USING gist ("location");

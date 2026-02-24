@@ -1,0 +1,20 @@
+{
+  "name": "@wildlog/embedding",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {},
+  "dependencies": {
+    "@huggingface/transformers": "^3.8.1",
+    "@wildlog/env": "workspace:*"
+  },
+  "devDependencies": {
+    "@wildlog/config": "workspace:*"
+  }
+}

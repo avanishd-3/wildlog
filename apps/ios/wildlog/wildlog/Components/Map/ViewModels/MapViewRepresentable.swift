@@ -210,6 +210,7 @@ final class Coordinator: NSObject, MKMapViewDelegate {
     var selectedTab: Binding<Tabs>
     var isSheetPresented: Binding<Bool>
     var filters: Binding<ParkFiltersInput?>
+    var isAnimatingPanAndZoom: Bool = false // Happens when only 1 marker
     
     /* Weak references */
     weak var mapView: CustomMkMapView?
@@ -279,7 +280,7 @@ final class Coordinator: NSObject, MKMapViewDelegate {
     }
     
     func fetchParks() {
-        fetchParksForVisibleRegion(mapView: mapView, filters: filters.wrappedValue)
+        fetchParksForVisibleRegion(mapView: mapView, filters: filters.wrappedValue, searchButton: self.searchButton)
     }
     
     
@@ -295,9 +296,14 @@ final class Coordinator: NSObject, MKMapViewDelegate {
         
         debugPrint("Region did change")
         
+        if isAnimatingPanAndZoom {
+            return // Do not make search button visible when animating pan and zoom
+        }
+        
         // Hide button when map is first shown (region changes twice on first load)
         
         if (!initializingMapOne && !initializingMapTwo) {
+            debugPrint("Making search button visible")
             UIView.animate(withDuration: 0.2) {
                 self.searchButton?.alpha = 1
             }

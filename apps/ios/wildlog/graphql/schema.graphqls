@@ -106,5 +106,5 @@ enum ParkTypeEnum {
 
 type Query {
   getPark: Park
-  getParksByBounds(filters: ParkFiltersInput, x_max: Float!, x_min: Float!, y_max: Float!, y_min: Float!): [Park!]
+  getParkMapRecommendations(filters: ParkFiltersInput, x_max: Float!, x_min: Float!, y_max: Float!, y_min: Float!): [Park!]
 }

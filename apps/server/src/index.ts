@@ -7,6 +7,10 @@ import { getParkLocation } from "@wildlog/db/queries/test";
 
 import { readFileSync } from "fs";
 
+// Import embedding function to ensure the model is loaded at startup
+import { computeEmbedding } from "@wildlog/embedding";
+import { seedEmbeddings } from "@wildlog/db/seed-embed";
+
 const app = Fastify({
   logger: false,
   https: {
@@ -44,6 +48,17 @@ app.get("/seed", async (_request, reply) => {
   }
 });
 
+app.get("/seed-embed", async (_request, reply) => {
+  // Takes a few seconds
+  try {
+    await seedEmbeddings();
+    reply.send({ message: "Database seeded successfully" });
+  } catch (error) {
+    console.error("Error seeding database:", error);
+    reply.status(500).send({ error: "Failed to seed database" });
+  }
+});
+
 app.get("/lat-checker", async (_request: any, reply: any) => {
   // Query db for id = 1 and return lat and long
   const result = await getParkLocation();
@@ -51,6 +66,22 @@ app.get("/lat-checker", async (_request: any, reply: any) => {
   reply.send({
     data: result.rows,
   });
+});
+
+app.get("/embedding-test", async (_request: any, reply: any) => {
+  const sentences = [
+    "The cat is on the table.",
+    "A dog is in the garden.",
+    "The sun is shining brightly.",
+  ];
+
+  try {
+    const embeddings = await computeEmbedding(sentences);
+    reply.send({ embeddings });
+  } catch (error) {
+    console.error("Error computing embeddings:", error);
+    reply.status(500).send({ error: "Failed to compute embeddings" });
+  }
 });
 
 // Route to Neo4j Browser for convenience

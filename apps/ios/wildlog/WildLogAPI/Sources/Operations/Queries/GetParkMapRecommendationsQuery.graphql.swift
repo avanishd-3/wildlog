@@ -4,11 +4,11 @@
 @_exported import ApolloAPI
 @_spi(Execution) @_spi(Unsafe) import ApolloAPI
 
-public struct GetParksByBoundsQuery: GraphQLQuery {
-  public static let operationName: String = "GetParksByBounds"
+public struct GetParkMapRecommendationsQuery: GraphQLQuery {
+  public static let operationName: String = "GetParkMapRecommendations"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query GetParksByBounds($filters: ParkFiltersInput, $x_max: Float!, $x_min: Float!, $y_max: Float!, $y_min: Float!) { getParksByBounds( filters: $filters x_max: $x_max x_min: $x_min y_max: $y_max y_min: $y_min ) { __typename id name description designation latitude longitude states type } }"#
+      #"query GetParkMapRecommendations($filters: ParkFiltersInput, $x_max: Float!, $x_min: Float!, $y_max: Float!, $y_min: Float!) { getParkMapRecommendations( filters: $filters x_max: $x_max x_min: $x_min y_max: $y_max y_min: $y_min ) { __typename id name description designation latitude longitude states type } }"#
     ))
 
   public var filters: GraphQLNullable<ParkFiltersInput>
@@ -45,7 +45,7 @@ public struct GetParksByBoundsQuery: GraphQLQuery {
 
     @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { WildLogAPI.Objects.Query }
     @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
-      .field("getParksByBounds", [GetParksByBound]?.self, arguments: [
+      .field("getParkMapRecommendations", [GetParkMapRecommendation]?.self, arguments: [
         "filters": .variable("filters"),
         "x_max": .variable("x_max"),
         "x_min": .variable("x_min"),
@@ -54,15 +54,15 @@ public struct GetParksByBoundsQuery: GraphQLQuery {
       ]),
     ] }
     @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
-      GetParksByBoundsQuery.Data.self
+      GetParkMapRecommendationsQuery.Data.self
     ] }
 
-    public var getParksByBounds: [GetParksByBound]? { __data["getParksByBounds"] }
+    public var getParkMapRecommendations: [GetParkMapRecommendation]? { __data["getParkMapRecommendations"] }
 
-    /// GetParksByBound
+    /// GetParkMapRecommendation
     ///
     /// Parent Type: `Park`
-    public struct GetParksByBound: WildLogAPI.SelectionSet {
+    public struct GetParkMapRecommendation: WildLogAPI.SelectionSet {
       @_spi(Unsafe) public let __data: DataDict
       @_spi(Unsafe) public init(_dataDict: DataDict) { __data = _dataDict }
 
@@ -79,7 +79,7 @@ public struct GetParksByBoundsQuery: GraphQLQuery {
         .field("type", GraphQLEnum<WildLogAPI.ParkTypeEnum>.self),
       ] }
       @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
-        GetParksByBoundsQuery.Data.GetParksByBound.self
+        GetParkMapRecommendationsQuery.Data.GetParkMapRecommendation.self
       ] }
 
       public var id: String { __data["id"] }

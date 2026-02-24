@@ -16,14 +16,14 @@ query GetPark {
   }
 }
 
-query GetParksByBounds(
+query GetParkMapRecommendations(
   $filters: ParkFiltersInput
   $x_max: Float!
   $x_min: Float!
   $y_max: Float!
   $y_min: Float!
 ) {
-  getParksByBounds(
+  getParkMapRecommendations(
     filters: $filters
     x_max: $x_max
     x_min: $x_min

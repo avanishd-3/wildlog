@@ -20,7 +20,8 @@
     "db:stop": "turbo -F @wildlog/db db:stop",
     "db:down": "turbo -F @wildlog/db db:down",
     "check": "oxlint && oxfmt --write",
-    "prepare": "husky"
+    "prepare": "husky",
+    "package:list": "pnpm list --recursive --depth -1"
   },
   "dependencies": {
     "@wildlog/env": "workspace:*",
