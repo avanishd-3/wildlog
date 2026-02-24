@@ -27,7 +27,7 @@ def chatgpt_prompt(park: str):
     
     return response.output_text
 
-gc = gspread.service_account(filename="nature-letterbox-b9eba28111c4.json")
+gc = gspread.service_account(filename=os.getenv("GOOGLE_SHEETS_CREDENTIALS"))
 sh = gc.open("National Park Data")
 ws = sh.sheet1
 
