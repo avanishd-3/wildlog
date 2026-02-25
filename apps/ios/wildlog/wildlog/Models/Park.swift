@@ -33,11 +33,11 @@ extension Park {
             id: UUID(uuidString: gql.id) ?? UUID(),
             name: gql.name,
             description: gql.description,
-            designation: gql.designation.rawValue,
+            designation: removeUnderscoreAndAllCaps(for: gql.designation.rawValue),
             latitude: lat,
             longitude: lon,
             states: gql.states,
-            type: gql.type.rawValue,
+            type: removeUnderscoreAndAllCaps(for: gql.type.rawValue),
             free: false,
             cost: nil,
             imageName: nil
