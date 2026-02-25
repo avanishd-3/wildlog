@@ -10,17 +10,26 @@ import WildLogAPI
 
 struct CustomMapView: View {
     @Binding var selectedTab: Tabs
-    @Binding var isSheetPresented: Bool
+    
+    // Controls which sheet is currently shown — passed down to the coordinator
+    // so marker taps can trigger the park detail sheet from within UIKit
+    @Binding var activeSheet: ActiveSheet?
     
     @Binding var filters: ParkFiltersInput?
-    @Binding var mapView: CustomMkMapView
     
+    // The underlying MKMapView instance is passed through so SearchView can call
+    // fetchParksForVisibleRegion directly when filters change from the sheet
+    @Binding var mapView: CustomMkMapView
+
     var body: some View {
         VStack {
-            MapViewRepresentable(selectedTab: $selectedTab, isSheetPresented: $isSheetPresented,
-                filters: $filters, mapView: $mapView
+            MapViewRepresentable(
+                selectedTab: $selectedTab,
+                activeSheet: $activeSheet,
+                filters: $filters,
+                mapView: $mapView
             )
-                .ignoresSafeArea()
+            .ignoresSafeArea()
             
             Spacer()
         }
@@ -28,5 +37,10 @@ struct CustomMapView: View {
 }
 
 #Preview {
-    CustomMapView(selectedTab: .constant(.home), isSheetPresented: .constant(true), filters: .constant(ParkFiltersInput()), mapView: .constant(CustomMkMapView()))
+    CustomMapView(
+        selectedTab: .constant(.home),
+        activeSheet: .constant(.filters),
+        filters: .constant(ParkFiltersInput()),
+        mapView: .constant(CustomMkMapView())
+    )
 }

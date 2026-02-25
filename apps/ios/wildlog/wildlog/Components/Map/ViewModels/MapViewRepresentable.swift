@@ -5,7 +5,6 @@
 //  Created by Avanish Davuluri on 2/4/26.
 //
 
-
 // See: https://stackoverflow.com/questions/79502649/swiftui-tabbar-appearance-doesnt-work-in-only-those-views-which-have-map
 // We need to customize the map using the old-school approach b/c we need custom tab color and will eventually add filter buttons
 
@@ -16,17 +15,20 @@ import WildLogAPI
 
 struct MapViewRepresentable: UIViewRepresentable {
     // UIViewRepresentable is a way to put UI Kit views into the Swift UI view hierarchy
+    // makeUIView creates the view once, updateUIView handles SwiftUI-driven updates,
+    // and the Coordinator handles delegate callbacks back into SwiftUI.
     
     @Binding var selectedTab: Tabs
-    @Binding var isSheetPresented: Bool
+    @Binding var activeSheet: ActiveSheet?
     
     // Filter bindings
     @Binding var filters: ParkFiltersInput?
     
+    // The map view instance is owned by SearchView and passed in as a binding
+    // so fetchParksForVisibleRegion can be called on it from outside this representable
     @Binding var mapView: CustomMkMapView
     
     func makeUIView(context: Context) -> MKMapView {
-//        let mapView = CustomMkMapView()
         mapView.delegate = context.coordinator
         mapView.showsUserLocation = true
         
@@ -144,11 +146,7 @@ struct MapViewRepresentable: UIViewRepresentable {
         )
 
         pitchButton.addTarget(
-            context.coordinator,
-            action: #selector(Coordinator.didTapPitch),
-            for: .touchUpInside
-        )
-        
+            context.coordinator, action: #selector(Coordinator.didTapPitch), for: .touchUpInside)
         backButton.addTarget(
             context.coordinator,
             action: #selector(Coordinator.didTapBackButton),
@@ -175,7 +173,7 @@ struct MapViewRepresentable: UIViewRepresentable {
     func makeCoordinator() -> Coordinator {
         Coordinator(
             selectedTab: $selectedTab,
-            isSheetPresented: $isSheetPresented,
+            activeSheet: $activeSheet,
             filters: $filters
         )
     }
@@ -186,7 +184,7 @@ final class Coordinator: NSObject, MKMapViewDelegate {
     
     init(
         selectedTab: Binding<Tabs>,
-        isSheetPresented: Binding<Bool>,
+        activeSheet: Binding<ActiveSheet?>,
         mapView: CustomMkMapView? = nil,
         locationButton: CustomUserTrackingButton? = nil,
         pitchButton: CustomPitchButton? = nil,
@@ -197,7 +195,7 @@ final class Coordinator: NSObject, MKMapViewDelegate {
     ) {
             
         self.selectedTab = selectedTab
-        self.isSheetPresented = isSheetPresented
+        self.activeSheet = activeSheet
         self.mapView = mapView
         self.locationButton = locationButton
         self.pitchButton = pitchButton
@@ -208,7 +206,7 @@ final class Coordinator: NSObject, MKMapViewDelegate {
     }
     
     var selectedTab: Binding<Tabs>
-    var isSheetPresented: Binding<Bool>
+    var activeSheet: Binding<ActiveSheet?>
     var filters: Binding<ParkFiltersInput?>
     var isAnimatingPanAndZoom: Bool = false // Happens when only 1 marker
     
@@ -267,7 +265,7 @@ final class Coordinator: NSObject, MKMapViewDelegate {
     @objc func didTapBackButton() {
         debugPrint("In did tap back button")
         self.selectedTab.wrappedValue = .home
-        self.isSheetPresented.wrappedValue = false
+        self.activeSheet.wrappedValue = nil
     }
     
     // Handle when user clicks the search this area button
@@ -282,8 +280,6 @@ final class Coordinator: NSObject, MKMapViewDelegate {
     func fetchParks() {
         fetchParksForVisibleRegion(mapView: mapView, filters: filters.wrappedValue, searchButton: self.searchButton)
     }
-    
-    
 
     func mapView(_ mapView: MKMapView,
                  didChange mode: MKUserTrackingMode,
@@ -317,16 +313,13 @@ final class Coordinator: NSObject, MKMapViewDelegate {
                 initializingMapTwo = false
             }
         }
-        
     }
     
     // Use custom marker for parks
     // See: https://www.hackingwithswift.com/read/16/3/annotations-and-accessory-views-mkpinannotationview
     func mapView(_ mapView: MKMapView, viewFor annotation: any MKAnnotation) -> MKAnnotationView? {
         
-        // TODO: When user clicks on marker, they should be redirected to the ParkView for that park
-        
-        // Do not customizer user location
+        // Do not customize user location
         guard !(annotation is MKUserLocation) else { return nil }
         
         guard let parkAnnotation = annotation as? ParkAnnotation else {
@@ -350,6 +343,13 @@ final class Coordinator: NSObject, MKMapViewDelegate {
         }
         
         return annotationView
+    }
+    
+    // Sets activeSheet to .parkDetail which triggers ParkDetailView in SearchView.
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        guard let parkAnnotation = view.annotation as? ParkAnnotation else { return }
+        debugPrint("Setting selectedPark to: \(parkAnnotation.park.name)")
+        activeSheet.wrappedValue = .parkDetail(parkAnnotation.park)
     }
     
     // Initially center the map on the user
