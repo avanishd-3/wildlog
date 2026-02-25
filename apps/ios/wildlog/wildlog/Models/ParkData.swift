@@ -21,7 +21,7 @@ class ParkData {
             states: "ME",
             type: "National",
             free: false,
-            cost: "$6",
+            cost: 6,
             imageName: "acadia"
         ),
         Park(
@@ -34,7 +34,7 @@ class ParkData {
             states: "CA",
             type: "National",
             free: false,
-            cost: "$35",
+            cost: 35,
             imageName: "yosemite"
         ),
         Park(
@@ -47,7 +47,7 @@ class ParkData {
             states: "UT",
             type: "National",
             free: false,
-            cost: "$35",
+            cost: 35,
             imageName: "zion"
         ),
         Park(
@@ -60,7 +60,7 @@ class ParkData {
             states: "UT",
             type: "National",
             free: false,
-            cost: "$30",
+            cost: 30,
             imageName: "canyonlands"
         ),
         Park(
@@ -73,7 +73,7 @@ class ParkData {
             states: "MT",
             type: "National",
             free: false,
-            cost: "$35",
+            cost: 35,
             imageName: "glacier"
         ),
         Park(
@@ -86,7 +86,7 @@ class ParkData {
             states: "UT",
             type: "National",
             free: false,
-            cost: "$35",
+            cost: 35,
             imageName: "bryce"
         )
     ]

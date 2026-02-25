@@ -18,7 +18,7 @@ struct Park: Identifiable, Codable, Hashable {
     let states: String
     let type: String
     let free: Bool
-    let cost: String?
+    let cost: Int
     let imageName: String?
 }
 
@@ -38,8 +38,8 @@ extension Park {
             longitude: lon,
             states: gql.states,
             type: removeUnderscoreAndAllCaps(for: gql.type.rawValue),
-            free: false,
-            cost: nil,
+            free: gql.free,
+            cost: gql.cost,
             imageName: nil
         )
     }

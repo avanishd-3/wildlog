@@ -57,8 +57,8 @@ struct ParkDetailView: View {
                     Spacer()
                     if park.free {
                         Text("Free")
-                    } else if let cost = park.cost {
-                        Text(cost)
+                    } else {
+                        Text("$\(park.cost)")
                     }
                 }
             }
