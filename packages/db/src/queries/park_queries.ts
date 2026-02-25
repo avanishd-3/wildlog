@@ -119,22 +119,26 @@ const getParksByBoundingBox = async (
 
   const where = filters ? [...filters, boundingBoxClause] : [boundingBoxClause];
 
-  return db
-    .select({
-      id: park.id,
-      publicId: park.publicId,
-      name: park.name,
-      description: park.description,
-      designation: park.designation,
-      states: park.states,
-      type: park.type,
-      cost: park.cost,
-      free: park.free,
-      latitude: sql`ST_Y(${park.location})`,
-      longitude: sql`ST_X(${park.location})`,
-    })
-    .from(park)
-    .where(and(...where))
-    .orderBy(sql`RANDOM()`)
-    .limit(15); // So people who zoom out heavily don't see a ton of parks
+  return (
+    db
+      .select({
+        id: park.id,
+        publicId: park.publicId,
+        name: park.name,
+        description: park.description,
+        designation: park.designation,
+        states: park.states,
+        type: park.type,
+        cost: park.cost,
+        free: park.free,
+        latitude: sql`ST_Y(${park.location})`,
+        longitude: sql`ST_X(${park.location})`,
+      })
+      .from(park)
+      .where(and(...where))
+      .orderBy(sql`RANDOM()`)
+      // So people who zoom out heavily don't see a ton of parks
+      // 15 is too low because when they use the filters and then untoggle them, parks "disappear"
+      .limit(30)
+  );
 };
