@@ -1,9 +1,12 @@
-export function createGraphQLEnumFromPgEnum<T extends readonly string[]>(
+export function createGraphQLEnumFromPgEnum<
+  T extends readonly string[],
+  Types extends PothosSchemaTypes.ExtendDefaultTypes<{}> = PothosSchemaTypes.ExtendDefaultTypes<{}>,
+>(
   // Convert enum values to uppercase and replace spaces with underscores for GraphQL compatibility
   // Have to do this because GraphQL enums cannot have spaces but PostgreSQL enums can
   // Example conversion: "National Park" -> "NATIONAL_PARK"
 
-  builder: PothosSchemaTypes.SchemaBuilder<PothosSchemaTypes.ExtendDefaultTypes<{}>>,
+  builder: PothosSchemaTypes.SchemaBuilder<Types>, // Have schema builder be generic so it works even when adding custom context + auth scopes
   name: string,
   values: T,
 ) {
