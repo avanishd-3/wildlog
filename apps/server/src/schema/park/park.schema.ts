@@ -59,6 +59,7 @@ builder.queryField("getPark", (t) =>
   t.field({
     type: park,
     resolve: () => {
+      console.log("getPark resolver called");
       return {
         id: "1", // Not uuid, but this is just a placeholder anyways
         name: "Yellowstone National Park",
@@ -83,6 +84,9 @@ builder.queryField("getParkMapRecommendations", (t) =>
       x_max: t.arg.float({ required: true }),
       y_max: t.arg.float({ required: true }),
       filters: t.arg({ type: parkFilters, required: false }),
+    },
+    authScopes: {
+      loggedIn: true, // Require authentication for this query
     },
     resolve: async (_, args) => {
       console.log("Received filters:", args.filters);

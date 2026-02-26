@@ -40,13 +40,8 @@ export const builder = new SchemaBuilder<{
 
 // Create root Query and Mutation type
 // Need this to prevent missing root type error
-builder.queryType({
-  authScopes: {
-    loggedIn: true, // Require authentication for all queries by default, can override on individual queries
-  },
-});
-builder.mutationType({
-  authScopes: {
-    loggedIn: true, // Require authentication for all mutations by default, can override on individual mutations
-  },
-});
+
+// You can only set authScope here if every query and mutation needs auth
+// If not, individual queries & mutations cannot over-ride the default
+builder.queryType({});
+builder.mutationType({});
