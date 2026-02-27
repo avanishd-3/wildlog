@@ -23,10 +23,10 @@ struct SignUpView: View {
                 .foregroundColor(Color(.systemGreen))
 
             Form {
-                Section(header: Text("Name")) {
-                    TextField("Full name", text: $name)
+                Section(header: Text("Username")) {
+                    TextField("User name", text: $name)
                         .autocorrectionDisabled(true)
-                        .textInputAutocapitalization(.words)
+                        .textInputAutocapitalization(.never)
                 }
 
                 Section(header: Text("Email")) {
