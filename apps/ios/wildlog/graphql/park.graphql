@@ -38,5 +38,7 @@ query GetParkMapRecommendations(
     longitude
     states
     type
+    cost
+    free
   }
 }

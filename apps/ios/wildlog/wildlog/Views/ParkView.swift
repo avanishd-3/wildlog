@@ -10,7 +10,8 @@ import SwiftUI
 // Basic apple settings-like design will probably change later to make it look more stylized
 struct ParkDetailView: View {
     let park: Park
-    
+    @Environment(\.dismiss) private var dismiss
+
     var body: some View {
         Form {
             // Park Image Section
@@ -56,8 +57,8 @@ struct ParkDetailView: View {
                     Spacer()
                     if park.free {
                         Text("Free")
-                    } else if let cost = park.cost {
-                        Text(cost)
+                    } else {
+                        Text("$\(park.cost)")
                     }
                 }
             }
@@ -78,6 +79,17 @@ struct ParkDetailView: View {
             }
         }
         .navigationBarTitle(park.name)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(.gray)
+                        .font(.title2)
+                }
+            }
+        }
     }
 }
 
