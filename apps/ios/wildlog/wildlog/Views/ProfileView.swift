@@ -8,13 +8,16 @@
 import SwiftUI
 
 struct ProfileView: View {
+    @Binding var selectedTab: Tabs
+    
+    
     var body: some View {
         NavigationStack {
             // Top row
             // Should not be scrollable
             HStack {
                 NavigationLink {
-                    SettingsView()
+                    SettingsView(selectedTab: $selectedTab)
                 } label: {
                     Image(systemName: "gearshape")
                         .font(.title2)
@@ -136,5 +139,5 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView()
+    ProfileView(selectedTab: .constant(.home))
 }

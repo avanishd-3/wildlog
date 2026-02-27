@@ -9,6 +9,8 @@ import SwiftUI
 
 struct SettingsView: View {
     
+    @Binding var selectedTab: Tabs
+    
     @AppStorage(.settingsNameKey)
     private var name: String = ""
     
@@ -63,7 +65,13 @@ struct SettingsView: View {
                     Button("Sign Out") {
                         Task {
                             do {
+                                
                                 try await authManager.logout()
+                                debugPrint("Signing out...")
+                                
+                                // Selected tab will be profile on log-in if you don't do this
+                                debugPrint("Setting selectedTab to .home")
+                                selectedTab = .home
                             } catch {
                                 debugPrint("Logout failed: \(error)")
                             }
@@ -83,5 +91,5 @@ struct SettingsView: View {
 }
 
 #Preview {
-    SettingsView().environment(AuthenticationManager())
+    SettingsView(selectedTab: .constant(.home)).environment(AuthenticationManager())
 }
