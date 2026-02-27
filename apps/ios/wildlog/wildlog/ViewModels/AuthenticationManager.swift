@@ -185,4 +185,9 @@ class AuthenticationManager {
         // Reset Apollo cache
         try await Network.shared.apolloClient.clearCache()
     }
+    
+    func resetUIState() { // Reset when going from login to sign up so error doesn't show up
+        self.authenticatedError = nil
+        self.isLoading = false
+    }
 }

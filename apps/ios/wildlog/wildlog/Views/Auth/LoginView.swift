@@ -84,7 +84,9 @@ struct LoginView: View {
                 }
                 
                 Section {
-                    NavigationLink(destination: SignUpView()) {
+                    NavigationLink(destination: SignUpView().onAppear(perform: {authManager.resetUIState()})) // Don't want log-in error to still be visible
+                    {
+                        
                         Text("New account? Sign up")
                     }
                 }
