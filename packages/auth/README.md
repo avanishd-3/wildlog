@@ -14,3 +14,9 @@ Here's how auth will work.
 2. POST /graphql (cookie sent & resolvers enforce auth rules)
 
 On app startup, the client can check if they have the cookie. If so, they can move to home screen. If not, they show log in screen.
+
+# Updating Auth Config
+
+In apps/server, you need to run ```pnpm dlx @better-auth/cli@latest generate --config ../../packages/auth/src/index.ts```.
+
+This will update auth.ts in the relational db schema. You then need to run (in the root directory, not apps/server) pnpm db:generate and pnpm db:migrate to translate the new schema to SQL and then to the DB.

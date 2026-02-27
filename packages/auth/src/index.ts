@@ -2,6 +2,7 @@ import { db } from "@wildlog/db";
 import * as schema from "@wildlog/db/schema/auth";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { username } from "better-auth/plugins";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -13,6 +14,7 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+  disabledPaths: ["/is-username-available"], // Do not allow usernames to be enumerated
   advanced: {
     defaultCookieAttributes: {
       sameSite: "none",
@@ -21,5 +23,7 @@ export const auth = betterAuth({
     },
     disableOriginCheck: true, // Disable origin check for mobile app (don't need to worry about CORS)
   },
-  plugins: [],
+  plugins: [
+    username(), // Allow people to log in with their username instead of email address
+  ],
 });

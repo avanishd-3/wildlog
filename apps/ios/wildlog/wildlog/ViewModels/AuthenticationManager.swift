@@ -80,7 +80,7 @@ class AuthenticationManager {
         
     }
     
-    func signup(email: String, password: String, userName: String) async throws {
+    func signup(email: String, password: String, name: String, userName: String) async throws {
         isLoading = true
         authenticatedError = nil
         
@@ -90,7 +90,8 @@ class AuthenticationManager {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        let jsonData = try JSONSerialization.data(withJSONObject: ["email": email, "password": password, "name": userName], options: [])
+        // See: https://www.better-auth.com/docs/plugins/username#sign-up
+        let jsonData = try JSONSerialization.data(withJSONObject: ["email": email, "password": password, "name": name, "username": userName], options: [])
         request.httpBody = jsonData
         
         let (_, response) = try await URLSession.shared.data(for: request)

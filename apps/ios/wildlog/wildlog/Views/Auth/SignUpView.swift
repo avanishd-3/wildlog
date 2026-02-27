@@ -11,6 +11,7 @@ struct SignUpView: View {
     @Environment(AuthenticationManager.self) private var authManager
 
     @State private var name = ""
+    @State private var userName = "" // Name is actual name, username is for display
     @State private var email = ""
     @State private var password = ""
     @State private var showPassword = false
@@ -23,13 +24,15 @@ struct SignUpView: View {
                 .foregroundColor(Color(.systemGreen))
 
             Form {
-                Section(header: Text("Username")) {
-                    TextField("User name", text: $name)
+                Section(header: Text("Account Info")) {
+                    TextField("Name", text: $name)
+                        .autocorrectionDisabled(true)
+                        .textInputAutocapitalization(.words)
+                    
+                    TextField("User Name", text: $userName)
                         .autocorrectionDisabled(true)
                         .textInputAutocapitalization(.never)
-                }
-
-                Section(header: Text("Email")) {
+                    
                     TextField("Email", text: $email)
                         .keyboardType(.emailAddress)
                         .autocorrectionDisabled(true)
@@ -68,7 +71,7 @@ struct SignUpView: View {
                     Button(action: {
                         Task {
                             do {
-                                try await authManager.signup(email: email, password: password, userName: name)
+                                try await authManager.signup(email: email, password: password, name: name, userName: userName)
                             } catch {
                                 debugPrint("Sign up failed: \(error)")
                             }
