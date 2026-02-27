@@ -19,6 +19,7 @@ export const auth = betterAuth({
       secure: true,
       httpOnly: true,
     },
+    disableOriginCheck: true, // Disable origin check for mobile app (don't need to worry about CORS)
   },
   plugins: [],
 });
