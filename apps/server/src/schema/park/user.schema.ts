@@ -4,7 +4,7 @@ const user = builder.simpleObject("User", {
   fields: (t) => ({
     id: t.string({
       nullable: false,
-    }), // This is the publicId from the database, which is a UUID string
+    }), // This is the userID from the database
   }),
 });
 
