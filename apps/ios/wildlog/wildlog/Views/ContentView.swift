@@ -11,6 +11,8 @@ import SwiftUI
 
 struct ContentView: View {
     @State var selectedTab: Tabs = .home
+    
+    @Environment(LaunchScreenStateManager.self) var launchScreenStateManager
     @Environment(AuthenticationManager.self) var authManager
     
     // Do not allow app access until they are authenticated
@@ -26,6 +28,9 @@ struct ContentView: View {
             let isAuthenticated = await authManager.checkAuthenticationStatus()
             await MainActor.run {
                 authManager.isAuthenticated = isAuthenticated
+                debugPrint("Authenticated: \(isAuthenticated)")
+                debugPrint("Dismissing launch screen")
+                launchScreenStateManager.dismiss()
             }
         }
     }

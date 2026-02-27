@@ -7,7 +7,8 @@
 
 import Foundation
 
-final class LaunchScreenStateManager: Observable {
+@Observable
+final class LaunchScreenStateManager {
     @MainActor private(set) var state: LaunchScreenStep = .firstStep
     
     // End launch screen animation

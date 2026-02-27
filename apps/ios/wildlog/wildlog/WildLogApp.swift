@@ -31,12 +31,12 @@ struct WildLogApp: App {
             ZStack {
                 ContentView()
                 
-//                if launchScreenState.state != .finished {
-//                    LaunchScreenView()
-//                }
+                if launchScreenState.state != .finished {
+                    LaunchScreenView()
+                }
             }
         }
-//        .environment(launchScreenState)
+        .environment(launchScreenState)
         .environment(authManager)
         .modelContainer(sharedModelContainer)
     }
