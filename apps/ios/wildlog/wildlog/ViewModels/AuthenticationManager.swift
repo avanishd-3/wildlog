@@ -16,6 +16,11 @@ import WildLogAPI
  * Should be the only place where non-apollo request is made (everything but auth is in graphql)
  */
 
+enum SignInMethods: Int, Equatable, Hashable {
+    case email
+    case username
+}
+
 @Observable
 class AuthenticationManager {
     // MARK: Hardcoding auth url since not deploying
@@ -109,25 +114,45 @@ class AuthenticationManager {
         self.isLoading = false
     }
     
-    func login(email: String, password: String) async throws {
+    func login(accountInfo: String, password: String, method: SignInMethods) async throws {
         isLoading = true
         authenticatedError = nil
         
-        let url = URL(string: "\(baseURL)/api/auth/sign-in/email")!
+        // Need to change endpoint based on auth method
+        // See: https://www.better-auth.com/docs/plugins/username#sign-in
         
-        var request = URLRequest(url: url)
+        var request: URLRequest!
+        
+        if method == .email {
+            debugPrint("User login with email")
+            
+            let url = URL(string: "\(baseURL)/api/auth/sign-in/email")!
+            request = URLRequest(url: url)
+            request.httpBody = try JSONSerialization.data(withJSONObject: ["email": accountInfo, "password": password], options: [])
+        }
+        else {
+            debugPrint("User login with username")
+            let url = URL(string: "\(baseURL)/api/auth/sign-in/username")
+            request = URLRequest(url: url!)
+            request.httpBody = try JSONSerialization.data(withJSONObject: ["username": accountInfo, "password": password], options: [])
+        }
+        
+        // Common settings
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        let jsonData = try JSONSerialization.data(withJSONObject: ["email": email, "password": password], options: [])
-        request.httpBody = jsonData
         
         let (_, response) = try await URLSession.shared.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
             debugPrint("User login failed")
-            self.authenticatedError = URLError(.userAuthenticationRequired).localizedDescription
-            throw URLError(.userAuthenticationRequired)
+            if method == .email {
+                self.authenticatedError = "Invalid email or password. Please try again."
+            }
+            else {
+                self.authenticatedError = "Invalid username or password. Please try again."
+            }
+            self.isLoading = false
+            throw URLError(.userAuthenticationRequired) // Need this so guard works
         }
         
         debugPrint("User login successful")

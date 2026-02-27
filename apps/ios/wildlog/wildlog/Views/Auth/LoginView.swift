@@ -10,9 +10,16 @@ import SwiftUI
 struct LoginView: View {
     @Environment(AuthenticationManager.self) private var authManager
     
-    @State private var email = ""
+    @State private var accountInfo = ""
     @State private var password = ""
     @State private var showPassword = false
+    
+    func isEmailValid(_ email: String) -> Bool {
+        // Follows format {name}@{end}.{ext}
+        // ext must be at least 2 characters long
+        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+        return email.range(of: emailRegex, options: .regularExpression, range: nil, locale: nil) != nil
+    }
     
     var body: some View {
         VStack(spacing: 16) {
@@ -23,9 +30,8 @@ struct LoginView: View {
                 .bold()
             
             Form {
-                Section(header: Text("Email")) {
-                    TextField("Email", text: $email)
-                        .keyboardType(.emailAddress)
+                Section(header: Text("Account Info")) {
+                    TextField("Email or username", text: $accountInfo)
                         .autocorrectionDisabled(true)
                         .textInputAutocapitalization(.never)
                 }
@@ -62,13 +68,16 @@ struct LoginView: View {
                     Button("Log In") {
                         Task {
                             do {
-                                try await authManager.login(email: email, password: password)
+                                let validEmail = isEmailValid(accountInfo)
+                                
+                                try await authManager.login(accountInfo: accountInfo, password: password, method: validEmail ? .email : .username)
+                                
                             } catch {
                                 debugPrint("Login failed: \(error)")
                             }
                         }
                     }
-                    .disabled(email.isEmpty || password.isEmpty || authManager.isLoading)
+                    .disabled(accountInfo.isEmpty || password.isEmpty || authManager.isLoading)
                     .frame(maxWidth: .infinity)
                     
                     if authManager.isLoading {
