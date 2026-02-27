@@ -12,10 +12,11 @@ struct LoginView: View {
     
     @State private var email = ""
     @State private var password = ""
+    @State private var showPassword = false
     
-    @State private var showPassword = false // Toggle password visibility
+    var onSignIn: (() -> Void)? = nil
     
-    var body : some View {
+    var body: some View {
         VStack(spacing: 16) {
             Spacer()
             
@@ -24,30 +25,31 @@ struct LoginView: View {
                 .bold()
             
             Form {
-                Section(header: Text("Login")) {
+                Section(header: Text("Email")) {
                     TextField("Email", text: $email)
                         .keyboardType(.emailAddress)
                         .autocorrectionDisabled(true)
                         .textInputAutocapitalization(.never)
-                    
                 }
                 
-                HStack {
-                    if showPassword {
-                        TextField("Password", text: $password)
-                            .autocorrectionDisabled(true)
-                            .textInputAutocapitalization(.never)
-                    } else {
-                        SecureField("Password", text: $password)
-                            .autocorrectionDisabled(true)
-                            .textInputAutocapitalization(.never)
-                    }
-                    
-                    Button(action: {
-                        showPassword.toggle()
-                    }) {
-                        Image(systemName: showPassword ? "eye.slash" : "eye")
-                            .foregroundStyle(Color(.systemGray))
+                Section(header: Text("Password")) {
+                    HStack {
+                        if showPassword {
+                            TextField("Password", text: $password)
+                                .autocorrectionDisabled(true)
+                                .textInputAutocapitalization(.never)
+                        } else {
+                            SecureField("Password", text: $password)
+                                .autocorrectionDisabled(true)
+                                .textInputAutocapitalization(.never)
+                        }
+                        
+                        Button(action: {
+                            showPassword.toggle()
+                        }) {
+                            Image(systemName: showPassword ? "eye.slash" : "eye")
+                                .foregroundStyle(Color(.systemGray))
+                        }
                     }
                 }
                 
@@ -63,8 +65,9 @@ struct LoginView: View {
                         Task {
                             do {
                                 try await authManager.login(email: email, password: password)
+                                onSignIn?()
                             } catch {
-                                // TODO: Handle log-in errors
+                                debugPrint("Login failed: \(error)")
                             }
                         }
                     }
@@ -81,12 +84,14 @@ struct LoginView: View {
                     }
                 }
                 
-                // Sign-up link
-                NavigationLink(destination: SignUpView()) {
-                    Text("New account? Sign up")
-                        .foregroundStyle(Color(.systemBlue))
+                Section {
+                    NavigationLink(destination: SignUpView(onSignIn: onSignIn)) {
+                        Text("New account? Sign up")
+                    }
                 }
             }
+            
+            Spacer()
         }
     }
 }

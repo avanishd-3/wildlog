@@ -14,6 +14,8 @@ struct SignUpView: View {
     @State private var email = ""
     @State private var password = ""
     @State private var showPassword = false
+    
+    var onSignIn: (() -> Void)? = nil
 
     var body: some View {
         VStack(spacing: 20) {
@@ -69,15 +71,16 @@ struct SignUpView: View {
                         Task {
                             do {
                                 try await authManager.signup(email: email, password: password, userName: name)
+                                onSignIn?()
                             } catch {
-                                // TODO: Handle sign up error
+                                debugPrint("Sign up failed: \(error)")
                             }
                         }
                     }) {
                         Text("Create Account")
                     }
                     .tint(Color(.systemGreen))
-                    .disabled(email.isEmpty || password.isEmpty || name.isEmpty || authManager.isLoading)
+                    .disabled(email.isEmpty || password.isEmpty || password.count < 8 || name.isEmpty || authManager.isLoading)
 
                     if authManager.isLoading {
                         HStack {

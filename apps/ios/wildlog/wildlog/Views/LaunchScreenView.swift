@@ -10,7 +10,7 @@
 import SwiftUI
 
 struct LaunchScreenView: View {
-    @EnvironmentObject private var launchScreenState: LaunchScreenStateManager
+    @Environment(LaunchScreenStateManager.self) private var launchScreenState
     @State private var firstAnimation = false
     @State private var startFadeOutAnimation = false
     
@@ -58,6 +58,6 @@ struct LaunchScreenView: View {
 
 struct LaunchScreenView_Previews: PreviewProvider {
     static var previews: some View {
-        LaunchScreenView().environmentObject(LaunchScreenStateManager())
+        LaunchScreenView().environment(LaunchScreenStateManager())
     }
 }

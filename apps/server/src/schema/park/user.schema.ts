@@ -13,7 +13,7 @@ builder.queryField("me", (t) =>
     type: user,
     nullable: true, // Allow null when not logged in
     resolve: (_parent, _args, context) => {
-      console.log("Resolving me query with context:", context);
+      console.log("Resolving 'me' query with user:", context.user);
       if (!context.user) {
         return null;
       }

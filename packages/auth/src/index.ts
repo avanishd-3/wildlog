@@ -1,6 +1,5 @@
 import { db } from "@wildlog/db";
 import * as schema from "@wildlog/db/schema/auth";
-import { env } from "@wildlog/env/server";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 
@@ -10,7 +9,7 @@ export const auth = betterAuth({
 
     schema: schema,
   }),
-  trustedOrigins: [env.CORS_ORIGIN],
+  trustedOrigins: ["*"], // Allow all origins for mobile app (don't need to worry about CORS)
   emailAndPassword: {
     enabled: true,
   },

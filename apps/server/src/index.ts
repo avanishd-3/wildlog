@@ -43,8 +43,12 @@ app.route({
         ...(request.body ? { body: JSON.stringify(request.body) } : {}),
       });
 
+      console.log("Request body is ", request.body);
+
       // Process authentication request
       const response = await auth.handler(req);
+
+      console.log("Auth response is ", response);
 
       // Forward response to client
       reply.status(response.status);

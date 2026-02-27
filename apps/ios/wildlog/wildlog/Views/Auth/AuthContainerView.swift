@@ -10,10 +10,13 @@ import SwiftUI
 // Show log-in by default but give them link to sign up
 struct AuthContainerView: View {
     @Environment(AuthenticationManager.self) private var authManager
+    
+    // Set logged in to true on sign in
+    var onSignIn: (() -> Void)? = nil
 
     var body: some View {
         NavigationStack {
-            LoginView().toolbar(.hidden)
+            LoginView(onSignIn: onSignIn).toolbar(.hidden)
         }
     }
 }

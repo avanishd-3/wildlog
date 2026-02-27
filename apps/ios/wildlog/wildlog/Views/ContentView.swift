@@ -5,33 +5,42 @@
 //  Created by Avanish Davuluri on 2/2/26.
 //
 
-// Landing page view for the app
-// Just contains all the
+// Landing page for the app
 
 import SwiftUI
 
 struct ContentView: View {
     @State var selectedTab: Tabs = .home
+    @Environment(AuthenticationManager.self) var authManager
     
-    @EnvironmentObject private var launchScreenState: LaunchScreenStateManager
-    
+    // Do not allow app access until they are authenticated
     var body: some View {
-            
-        // **Important**: Do not set tint or accent color. It applies globally
-        UIKitTabView(selectedTab: $selectedTab)
+        Group {
+            if authManager.isAuthenticated {
+                UIKitTabView(selectedTab: $selectedTab)
+            } else {
+                AuthContainerView(onSignIn: {
+                    Task {
+                        await MainActor.run {
+                            authManager.isAuthenticated = true
+                        }
+                    }
+                })
+            }
+        }
         .task {
-            // TODO: Replace with actual API call
-            // This is just a placeholder for now
-            try? await Task.sleep(for: .seconds(3))
-            self.launchScreenState.dismiss()
+            let isAuthenticated = await authManager.checkAuthenticationStatus()
+            await MainActor.run {
+                authManager.isAuthenticated = isAuthenticated
+            }
         }
     }
 }
 
-
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
-            .environmentObject(LaunchScreenStateManager())
+            .environment(LaunchScreenStateManager())
+            .environment(AuthenticationManager())
     }
 }

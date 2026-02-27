@@ -6,7 +6,7 @@ With the current set up, Better Auth is integrated with Drizzle and can update t
 
 # Auth Flow
 
-For our app, we're using cookie-based authentication to make things simpler. We don't need to worry about CORS since this is a first-party iOS app and we're not going to use web views (update better auth config and Fastify endpoint if this changes).
+For our app, we're using cookie-based authentication to make things simpler. We don't need to worry about CORS since this is a first-party iOS app and we're not going to use web views (update better auth config and Fastify endpoint if this changes). We also don't need to worry about CSRF for the same reason.
 
 Here's how auth will work.
 
