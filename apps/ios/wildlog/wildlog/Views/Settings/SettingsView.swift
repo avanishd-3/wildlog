@@ -24,6 +24,8 @@ struct SettingsView: View {
     @AppStorage(.settingsUserNotificationKey)
     private var userNotification: Bool = false
     
+    @Environment(AuthenticationManager.self) var authManager
+    
     // Placeholder
     // TODO: Use actual logic to handle
     @State private var favoriteParks = [
@@ -57,6 +59,19 @@ struct SettingsView: View {
                     }
                 }
                 
+                Section(header: Text("Sign Out")) {
+                    Button("Sign Out") {
+                        Task {
+                            do {
+                                try await authManager.logout()
+                            } catch {
+                                debugPrint("Logout failed: \(error)")
+                            }
+                        }
+                    }
+                    .foregroundStyle(Color(.systemRed))
+                }
+                
                 Section(header: Text("Notifications")) {
                     Toggle("Receive push notifications", isOn: $userNotification)
                 }
@@ -68,5 +83,5 @@ struct SettingsView: View {
 }
 
 #Preview {
-    SettingsView()
+    SettingsView().environment(AuthenticationManager())
 }
