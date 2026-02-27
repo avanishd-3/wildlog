@@ -101,16 +101,20 @@ class AuthenticationManager {
         
         let (_, response) = try await URLSession.shared.data(for: request)
         
-        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-            debugPrint("User sign up failed")
-            self.authenticatedError = URLError(.userAuthenticationRequired).localizedDescription
-            throw URLError(.userAuthenticationRequired)
+        let httpResponse = response as? HTTPURLResponse
+        
+        switch httpResponse?.statusCode {
+            case 200: // Cookie stored automatically
+                debugPrint("User sign up successful")
+                self.isAuthenticated = true
+            case 400:
+                self.authenticatedError = "Sign up failed"
+            case 409:
+                self.authenticatedError = "Username already taken"
+            default:
+                debugPrint("User sign up failed")
         }
         
-        debugPrint("Sign up response status: \(httpResponse.statusCode)")
-        
-        // Cookie stored automatically
-        self.isAuthenticated = true
         self.isLoading = false
     }
     

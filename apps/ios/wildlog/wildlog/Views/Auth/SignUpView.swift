@@ -80,7 +80,7 @@ struct SignUpView: View {
                         Text("Create Account")
                     }
                     .tint(Color(.systemGreen))
-                    .disabled(email.isEmpty || password.isEmpty || password.count < 8 || name.isEmpty || authManager.isLoading)
+                    .disabled(email.isEmpty || !isValidEmail(email) || password.isEmpty || password.count < 8 || name.isEmpty || authManager.isLoading)
 
                     if authManager.isLoading {
                         HStack {

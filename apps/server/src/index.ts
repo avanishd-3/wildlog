@@ -11,6 +11,7 @@ import { readFileSync } from "fs";
 import { computeEmbedding } from "@wildlog/embedding";
 import { seedEmbeddings } from "@wildlog/db/seed-embed";
 import { auth } from "@wildlog/auth";
+import z from "zod";
 
 const app = Fastify({
   logger: false,
@@ -18,6 +19,18 @@ const app = Fastify({
     key: readFileSync("localhost-key.pem"),
     cert: readFileSync("localhost.pem"),
   },
+});
+
+// Different than Better Auth docs, but what we mandate in UI
+const SignUpRequest = z.object({
+  email: z.email(),
+  name: z.string().min(1),
+  password: z.string().min(8),
+  username: z
+    .string()
+    .min(3)
+    .max(20)
+    .regex(/^[a-zA-Z0-9_]+$/),
 });
 
 // Register authentication endpoint
@@ -43,7 +56,37 @@ app.route({
         ...(request.body ? { body: JSON.stringify(request.body) } : {}),
       });
 
-      console.log("Request body is ", request.body);
+      // If sign-up, check if username is available
+      if (url.pathname == "/api/auth/sign-up/email") {
+        console.log("Received sign-up request with body: ", request.body);
+        const requestBody = SignUpRequest.safeParse(request.body);
+
+        if (!requestBody.success) {
+          console.log("Sign-up request validation failed: ", requestBody.error.message);
+          reply.status(400).send({
+            error: "Invalid sign-up request: " + requestBody.error.message,
+            code: "INVALID_REQUEST",
+          });
+          return;
+        }
+
+        console.log(`Checking availability for username: ${requestBody.data.username}`);
+
+        const isAvailableResponse = await auth.api.isUsernameAvailable({
+          body: {
+            username: requestBody.data.username,
+          },
+        });
+
+        if (!isAvailableResponse?.available) {
+          console.log(`Username ${requestBody.data.username} is already taken`);
+          reply.status(409).send({
+            error: "Username is already taken",
+            code: "USERNAME_TAKEN",
+          });
+          return;
+        }
+      }
 
       // Process authentication request
       const response = await auth.handler(req);
