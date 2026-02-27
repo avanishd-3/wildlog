@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import WildLogAPI
 
 
 /**
@@ -22,7 +23,40 @@ class AuthenticationManager: Observable {
     
     private var cancellables = Set<AnyCancellable>()
     
-    private init() {}
+    init() {} // Init needs to be public for previews to work
+    
+    func checkAuthenticationStatus() async -> Bool {
+        // Check cookie
+        let hasCookie = HTTPCookieStorage.shared.cookies?.contains {
+            $0.domain.contains("localhost") && ($0.expiresDate != nil || $0.expiresDate! > Date())
+        } ?? false
+        
+        debugPrint("Checked for cookie: \(hasCookie)")
+        
+        guard hasCookie else {
+            debugPrint("No cookie found, returning false")
+            self.isAuthenticated = false
+            return false
+        }
+        
+        // Verify with backend
+        do {
+            let response = try await apolloClient.fetch(query: MeQuery())
+            if response.data?.me != nil {
+                self.isAuthenticated = true
+                return true
+            }
+            else {
+                return false
+            }
+            
+        } catch { // Consider yourself unauthenticated on any server error
+            self.isAuthenticated = false
+            return false
+        }
+        
+        
+    }
     
     func signup(email: String, password: String, userName: String) async throws {
         isLoading = true
@@ -86,7 +120,7 @@ class AuthenticationManager: Observable {
         
         // Clear cookies only for our backend
         HTTPCookieStorage.shared.cookies?.forEach {
-            guard $0.domain == "localhost:3000" else { return }
+            guard $0.domain == "localhost" else { return }
             HTTPCookieStorage.shared.deleteCookie($0)
         }
         

@@ -107,4 +107,9 @@ enum ParkTypeEnum {
 type Query {
   getPark: Park
   getParkMapRecommendations(filters: ParkFiltersInput, x_max: Float!, x_min: Float!, y_max: Float!, y_min: Float!): [Park!]
+  me: User
+}
+
+type User {
+  id: String!
 }
