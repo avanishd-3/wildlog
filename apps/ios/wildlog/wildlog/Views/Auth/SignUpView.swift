@@ -54,7 +54,7 @@ struct SignUpView: View {
                         Button {
                             showPassword.toggle()
                         } label: {
-                            Image(systemName: showPassword ? "eye.slash" : "eye")
+                            Image(systemName: showPassword ? "eye" : "eye.slash")
                                 .foregroundStyle(Color(.systemGray))
                         }
                     }
