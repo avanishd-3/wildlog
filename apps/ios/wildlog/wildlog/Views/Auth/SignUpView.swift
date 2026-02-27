@@ -14,8 +14,6 @@ struct SignUpView: View {
     @State private var email = ""
     @State private var password = ""
     @State private var showPassword = false
-    
-    var onSignIn: (() -> Void)? = nil
 
     var body: some View {
         VStack(spacing: 20) {
@@ -71,7 +69,6 @@ struct SignUpView: View {
                         Task {
                             do {
                                 try await authManager.signup(email: email, password: password, userName: name)
-                                onSignIn?()
                             } catch {
                                 debugPrint("Sign up failed: \(error)")
                             }

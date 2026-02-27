@@ -19,13 +19,7 @@ struct ContentView: View {
             if authManager.isAuthenticated {
                 UIKitTabView(selectedTab: $selectedTab)
             } else {
-                AuthContainerView(onSignIn: {
-                    Task {
-                        await MainActor.run {
-                            authManager.isAuthenticated = true
-                        }
-                    }
-                })
+                AuthContainerView()
             }
         }
         .task {

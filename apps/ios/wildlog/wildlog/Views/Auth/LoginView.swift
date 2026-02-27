@@ -14,8 +14,6 @@ struct LoginView: View {
     @State private var password = ""
     @State private var showPassword = false
     
-    var onSignIn: (() -> Void)? = nil
-    
     var body: some View {
         VStack(spacing: 16) {
             Spacer()
@@ -65,7 +63,6 @@ struct LoginView: View {
                         Task {
                             do {
                                 try await authManager.login(email: email, password: password)
-                                onSignIn?()
                             } catch {
                                 debugPrint("Login failed: \(error)")
                             }
@@ -85,7 +82,7 @@ struct LoginView: View {
                 }
                 
                 Section {
-                    NavigationLink(destination: SignUpView(onSignIn: onSignIn)) {
+                    NavigationLink(destination: SignUpView()) {
                         Text("New account? Sign up")
                     }
                 }
