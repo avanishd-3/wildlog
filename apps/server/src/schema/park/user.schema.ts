@@ -5,6 +5,9 @@ const user = builder.simpleObject("User", {
     id: t.string({
       nullable: false,
     }), // This is the userID from the database
+    username: t.string({
+      nullable: false,
+    }),
   }),
 });
 
@@ -19,6 +22,7 @@ builder.queryField("me", (t) =>
       }
       return {
         id: context.user.id,
+        username: context.user.username,
       };
     },
   }),

@@ -6,9 +6,18 @@
 //
 
 import SwiftUI
+import WildLogAPI
 
 struct ProfileView: View {
     @Binding var selectedTab: Tabs
+    
+    @State private var userInfo: GetUserInfoQuery.Data.Me?
+    
+    private func getUserInfo() async throws {
+        let response = try await apolloClient.fetch(query: GetUserInfoQuery())
+        
+        userInfo = response.data?.me
+    }
     
     
     var body: some View {
@@ -26,7 +35,7 @@ struct ProfileView: View {
 
                 Spacer()
 
-                Text("Username")
+                Text("\(userInfo?.username ?? "Username") ")
                     .font(.headline)
 
                 Spacer()
@@ -133,6 +142,13 @@ struct ProfileView: View {
                     }
                 }
                 .padding(8)
+            }
+        }
+        .task {
+            do {
+                try await getUserInfo()
+            } catch {
+                // Do nothing (info will be empty)
             }
         }
     }

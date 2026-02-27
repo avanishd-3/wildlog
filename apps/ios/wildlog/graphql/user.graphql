@@ -3,3 +3,9 @@ query me {
     id
   }
 }
+
+query getUserInfo {
+  me {
+    username
+  }
+}
