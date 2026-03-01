@@ -76,8 +76,7 @@ builder.mutationField("updateBio", (t) =>
       const updatedUserBio = (await updateUserBio(context.user.id, args.bio))[0]; // Drizzle returns an array, but since id is unique, there will only be 1 user
 
       if (updatedUserBio === undefined) {
-        // Should not happen, but just in case
-        throw new Error("User not found");
+        throw new Error("User bio update failed");
       }
 
       // Return the updated user (re-use everything but the bio so the db query can search less columns)
