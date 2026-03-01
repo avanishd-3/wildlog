@@ -6,6 +6,16 @@ query me {
 
 query getUserInfo {
   me {
+    name
+    email
     username
+    website
+    bio
+  }
+}
+
+mutation updateBio($bio: String!) {
+  updateBio(bio: $bio) {
+    bio
   }
 }

@@ -2,7 +2,7 @@ import { db } from "@wildlog/db";
 import * as schema from "@wildlog/db/schema/auth";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { username } from "better-auth/plugins";
+import { username, openAPI } from "better-auth/plugins";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -25,5 +25,18 @@ export const auth = betterAuth({
   },
   plugins: [
     username(), // Allow people to log in with their username instead of email address
+    openAPI(), // Generate OpenAPI spec for auth endpoints
   ],
+  user: {
+    additionalFields: {
+      website: {
+        type: "string",
+        required: false,
+      },
+      bio: {
+        type: "string",
+        required: false,
+      },
+    },
+  },
 });

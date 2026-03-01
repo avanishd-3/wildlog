@@ -13,10 +13,23 @@ struct ProfileView: View {
     
     @State private var userInfo: GetUserInfoQuery.Data.Me?
     
+    // Can't pass optional value as binding, so need to do this
+    @State private var name = ""
+    @State private var userName = ""
+    @State private var email = ""
+    @State private var website = ""
+    @State private var bio = ""
+    
     private func getUserInfo() async throws {
         let response = try await apolloClient.fetch(query: GetUserInfoQuery())
         
+        // Pre-load all this stuff so going to the settings page feels fast
+        
         userInfo = response.data?.me
+        name = userInfo?.name ?? ""
+        userName = userInfo?.username ?? "Username"
+        email = userInfo?.email ?? ""
+        
     }
     
     
@@ -26,7 +39,7 @@ struct ProfileView: View {
             // Should not be scrollable
             HStack {
                 NavigationLink {
-                    SettingsView(selectedTab: $selectedTab)
+                    SettingsView(selectedTab: $selectedTab, name: $name, email: $email, userWebsite: $website, userBio: $bio)
                 } label: {
                     Image(systemName: "gearshape")
                         .font(.title2)
@@ -35,7 +48,7 @@ struct ProfileView: View {
 
                 Spacer()
 
-                Text("\(userInfo?.username ?? "Username") ")
+                Text(userName)
                     .font(.headline)
 
                 Spacer()

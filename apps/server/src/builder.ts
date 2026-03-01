@@ -6,7 +6,11 @@ import ScopeAuthPlugin from "@pothos/plugin-scope-auth";
 type Context = {
   user: {
     id: string;
+    name: string;
+    email: string;
     username: string;
+    website?: string;
+    bio?: string;
   } | null;
 };
 

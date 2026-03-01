@@ -2,7 +2,7 @@ import { createGraphQLEnumFromPgEnum } from "@/utils/create-graphql-enum";
 import { builder } from "@/builder";
 import { parkDesignationEnum, parkTypeEnum } from "@wildlog/db/schema/park";
 
-import { getParkMapRecommendations } from "@wildlog/db/queries/park_queries";
+import { getParkMapRecommendations } from "@wildlog/db/queries/park-queries";
 import { getParksFilters } from "@wildlog/db/utils/get-park-query-filters";
 
 const ParkDesignationEnum = createGraphQLEnumFromPgEnum(

@@ -11,17 +11,10 @@ struct SettingsView: View {
     
     @Binding var selectedTab: Tabs
     
-    @AppStorage(.settingsNameKey)
-    private var name: String = ""
-    
-    @AppStorage(.settingsUserEmailKey)
-    private var userEmail: String = ""
-    
-    @AppStorage(.settingsUserWebsiteKey)
-    private var userWebsite: String = ""
-    
-    @AppStorage(.settingsBioKey)
-    private var userBio: String = ""
+    @Binding var name: String
+    @Binding var email: String
+    @Binding var userWebsite: String
+    @Binding var userBio: String
     
     @AppStorage(.settingsUserNotificationKey)
     private var userNotification: Bool = false
@@ -44,10 +37,11 @@ struct SettingsView: View {
             // See: https://developer.apple.com/documentation/swiftui/view/textcontenttype(_:)-ufdv
             Form {
                 Section(header: Text("Profile")) {
-                    TextField("Name", text: $name)
+                    TextField("Given Name", text: $name)
                         .textContentType(.name)
-                    TextField("Email Address", text: $userEmail)
+                    TextField("Email Address", text: $email)
                         .textContentType(.emailAddress)
+                        .disabled(true)
                     TextField("Website", text: $userWebsite)
                         .textInputAutocapitalization(.never)
                         .textContentType(.URL)
@@ -91,5 +85,5 @@ struct SettingsView: View {
 }
 
 #Preview {
-    SettingsView(selectedTab: .constant(.home)).environment(AuthenticationManager())
+    SettingsView(selectedTab: .constant(.home), name: .constant("John"), email: .constant("john@example.com"), userWebsite: .constant("https://john.example.com"), userBio: .constant("Hello, world!")).environment(AuthenticationManager())
 }

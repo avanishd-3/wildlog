@@ -3,6 +3,8 @@
 The server has the following endpoints.
 
 - `/`: root endpoint, which is set to auto-redirect to /graphiql
+- `/api/auth`: auth endpoints (handled by Better Auth)
+   - `/api/auth/reference`: OpenAPI specification for Better Auth handler
 - `/seed`: seed script for db park info (should **not** be used by client)
 - `/seed-embed`: seed script for db embeddings (should **not** be used by client)
 - `/graphql`: endpoint for all GraphQL requests

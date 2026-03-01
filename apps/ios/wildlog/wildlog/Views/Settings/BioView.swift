@@ -6,11 +6,14 @@
 //
 
 import SwiftUI
+import WildLogAPI
 
 struct BioView: View {
     @Binding var bio: String
     @Environment(\.dismiss) private var dimiss // To close view
     @FocusState private var isFocused: Bool
+    
+    @State var savingnewBio: Bool = false
     
     
     var body: some View {
@@ -23,10 +26,20 @@ struct BioView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
-                        // TODO: Update DB on save
-                        isFocused = false
-                        dimiss()
+                        Task {
+                            do {
+                                savingnewBio = true
+                                let response = try await apolloClient.perform(mutation: UpdateBioMutation(bio: bio))
+                                bio = response.data?.updateBio?.bio ?? bio
+                                savingnewBio = false
+                                isFocused = false
+                                dimiss()
+                            } catch {
+                                // TODO: Handle update error
+                            }
+                        }
                     }
+                    .disabled(bio.isEmpty || savingnewBio)
                     .tint(Color(.systemGreen)) // Save should be green
                 }
             }

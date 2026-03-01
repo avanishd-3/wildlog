@@ -43,6 +43,7 @@ directive @defer(
 
 type Mutation {
   createPark(description: String!, designation: ParkDesignationEnum!, name: String!): Park
+  updateBio(bio: String!): User
 }
 
 type Park {
@@ -111,6 +112,10 @@ type Query {
 }
 
 type User {
+  bio: String
+  email: String!
   id: String!
+  name: String!
   username: String!
+  website: String
 }
