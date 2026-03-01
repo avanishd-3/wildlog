@@ -29,6 +29,8 @@ struct ProfileView: View {
         name = userInfo?.name ?? ""
         userName = userInfo?.username ?? "Username"
         email = userInfo?.email ?? ""
+        website = userInfo?.website ?? ""
+        bio = userInfo?.bio ?? ""
         
     }
     
