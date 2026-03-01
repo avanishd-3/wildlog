@@ -90,6 +90,14 @@ struct SignUpView: View {
                         }
                     }
                 }
+                
+                Section {
+                    NavigationLink(destination: LoginView().onAppear(perform: {authManager.resetUIState()})) // Reset any errors
+                    {
+                        
+                        Text("Already have an account? Log in")
+                    }
+                }
             }
             Spacer()
         }
