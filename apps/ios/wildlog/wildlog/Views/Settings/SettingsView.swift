@@ -6,23 +6,26 @@
 //
 
 import SwiftUI
+import WildLogAPI
 
 struct SettingsView: View {
     
-    @AppStorage(.settingsNameKey)
-    private var name: String = ""
+    @Binding var selectedTab: Tabs
     
-    @AppStorage(.settingsUserEmailKey)
-    private var userEmail: String = ""
-    
-    @AppStorage(.settingsUserWebsiteKey)
-    private var userWebsite: String = ""
-    
-    @AppStorage(.settingsBioKey)
-    private var userBio: String = ""
+    @Binding var name: String
+    @Binding var email: String
+    @Binding var userWebsite: String
+    @Binding var userBio: String
     
     @AppStorage(.settingsUserNotificationKey)
     private var userNotification: Bool = false
+    
+    @Environment(AuthenticationManager.self) var authManager
+    
+    @State private var savingNewInfo: Bool = false
+    
+    @Environment(\.dismiss) private var dimiss // To close view
+    @FocusState private var isFocused: Bool
     
     // Placeholder
     // TODO: Use actual logic to handle
@@ -40,10 +43,11 @@ struct SettingsView: View {
             // See: https://developer.apple.com/documentation/swiftui/view/textcontenttype(_:)-ufdv
             Form {
                 Section(header: Text("Profile")) {
-                    TextField("Name", text: $name)
+                    TextField("Given Name", text: $name)
                         .textContentType(.name)
-                    TextField("Email Address", text: $userEmail)
+                    TextField("Email Address", text: $email)
                         .textContentType(.emailAddress)
+                        .disabled(true)
                     TextField("Website", text: $userWebsite)
                         .textInputAutocapitalization(.never)
                         .textContentType(.URL)
@@ -57,16 +61,59 @@ struct SettingsView: View {
                     }
                 }
                 
+                Section(header: Text("Sign Out")) {
+                    Button("Sign Out") {
+                        Task {
+                            do {
+                                
+                                try await authManager.logout()
+                                debugPrint("Signing out...")
+                                
+                                // Selected tab will be profile on log-in if you don't do this
+                                debugPrint("Setting selectedTab to .home")
+                                selectedTab = .home
+                            } catch {
+                                debugPrint("Logout failed: \(error)")
+                            }
+                        }
+                    }
+                    .foregroundStyle(Color(.systemRed))
+                }
+                
                 Section(header: Text("Notifications")) {
                     Toggle("Receive push notifications", isOn: $userNotification)
                 }
                 
             }
             .navigationBarTitle("Settings")
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        Task {
+                            do {
+                                savingNewInfo = true
+                                let response = try await apolloClient.perform(mutation: UpdateUserInfoMutation(name: name, website: userWebsite))
+                                
+                                name = response.data?.updateBaseUserInfo?.name ?? name
+                                userWebsite = response.data?.updateBaseUserInfo?.website ?? userWebsite
+                                
+                                savingNewInfo = false
+                                isFocused = false
+                                dimiss()
+                            } catch {
+                                // TODO: Handle update error
+                            }
+                        }
+                    }
+                    .tint(Color(.systemGreen))
+                    .disabled(savingNewInfo)
+                }
+                
+            }
         }
     }
 }
 
 #Preview {
-    SettingsView()
+    SettingsView(selectedTab: .constant(.home), name: .constant("John"), email: .constant("john@example.com"), userWebsite: .constant("https://john.example.com"), userBio: .constant("Hello, world!")).environment(AuthenticationManager())
 }

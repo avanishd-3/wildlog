@@ -16,3 +16,14 @@ If you modify the schema, run
 # Other Scripts
 
 - `pnpm db:stdio`: UI for database (like DBeaver and Supabase)
+
+# File Structure
+
+```text
+/
+├── src
+│   ├── migrations (DB migration info)
+│   │   └── meta (folder for Drizzle info) -> Drizzle stores the current DB schema as json so generated migration files have proper diffong
+│   ├── queries (functions only have SQL select statements)
+│   ├── mutations (functions have SQL insert, update, delete statements)
+```

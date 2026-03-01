@@ -10,7 +10,8 @@ import SwiftData
 
 @main
 struct WildLogApp: App {
-    @StateObject var launchScreenState = LaunchScreenStateManager()
+    @State var launchScreenState = LaunchScreenStateManager()
+    @State var authManager = AuthenticationManager()
     
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
@@ -34,7 +35,9 @@ struct WildLogApp: App {
                     LaunchScreenView()
                 }
             }
-        }.environmentObject(launchScreenState)
+        }
+        .environment(launchScreenState)
+        .environment(authManager)
         .modelContainer(sharedModelContainer)
     }
 }

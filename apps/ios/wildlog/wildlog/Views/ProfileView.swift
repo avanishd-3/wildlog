@@ -6,15 +6,42 @@
 //
 
 import SwiftUI
+import WildLogAPI
 
 struct ProfileView: View {
+    @Binding var selectedTab: Tabs
+    
+    @State private var userInfo: GetUserInfoQuery.Data.Me?
+    
+    // Can't pass optional value as binding, so need to do this
+    @State private var name = ""
+    @State private var userName = ""
+    @State private var email = ""
+    @State private var website = ""
+    @State private var bio = ""
+    
+    private func getUserInfo() async throws {
+        let response = try await apolloClient.fetch(query: GetUserInfoQuery())
+        
+        // Pre-load all this stuff so going to the settings page feels fast
+        
+        userInfo = response.data?.me
+        name = userInfo?.name ?? ""
+        userName = userInfo?.username ?? "Username"
+        email = userInfo?.email ?? ""
+        website = userInfo?.website ?? ""
+        bio = userInfo?.bio ?? ""
+        
+    }
+    
+    
     var body: some View {
         NavigationStack {
             // Top row
             // Should not be scrollable
             HStack {
                 NavigationLink {
-                    SettingsView()
+                    SettingsView(selectedTab: $selectedTab, name: $name, email: $email, userWebsite: $website, userBio: $bio)
                 } label: {
                     Image(systemName: "gearshape")
                         .font(.title2)
@@ -23,7 +50,7 @@ struct ProfileView: View {
 
                 Spacer()
 
-                Text("Username")
+                Text(userName)
                     .font(.headline)
 
                 Spacer()
@@ -132,9 +159,16 @@ struct ProfileView: View {
                 .padding(8)
             }
         }
+        .task {
+            do {
+                try await getUserInfo()
+            } catch {
+                // Do nothing (info will be empty)
+            }
+        }
     }
 }
 
 #Preview {
-    ProfileView()
+    ProfileView(selectedTab: .constant(.home))
 }

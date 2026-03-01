@@ -71,7 +71,7 @@ struct SwiftUITabView: View {
                     ReviewView()
                 }
                 Tab("Profile", systemImage: "person.crop.circle", value: .profile) {
-                    ProfileView()
+                    ProfileView(selectedTab: $selectedTab)
                 }
             }
         } else {
@@ -97,7 +97,7 @@ struct SwiftUITabView: View {
                         Label("Reviews", systemImage: "sparkles")
                     }
                     .tag(Tabs.reviews)
-                ProfileView()
+                ProfileView(selectedTab: $selectedTab)
                     .tabItem {
                         Label("Profile", systemImage: "person.crop.circle")
                     }

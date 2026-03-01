@@ -1,0 +1,28 @@
+query me {
+  me {
+    id
+  }
+}
+
+query getUserInfo {
+  me {
+    name
+    email
+    username
+    website
+    bio
+  }
+}
+
+mutation updateBio($bio: String!) {
+  updateBio(bio: $bio) {
+    bio
+  }
+}
+
+mutation updateUserInfo($name: String!, $website: String!) {
+  updateBaseUserInfo(name: $name, website: $website) {
+    name
+    website
+  }
+}

@@ -43,6 +43,8 @@ directive @defer(
 
 type Mutation {
   createPark(description: String!, designation: ParkDesignationEnum!, name: String!): Park
+  updateBaseUserInfo(name: String!, website: String!): User
+  updateBio(bio: String!): User
 }
 
 type Park {
@@ -109,4 +111,14 @@ enum ParkTypeEnum {
 type Query {
   getPark: Park
   getParkMapRecommendations(filters: ParkFiltersInput, x_max: Float!, x_min: Float!, y_max: Float!, y_min: Float!): [Park!]
+  me: User
+}
+
+type User {
+  bio: String
+  email: String!
+  id: String!
+  name: String!
+  username: String!
+  website: String
 }

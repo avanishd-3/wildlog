@@ -2,7 +2,7 @@ import { createGraphQLEnumFromPgEnum } from "@/utils/create-graphql-enum";
 import { builder } from "@/builder";
 import { parkDesignationEnum, parkTypeEnum } from "@wildlog/db/schema/park";
 
-import { getParkMapRecommendations } from "@wildlog/db/queries/park_queries";
+import { getParkMapRecommendations } from "@wildlog/db/queries/park-queries";
 import { getParksFilters } from "@wildlog/db/utils/get-park-query-filters";
 
 const ParkDesignationEnum = createGraphQLEnumFromPgEnum(
@@ -65,6 +65,7 @@ builder.queryField("getPark", (t) =>
   t.field({
     type: park,
     resolve: () => {
+      console.log("getPark resolver called");
       return {
         id: "1", // Not uuid, but this is just a placeholder anyways
         name: "Yellowstone National Park",
@@ -91,6 +92,9 @@ builder.queryField("getParkMapRecommendations", (t) =>
       x_max: t.arg.float({ required: true }),
       y_max: t.arg.float({ required: true }),
       filters: t.arg({ type: parkFilters, required: false }),
+    },
+    authScopes: {
+      loggedIn: true, // Require authentication for this query
     },
     resolve: async (_, args) => {
       console.log("Received filters:", args.filters);

@@ -7,13 +7,12 @@
 
 import Foundation
 
-final class LaunchScreenStateManager: ObservableObject {
-    @MainActor @Published private(set) var state: LaunchScreenStep = .firstStep
+@Observable
+final class LaunchScreenStateManager {
+    @MainActor private(set) var state: LaunchScreenStep = .firstStep
     
     // End launch screen animation
     @MainActor func dismiss() {
-        Task {
-            self.state = .finished
-        }
+        self.state = .finished
     }
 }
