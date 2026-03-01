@@ -9,32 +9,62 @@ import SwiftUI
 import MapKit
 import WildLogAPI
 
+// Controls which sheet is currently presented on the map screen.
+enum ActiveSheet: Identifiable {
+    case filters
+    case parkDetail(Park)
+    
+    var id: String {
+        switch self {
+        case .filters: return "filters"
+        case .parkDetail(let park): return park.id.uuidString
+        }
+    }
+}
+
 struct SearchView: View {
-    @State private var position = MapCameraPosition.automatic
-    
-    @Binding var isSheetPresented: Bool
     @Binding var selectedTab: Tabs
-    
-    // Need to store filters up here so map can get them
-    
-    // Need to have map here, so the sheet can apply filters to the map
     @State private var mapView: CustomMkMapView = CustomMkMapView()
     @State private var filters: ParkFiltersInput?
-    
-    
+    @State private var activeSheet: ActiveSheet? = nil
+
     var body: some View {
-        
-        CustomMapView(selectedTab: $selectedTab, isSheetPresented: $isSheetPresented, filters: $filters, mapView: $mapView)
-            .sheet(isPresented: $isSheetPresented) {
-                let _ = debugPrint("Is sheet present: \(isSheetPresented)")
+        CustomMapView(
+            selectedTab: $selectedTab,
+            activeSheet: $activeSheet,
+            filters: $filters,
+            mapView: $mapView
+        )
+        // Show filter sheet when the user navigates to the search tab
+        // Potentional TODO: toggle on/off the filter tab
+        .onAppear {
+            activeSheet = .filters
+        }
+        // Clear sheet when leaving the tab so it doesn't bleed into other tabs.
+        .onDisappear {
+            activeSheet = nil
+        }
+        // Single sheet modifier handles both filter and park detail presentation.
+        .sheet(item: $activeSheet, onDismiss: {
+            if selectedTab == .map && activeSheet == nil {
+                activeSheet = .filters
+            }
+        }) { sheet in
+            switch sheet {
+            case .filters:
                 SheetView(filters: $filters,
                           onFiltersChanged: {
                             fetchParksForVisibleRegion(mapView: mapView, filters: filters)
                 })
+            case .parkDetail(let park):
+                NavigationStack {
+                    ParkDetailView(park: park)
+                }
             }
+        }
     }
 }
 
 #Preview {
-    SearchView(isSheetPresented: .constant(true), selectedTab: .constant(.home))
+    SearchView(selectedTab: .constant(.map))
 }

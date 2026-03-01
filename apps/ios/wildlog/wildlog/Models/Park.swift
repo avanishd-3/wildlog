@@ -18,7 +18,7 @@ struct Park: Identifiable, Codable, Hashable {
     let states: String
     let type: String
     let free: Bool
-    let cost: String?
+    let cost: Int
     let imageName: String?
 }
 
@@ -33,13 +33,13 @@ extension Park {
             id: UUID(uuidString: gql.id) ?? UUID(),
             name: gql.name,
             description: gql.description,
-            designation: gql.designation.rawValue,
+            designation: removeUnderscoreAndAllCaps(for: gql.designation.rawValue),
             latitude: lat,
             longitude: lon,
             states: gql.states,
-            type: gql.type.rawValue,
-            free: false,
-            cost: nil,
+            type: removeUnderscoreAndAllCaps(for: gql.type.rawValue),
+            free: gql.free,
+            cost: gql.cost,
             imageName: nil
         )
     }

@@ -44,6 +44,12 @@ const park = builder.simpleObject("Park", {
       type: ParkTypeEnum,
       nullable: false,
     }),
+    cost: t.int({
+      nullable: false,
+    }),
+    free: t.boolean({
+      nullable: false,
+    }),
   }),
 });
 
@@ -70,6 +76,8 @@ builder.queryField("getPark", (t) =>
         longitude: -110.5,
         states: "WY, MT, ID",
         type: "National",
+        cost: 30,
+        free: false,
       };
     },
   }),
@@ -108,6 +116,8 @@ builder.queryField("getParkMapRecommendations", (t) =>
         longitude: typeof park.longitude === "number" ? park.longitude : null,
         states: park.states,
         type: park.type,
+        cost: park.cost,
+        free: park.free,
       }));
     },
   }),
@@ -137,6 +147,8 @@ builder.mutationField("createPark", (t) =>
         longitude: null,
         states: "",
         type: "National",
+        cost: 0,
+        free: true,
       };
     },
   }),

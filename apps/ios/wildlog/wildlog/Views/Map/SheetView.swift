@@ -20,7 +20,7 @@ struct SheetView: View {
     // Convert from park type enum to string in UI
     // This just makes it so NATIONAL -> National and so on
     func typeLabel(for type: ParkTypeEnum) -> String {
-        type.rawValue.lowercased().capitalized(with: Locale.current)
+        removeUnderscoreAndAllCaps(for: type.rawValue)
     }
 
     // Convert from park cost enum to string in UI

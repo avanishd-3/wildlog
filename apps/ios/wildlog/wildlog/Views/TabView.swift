@@ -5,12 +5,11 @@
 //  Created by Avanish Davuluri on 2/8/26.
 //
 
-
 import SwiftUI
 
-// We need to do this so the tabs are green only when selected
-// Apple removed the ability to modify tab color with the new API
-// so we need to dip into UIKit
+// We need to do this so the tabs are green only when selected.
+// Apple removed the ability to modify tab color with the new SwiftUI API
+// so we need to dip into UIKit to set UITabBarAppearance manually.
 struct UIKitTabView: UIViewControllerRepresentable {
     @Binding var selectedTab: Tabs
     
@@ -18,7 +17,6 @@ struct UIKitTabView: UIViewControllerRepresentable {
         let controller = UIHostingController(rootView: SwiftUITabView(selectedTab: $selectedTab))
         
         // See: https://code-examples.net/en/q/4c170ed/mastering-uitabbarappearance-solving-icon-color-bugs-in-ios-26
-        
         let appearance = UITabBarAppearance()
         let itemAppearance = UITabBarItemAppearance()
         appearance.configureWithOpaqueBackground()
@@ -40,23 +38,17 @@ struct UIKitTabView: UIViewControllerRepresentable {
     }
     
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-            if let hostingController = uiViewController as? UIHostingController<SwiftUITabView> {
-                hostingController.rootView = SwiftUITabView(selectedTab: $selectedTab)
-            }
+        if let hostingController = uiViewController as? UIHostingController<SwiftUITabView> {
+            hostingController.rootView = SwiftUITabView(selectedTab: $selectedTab)
         }
+    }
 }
 
 struct SwiftUITabView: View {
     @Binding var selectedTab: Tabs
     
-    @State var mapSheetViewIsPresented: Bool = true // So exiting the map can toggle the sheet off
-    
     private func handleTabUpdate() {
         debugPrint("New tab selected : \(selectedTab)")
-        if selectedTab == .map {
-            debugPrint("Toggle map sheet")
-            mapSheetViewIsPresented = true
-        }
     }
 
     var body: some View {
@@ -71,8 +63,9 @@ struct SwiftUITabView: View {
                     ListView()
                 }
                 Tab("Search", systemImage: "magnifyingglass", value: .map) {
-                    // Pass tab so the map back button can return to the home tab
-                    SearchView(isSheetPresented: $mapSheetViewIsPresented, selectedTab: $selectedTab)
+                    // selectedTab is passed so the map back button can navigate to home
+                    // SearchView manages its own sheet state internally via ActiveSheet
+                    SearchView(selectedTab: $selectedTab)
                 }
                 Tab("Reviews", systemImage: "sparkles", value: .reviews) {
                     ReviewView()
@@ -95,10 +88,8 @@ struct SwiftUITabView: View {
                         Label("Your Lists", systemImage: "list.bullet")
                     }
                     .tag(Tabs.lists)
-                SearchView(isSheetPresented: $mapSheetViewIsPresented, selectedTab: $selectedTab)
-                    .tabItem {
-                        Label("Search", systemImage: "magnifyingglass")
-                    }
+                SearchView(selectedTab: $selectedTab)
+                    .tabItem { Label("Search", systemImage: "magnifyingglass") }
                     .tag(Tabs.map)
                     .tint(Color(.systemGreen))
                 ReviewView()

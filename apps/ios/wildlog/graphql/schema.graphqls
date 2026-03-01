@@ -48,8 +48,10 @@ type Mutation {
 }
 
 type Park {
+  cost: Int!
   description: String!
   designation: ParkDesignationEnum!
+  free: Boolean!
   id: String!
   latitude: Float
   longitude: Float
