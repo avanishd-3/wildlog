@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WildLogAPI
 
 struct SettingsView: View {
     
@@ -20,6 +21,11 @@ struct SettingsView: View {
     private var userNotification: Bool = false
     
     @Environment(AuthenticationManager.self) var authManager
+    
+    @State private var savingNewInfo: Bool = false
+    
+    @Environment(\.dismiss) private var dimiss // To close view
+    @FocusState private var isFocused: Bool
     
     // Placeholder
     // TODO: Use actual logic to handle
@@ -80,6 +86,30 @@ struct SettingsView: View {
                 
             }
             .navigationBarTitle("Settings")
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        Task {
+                            do {
+                                savingNewInfo = true
+                                let response = try await apolloClient.perform(mutation: UpdateUserInfoMutation(name: name, website: userWebsite))
+                                
+                                name = response.data?.updateBaseUserInfo?.name ?? name
+                                userWebsite = response.data?.updateBaseUserInfo?.website ?? userWebsite
+                                
+                                savingNewInfo = false
+                                isFocused = false
+                                dimiss()
+                            } catch {
+                                // TODO: Handle update error
+                            }
+                        }
+                    }
+                    .tint(Color(.systemGreen))
+                    .disabled(savingNewInfo)
+                }
+                
+            }
         }
     }
 }

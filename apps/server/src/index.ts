@@ -111,7 +111,7 @@ app.register(mercurius, {
   schema: apiSchema,
   graphiql: true, // Enable GraphQL UI
   context: async (request, _reply) => {
-    // Add user info to context if authenticated
+    // Add user info to context if authenticated (per-request)
     const session = await auth.api.getSession({
       headers: request.headers,
     });

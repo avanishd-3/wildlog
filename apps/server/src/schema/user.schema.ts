@@ -1,5 +1,5 @@
 import { builder } from "@/builder";
-import { updateUserBio } from "@wildlog/db/mutations/user-mutations";
+import { updateBaseUserInfo, updateUserBio } from "@wildlog/db/mutations/user-mutations";
 
 const user = builder.simpleObject("User", {
   fields: (t) => ({
@@ -87,6 +87,74 @@ builder.mutationField("updateBio", (t) =>
         username: context.user.username,
         website: context.user.website,
         bio: updatedUserBio.bio,
+      };
+    },
+  }),
+);
+
+builder.mutationField("updateBaseUserInfo", (t) =>
+  t.field({
+    type: user,
+    args: {
+      name: t.arg.string({ required: true }),
+      website: t.arg.string({ required: true }),
+    },
+    authScopes: {
+      loggedIn: true, // Only allow logged in users to update their info
+    },
+    resolve: async (_parent, args, context) => {
+      if (!context.user) {
+        // Won't happen b/c of authScope (just to satisfy type checker)
+        throw new Error("Not authenticated");
+      }
+
+      // Check if there are any changes to update, if not return current user
+      if (args.name === context.user.name && args.website === context.user.website) {
+        return {
+          id: context.user.id,
+          name: context.user.name,
+          email: context.user.email,
+          username: context.user.username,
+          website: context.user.website,
+          bio: context.user.bio,
+        };
+      }
+
+      let method = "";
+
+      if (args.name !== context.user.name && args.website !== context.user.website) {
+        console.log("User requesting to update both name and website");
+        method = "both";
+      } else if (args.name !== context.user.name) {
+        console.log("User requesting to update name only");
+        method = "name";
+      } else if (args.website !== context.user.website) {
+        console.log("User requesting to update website only");
+        method = "website";
+      }
+
+      // Update user info in the database
+      const updatedUser = (
+        await updateBaseUserInfo(
+          context.user.id,
+          method as "name" | "website" | "both",
+          args.name,
+          args.website,
+        )
+      )[0];
+
+      if (updatedUser === undefined) {
+        throw new Error("User info update failed");
+      }
+
+      // Return the updated user (re-use everything but the updated fields so the db query can search less columns)
+      return {
+        id: context.user.id,
+        name: updatedUser.name,
+        email: context.user.email,
+        username: context.user.username,
+        website: updatedUser.website,
+        bio: context.user.bio,
       };
     },
   }),

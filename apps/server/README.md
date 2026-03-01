@@ -50,3 +50,7 @@ Resolvers are just functions that tell GraphQL how to fetch data for a field (fo
 GraphQL only resolves fields that are requested, which is nice because it reduces unnecessary work. It also only sends requested fields to the client, which reduces the over-sharing that can be an issue for Rest APIs.
 
 This [article](https://omkarkulkarni.hashnode.dev/type-safe-graphql-server-with-pothos-formerly-giraphql) is pretty helpful to quickly understand how Pothos + GraphQl works. It uses Apollo instead of Mercurius, but the schema part is the same.
+
+### Context
+
+On every request, Mercurius calls the auth api to fetch the session info for the user. Because we're using Better Auth, this means a db call. So, if you update user info, the context will be updated for the next request. In resolvers, manually changing the context does nothing, since the context is on a **per-request** basis.
