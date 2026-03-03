@@ -42,7 +42,6 @@ directive @defer(
 ) on FRAGMENT_SPREAD | INLINE_FRAGMENT
 
 type Mutation {
-  createPark(description: String!, designation: ParkDesignationEnum!, name: String!): Park
   updateBaseUserInfo(name: String!, website: String!): User
   updateBio(bio: String!): User
 }
@@ -109,7 +108,6 @@ enum ParkTypeEnum {
 }
 
 type Query {
-  getPark: Park
   getParkMapRecommendations(filters: ParkFiltersInput, x_max: Float!, x_min: Float!, y_max: Float!, y_min: Float!): [Park!]
   me: User
 }

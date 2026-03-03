@@ -9,7 +9,6 @@ import SwiftUI
 
 // TODO: Replace with actual list view
 struct ListView: View {
-    var parkViewModel = ParkViewModel()
     
     var body: some View {
         VStack {
@@ -18,11 +17,6 @@ struct ListView: View {
                 .font(.largeTitle)
             Spacer()
             
-            Button("Fetch park info") {
-                parkViewModel.fetchPark()
-            }
-            
-            Text(parkViewModel.name)
         }.frame(maxWidth: .infinity)
     }
 }
