@@ -13,6 +13,9 @@ import { seedEmbeddings } from "@wildlog/db/seed-embed";
 import { auth } from "@wildlog/auth";
 import z from "zod";
 
+// Make sure to close neo4j driver on shutdown
+import { closeDriver } from "@wildlog/graph-db";
+
 const app = Fastify({
   logger: false,
   https: {
@@ -123,14 +126,6 @@ app.register(mercurius, {
   },
 });
 
-app.listen({ port: 3000 }, (err, address) => {
-  if (err) {
-    console.error("Error starting server:", err);
-    process.exit(1);
-  }
-  console.log(`Server is running at ${address}`);
-});
-
 // Route get requests to the GraphiQL endpoint so loading the root URL doesn't show an error
 app.get("/", async (_request, reply) => {
   reply.redirect("/graphiql");
@@ -186,4 +181,36 @@ app.get("/embedding-test", async (_request: any, reply: any) => {
 // Route to Neo4j Browser for convenience
 app.get("/graphdb", async (_request, reply) => {
   reply.redirect("http://localhost:7474");
+});
+
+process.on("SIGTERM", () => {
+  console.log("Received SIGTERM, shutting down gracefully...");
+  app.close().then(() => {
+    console.log("Server closed");
+    process.exit(0);
+  });
+});
+
+process.on("SIGINT", () => {
+  console.log("Received SIGINT, shutting down gracefully...");
+  app.close().then(() => {
+    console.log("Server closed");
+    process.exit(0);
+  });
+});
+
+// ---- App Hooks -----
+
+app.addHook("onClose", async (_instance) => {
+  console.log("Fastify instance is closing, closing Neo4j driver...");
+  await closeDriver();
+});
+
+// This needs to be at the end to ensure everything is registered before the app starts
+app.listen({ port: 3000 }, (err, address) => {
+  if (err) {
+    console.error("Error starting server:", err);
+    process.exit(1);
+  }
+  console.log(`Server is running at ${address}`);
 });
