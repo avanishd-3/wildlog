@@ -140,7 +140,7 @@ struct ProfileView: View {
                             CustomFormDivider()
 
                             CustomFormRow("Likes") {
-                                Text("Likes")
+                                LikedParksView()
                             }
                         }
 
