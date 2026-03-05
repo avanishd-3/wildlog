@@ -8,6 +8,8 @@ Neo4J is schema-less, which means there's no code to enforce consistency of node
 
 - Parks
   - Attributes: id, publicId, name
+- Users
+  - Attributes: username
 
 ## Relationships
 

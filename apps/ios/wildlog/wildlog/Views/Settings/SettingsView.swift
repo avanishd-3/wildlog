@@ -107,7 +107,7 @@ struct SettingsView: View {
                                 showDeleteAccountConfirmation = false
                             }
                     } message: {
-                        Text("Deleting your account removes your content from the WildLog platform immediately. Once an account is permanently deleted, it cannot be recovered")
+                        Text("Deleting your account removes your content from the WildLog platform immediately. Once an account is permanently deleted, it cannot be recovered.")
                             .font(.body)
                     }
                 }
@@ -130,7 +130,20 @@ struct SettingsView: View {
                         Spacer()
                         Button("Confirm Delete") {
                             isDeletingAccount = true
-                            // TODO: Add your delete logic here, e.g.:
+                            Task {
+                                do {
+                                    
+                                    try await authManager.deleteAccount(password: password)
+                                    debugPrint("Deleting account")
+                                    
+                                    // Selected tab will be profile on log-in if you don't do this
+                                    debugPrint("Setting selectedTab to .home")
+                                    selectedTab = .home
+                                } catch {
+                                    debugPrint("Logout failed: \(error)")
+                                }
+                            }
+
                             showDeleteAccountSheet = false
                             password = ""
                             isDeletingAccount = false

@@ -60,20 +60,20 @@ app.route({
         ...(request.body ? { body: JSON.stringify(request.body) } : {}),
       });
 
+      const requestBody = SignUpRequest.safeParse(request.body);
+
+      if (!requestBody.success) {
+        console.log("Request validation failed: ", requestBody.error.message);
+        reply.status(400).send({
+          error: "Invalid request: " + requestBody.error.message,
+          code: "INVALID_REQUEST",
+        });
+        return;
+      }
+
       // If sign-up, check if username is available
       if (url.pathname == "/api/auth/sign-up/email") {
-        console.log("Received sign-up request with body: ", request.body);
-        const requestBody = SignUpRequest.safeParse(request.body);
-
-        if (!requestBody.success) {
-          console.log("Sign-up request validation failed: ", requestBody.error.message);
-          reply.status(400).send({
-            error: "Invalid sign-up request: " + requestBody.error.message,
-            code: "INVALID_REQUEST",
-          });
-          return;
-        }
-
+        console.log("Received sign-up request with username: ", requestBody.data.username);
         console.log(`Checking availability for username: ${requestBody.data.username}`);
 
         const isAvailableResponse = await auth.api.isUsernameAvailable({
@@ -90,6 +90,11 @@ app.route({
           });
           return;
         }
+      }
+
+      // Log account deletion
+      if (url.pathname == "/api/auth/delete-user") {
+        console.log("Received account deletion request for user: ", requestBody.data.email);
       }
 
       // Process authentication request
