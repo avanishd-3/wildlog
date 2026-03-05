@@ -26,6 +26,11 @@ struct SettingsView: View {
     
     @Environment(\.dismiss) private var dimiss // To close view
     @FocusState private var isFocused: Bool
+
+    @State private var showDeleteAccountConfirmation: Bool = false
+    @State private var password: String = "" // Make user enter password to confirm account deletion
+    @State private var showDeleteAccountSheet: Bool = false // Password entry field
+    @State private var isDeletingAccount: Bool = false
     
     // Placeholder
     // TODO: Use actual logic to handle
@@ -84,8 +89,60 @@ struct SettingsView: View {
                     Toggle("Receive push notifications", isOn: $userNotification)
                 }
                 
+                // Delete account
+                Section(header: Text("Delete Account")) {
+                    Button("Delete Account") {
+                        showDeleteAccountConfirmation = true
+                    }
+                    .foregroundStyle(Color(.systemRed))
+                    .confirmationDialog("Delete Account Confirmation", isPresented: $showDeleteAccountConfirmation) {
+                        
+                            Button("Delete Account") {
+                                // Set sheet to true
+                                showDeleteAccountSheet = true
+                                
+                            }
+                            
+                            Button("Cancel", role:.cancel) {
+                                showDeleteAccountConfirmation = false
+                            }
+                    } message: {
+                        Text("Deleting your account removes your content from the WildLog platform immediately. Once an account is permanently deleted, it cannot be recovered")
+                            .font(.body)
+                    }
+                }
             }
             .navigationBarTitle("Settings")
+            .sheet(isPresented: $showDeleteAccountSheet) {
+                VStack(spacing: 20) {
+                    Text("Confirm Account Deletion")
+                        .font(.title2)
+                    Text("Please enter your password to confirm account deletion. This action cannot be undone.")
+                        .multilineTextAlignment(.center)
+                    // Horizontal padding so it doesn't go to edge of space
+                    SecureFieldWithEyeToggle(password: $password)
+                        .padding([.horizontal, .top])
+                    HStack {
+                        Button("Cancel") {
+                            showDeleteAccountSheet = false
+                            password = ""
+                        }
+                        Spacer()
+                        Button("Confirm Delete") {
+                            isDeletingAccount = true
+                            // TODO: Add your delete logic here, e.g.:
+                            showDeleteAccountSheet = false
+                            password = ""
+                            isDeletingAccount = false
+                        }
+                        .foregroundColor(.red)
+                        .disabled(password.isEmpty || isDeletingAccount)
+                    }
+                    .padding() // So cancel and confirm delete buttons aren't at the end of the text
+                }
+                .presentationDetents([.medium])
+                
+            }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
@@ -108,7 +165,6 @@ struct SettingsView: View {
                     .tint(Color(.systemGreen))
                     .disabled(savingNewInfo)
                 }
-                
             }
         }
     }
