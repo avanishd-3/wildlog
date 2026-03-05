@@ -16,6 +16,7 @@ import z from "zod";
 // Make sure to close neo4j driver on shutdown
 import { closeDriver } from "@wildlog/graph-db";
 import { insertParksIntoGraph } from "@wildlog/graph-db/seed";
+import { createUser } from "@wildlog/graph-db/mutations/create-user";
 
 const app = Fastify({
   logger: false,
@@ -233,6 +234,30 @@ app.addHook("onClose", async (_instance) => {
   console.log("Fastify instance is closing, closing Neo4j driver...");
   await closeDriver();
 });
+
+// Graph DB insert can be slow, so do it after successful sign-up to avoid slowing down auth flow
+app.addHook("onResponse", async (request, reply) => {
+  // If user signed up, insert them into graph db
+  if (request.url === "/api/auth/sign-up/email" && reply.statusCode === 200) {
+    console.log("Inserting new user into graph database...");
+    const requestBody = SignUpRequest.safeParse(request.body);
+
+    if (!requestBody.success) {
+      // Won't happen if reply is 200, just to satisfy type checker
+      console.log("Sign-up request validation failed: ", requestBody.error.message);
+      return; // Don't attempt to insert into graph DB if validation fails
+    }
+
+    try {
+      await createUser(requestBody.data.username);
+      console.log("User inserted into graph database successfully");
+    } catch (error) {
+      console.error("Error inserting user into graph database:", error);
+    }
+  }
+});
+
+// ---- Start Server ----
 
 // This needs to be at the end to ensure everything is registered before the app starts
 app.listen({ port: 3000 }, (err, address) => {
