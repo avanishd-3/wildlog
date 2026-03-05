@@ -18,7 +18,7 @@ services:
       - wildlog_neo4j_logs:/logs
       - wildlog_neo4j_import:/var/lib/neo4j/import
       - wildlog_neo4j_plugins:/plugins
-    restart: always # From https://neo4j.com/docs/operations-manual/current/docker/docker-compose-standalone/
+    restart: unless-stopped
 
 volumes:
   wildlog_neo4j_data:
