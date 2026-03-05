@@ -2,7 +2,7 @@ import Fastify from "fastify";
 import mercurius from "mercurius";
 import { apiSchema } from "./schema/schema";
 
-import { seed } from "@wildlog/db/seed";
+import { getDuplicateParks, seed } from "@wildlog/db/seed";
 import { getParkLocation } from "@wildlog/db/queries/test";
 
 import { readFileSync } from "fs";
@@ -15,6 +15,7 @@ import z from "zod";
 
 // Make sure to close neo4j driver on shutdown
 import { closeDriver } from "@wildlog/graph-db";
+import { insertParksIntoGraph } from "@wildlog/graph-db/seed";
 
 const app = Fastify({
   logger: false,
@@ -132,13 +133,35 @@ app.get("/", async (_request, reply) => {
 });
 
 // Seed route to seed database
+// Seed relational and graph databases
+// Split up for better error messages (also graph DB seeding depends on relational DB seeding)
 app.get("/seed", async (_request, reply) => {
   try {
     await seed();
-    reply.send({ message: "Database seeded successfully" });
   } catch (error) {
     console.error("Error seeding database:", error);
-    reply.status(500).send({ error: "Failed to seed database" });
+    reply.status(500).send({ error: "Failed to seed relational database" });
+  }
+
+  try {
+    await insertParksIntoGraph();
+    reply.send({ message: "Relational and graph database seeded successfully" });
+  } catch (error) {
+    console.error("Error seeding graph database:", error);
+    reply
+      .status(500)
+      .send({ error: "Relational seeded successfully, but failed to seed graph database" });
+  }
+});
+
+app.get("/duplicates", async (_request, reply) => {
+  // Find all duplicate parks by name in the relational database and return them
+  try {
+    const result = await getDuplicateParks();
+    reply.send({ data: result.rows });
+  } catch (error) {
+    console.error("Error finding duplicates:", error);
+    reply.status(500).send({ error: "Failed to find duplicate parks" });
   }
 });
 

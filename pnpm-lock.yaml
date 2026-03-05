@@ -226,6 +226,9 @@ importers:
       '@neo4j/cypher-builder':
         specifier: ^2.12.0
         version: 2.12.0
+      '@wildlog/db':
+        specifier: workspace:*
+        version: link:../db
       '@wildlog/env':
         specifier: workspace:*
         version: link:../env
