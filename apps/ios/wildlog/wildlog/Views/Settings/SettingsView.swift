@@ -26,6 +26,15 @@ struct SettingsView: View {
     
     @Environment(\.dismiss) private var dimiss // To close view
     @FocusState private var isFocused: Bool
+
+    @State private var showDeleteAccountConfirmation: Bool = false
+    // MARK: No need to handle user entering the wrong password
+    // If they are authenticated, server will use their session cookie
+    // And since they need to be authenticated to delete their account, password will never be used
+    // It's just a psychological barrier so they don't accidentally delete their account
+    @State private var password: String = "" // Make user enter password to confirm account deletion
+    @State private var showDeleteAccountSheet: Bool = false // Password entry field
+    @State private var isDeletingAccount: Bool = false
     
     // Placeholder
     // TODO: Use actual logic to handle
@@ -84,8 +93,73 @@ struct SettingsView: View {
                     Toggle("Receive push notifications", isOn: $userNotification)
                 }
                 
+                // Delete account
+                Section(header: Text("Delete Account")) {
+                    Button("Delete Account") {
+                        showDeleteAccountConfirmation = true
+                    }
+                    .foregroundStyle(Color(.systemRed))
+                    .confirmationDialog("Delete Account Confirmation", isPresented: $showDeleteAccountConfirmation) {
+                        
+                            Button("Delete Account") {
+                                // Set sheet to true
+                                showDeleteAccountSheet = true
+                                
+                            }
+                            
+                            Button("Cancel", role:.cancel) {
+                                showDeleteAccountConfirmation = false
+                            }
+                    } message: {
+                        Text("Deleting your account removes your content from the WildLog platform immediately. Once an account is permanently deleted, it cannot be recovered.")
+                            .font(.body)
+                    }
+                }
             }
             .navigationBarTitle("Settings")
+            .sheet(isPresented: $showDeleteAccountSheet) {
+                VStack(spacing: 20) {
+                    Text("Confirm Account Deletion")
+                        .font(.title2)
+                    Text("Please enter your password to confirm account deletion. This action cannot be undone.")
+                        .multilineTextAlignment(.center)
+                    // Horizontal padding so it doesn't go to edge of space
+                    SecureFieldWithEyeToggle(password: $password)
+                        .padding([.horizontal, .top])
+                    HStack {
+                        Button("Cancel") {
+                            showDeleteAccountSheet = false
+                            password = ""
+                        }
+                        Spacer()
+                        Button("Confirm Delete") {
+                            isDeletingAccount = true
+                            Task {
+                                do {
+                                    
+                                    try await authManager.deleteAccount(password: password)
+                                    debugPrint("Deleting account")
+                                    
+                                    // Selected tab will be profile on log-in if you don't do this
+                                    debugPrint("Setting selectedTab to .home")
+                                    selectedTab = .home
+                                } catch {
+                                    debugPrint("Logout failed: \(error)")
+                                }
+                            }
+
+                            showDeleteAccountSheet = false
+                            password = ""
+                            isDeletingAccount = false
+                        }
+                        .foregroundColor(.red)
+                        .disabled(password.isEmpty || isDeletingAccount)
+                    }
+                    .padding() // So cancel and confirm delete buttons aren't at the end of the text
+                }
+                .presentationDetents([.medium])
+                
+            }
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
@@ -108,7 +182,6 @@ struct SettingsView: View {
                     .tint(Color(.systemGreen))
                     .disabled(savingNewInfo)
                 }
-                
             }
         }
     }

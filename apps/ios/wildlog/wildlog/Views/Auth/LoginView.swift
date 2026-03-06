@@ -12,7 +12,6 @@ struct LoginView: View {
     
     @State private var accountInfo = ""
     @State private var password = ""
-    @State private var showPassword = false
     
     var body: some View {
         VStack(spacing: 16) {
@@ -30,24 +29,7 @@ struct LoginView: View {
                 }
                 
                 Section(header: Text("Password")) {
-                    HStack {
-                        if showPassword {
-                            TextField("Password", text: $password)
-                                .autocorrectionDisabled(true)
-                                .textInputAutocapitalization(.never)
-                        } else {
-                            SecureField("Password", text: $password)
-                                .autocorrectionDisabled(true)
-                                .textInputAutocapitalization(.never)
-                        }
-                        
-                        Button(action: {
-                            showPassword.toggle()
-                        }) {
-                            Image(systemName: showPassword ? "eye" : "eye.slash")
-                                .foregroundStyle(Color(.systemGray))
-                        }
-                    }
+                    SecureFieldWithEyeToggle(password: $password)
                 }
                 
                 if let error = authManager.authenticatedError {

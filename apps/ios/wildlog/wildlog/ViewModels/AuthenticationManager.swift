@@ -186,6 +186,30 @@ class AuthenticationManager {
         try await Network.shared.apolloClient.clearCache()
     }
     
+    func deleteAccount(password: String) async throws {
+        self.isAuthenticated = false
+        
+        let url = URL(string: "\(baseURL)/api/auth/delete-user")!
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let jsonData = try JSONSerialization.data(withJSONObject: ["password": password], options: [])
+        request.httpBody = jsonData
+        
+        _ = try await URLSession.shared.data(for: request)
+        
+        // Clear cookies only for our backend
+        HTTPCookieStorage.shared.cookies?.forEach {
+            guard $0.domain == "localhost" else { return }
+            HTTPCookieStorage.shared.deleteCookie($0)
+        }
+        
+        // Reset Apollo cache
+        try await Network.shared.apolloClient.clearCache()
+    }
+    
     func resetUIState() { // Reset so switching b/n log-in and sign-up clears errors
         self.authenticatedError = nil
         self.isLoading = false

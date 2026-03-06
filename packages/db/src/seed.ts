@@ -11,6 +11,13 @@ export const seed = async () => {
   const csvPath = path.resolve("../../apps/data/park_data_21126_1301.csv");
   console.log(`Seeding database from CSV file at: ${csvPath}`);
 
+  // If there are already parks in the database, skip seeding
+  const existingParks = await db.select().from(park).limit(1);
+  if (existingParks.length > 0) {
+    console.log("Parks already exist in the database. Skipping relational DB seeding.");
+    return;
+  }
+
   // See https://www.importcsv.com/blog/typescript-csv-parser for parsing logic.
   interface Park {
     name: string;

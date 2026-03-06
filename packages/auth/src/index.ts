@@ -28,6 +28,10 @@ export const auth = betterAuth({
     openAPI(), // Generate OpenAPI spec for auth endpoints
   ],
   user: {
+    deleteUser: {
+      // For real app, you would need to send an email to confirm deletion
+      enabled: true,
+    },
     additionalFields: {
       website: {
         type: "string",

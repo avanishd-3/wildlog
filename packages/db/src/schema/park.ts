@@ -51,7 +51,7 @@ export const park = pgTable(
 
     // Public ID for external use (i.e., APIs)
     publicId: uuid("public_id").defaultRandom().notNull().unique(),
-    name: text("name").notNull(),
+    name: text("name").notNull().unique(), // Real world should enforce this
     description: text("description").notNull(),
     designation: parkDesignationEnum("designation").notNull(),
     // Using PostGIS geometry type for spatial data

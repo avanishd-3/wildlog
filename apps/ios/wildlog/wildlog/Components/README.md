@@ -1,5 +1,7 @@
 # Components
 
+This is for custom generic components to extend the functionality of Swift UI. 
+
 ## Form Components
 
 The default iOS form manages its own scrollability, meaning if you have both form and non-form content, the form part will scroll on its own,
@@ -10,6 +12,10 @@ This pattern is most common when you have a form that is a list of links.
 The custom form wraps this in a familiar interface, allowing the entire page to scroll at once.
 
 Only use this if you have this use case. If the entire page is a form, use the default form.
+
+## SecureField Component
+
+This just augments the secure field with an eye slash icon the user can toggle on and off for visibility. When they toggle the button, it switches from a secure field to a text field (and vice versa).
 
 ## Map Components
 
@@ -34,4 +40,5 @@ We will have to use this quite a bit, especially because maps are a prominent pa
 | Component(s) | Style   |
 | ------------ | ------- |
 | Form         | SwiftUI |
+| SecureField         | SwiftUI |
 | Map          | UI Kit  |

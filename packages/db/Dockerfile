@@ -5,7 +5,7 @@ WORKDIR /app
 
 # pgvector needs clang and llvm 19 or higher
 
-RUN apk add --no-cache git \\
+RUN apk add --no-cache git \
     build-base \
     clang19 \
     llvm19-dev
