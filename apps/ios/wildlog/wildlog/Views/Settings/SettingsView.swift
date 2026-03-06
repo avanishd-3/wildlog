@@ -28,6 +28,10 @@ struct SettingsView: View {
     @FocusState private var isFocused: Bool
 
     @State private var showDeleteAccountConfirmation: Bool = false
+    // MARK: No need to handle user entering the wrong password
+    // If they are authenticated, server will use their session cookie
+    // And since they need to be authenticated to delete their account, password will never be used
+    // It's just a psychological barrier so they don't accidentally delete their account
     @State private var password: String = "" // Make user enter password to confirm account deletion
     @State private var showDeleteAccountSheet: Bool = false // Password entry field
     @State private var isDeletingAccount: Bool = false
