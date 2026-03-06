@@ -2,7 +2,7 @@ import { fastify } from "fastify";
 import mercurius from "mercurius";
 import { apiSchema } from "./schema/schema";
 
-import { getDuplicateParks, seed } from "@wildlog/db/seed";
+import { seed } from "@wildlog/db/seed";
 import { getParkLocation } from "@wildlog/db/queries/test";
 
 import { readFileSync } from "fs";
@@ -188,17 +188,6 @@ app.get("/seed", async (_request, reply) => {
     reply
       .status(500)
       .send({ error: "Relational seeded successfully, but failed to seed graph database" });
-  }
-});
-
-app.get("/duplicates", async (_request, reply) => {
-  // Find all duplicate parks by name in the relational database and return them
-  try {
-    const result = await getDuplicateParks();
-    reply.send({ data: result.rows });
-  } catch (error) {
-    console.error("Error finding duplicates:", error);
-    reply.status(500).send({ error: "Failed to find duplicate parks" });
   }
 });
 

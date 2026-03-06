@@ -109,13 +109,3 @@ export const seed = async () => {
       console.error("Error parsing CSV:", err.message);
     });
 };
-
-export const getDuplicateParks = async () => {
-  const result = await db.execute(sql`
-    SELECT name, COUNT(*) as count
-    FROM park
-    GROUP BY name
-    HAVING COUNT(*) > 1
-  `);
-  return result;
-};
