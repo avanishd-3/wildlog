@@ -16,7 +16,7 @@ import z from "zod";
 // Make sure to close neo4j driver on shutdown
 import { closeDriver } from "@wildlog/graph-db";
 import { insertParksIntoGraph } from "@wildlog/graph-db/seed";
-import { createUser } from "@wildlog/graph-db/mutations/create-user";
+import { createUser, deleteUser } from "@wildlog/graph-db/mutations/user";
 
 const app = Fastify({
   logger: false,
@@ -61,19 +61,19 @@ app.route({
         ...(request.body ? { body: JSON.stringify(request.body) } : {}),
       });
 
-      const requestBody = SignUpRequest.safeParse(request.body);
-
-      if (!requestBody.success) {
-        console.log("Request validation failed: ", requestBody.error.message);
-        reply.status(400).send({
-          error: "Invalid request: " + requestBody.error.message,
-          code: "INVALID_REQUEST",
-        });
-        return;
-      }
-
       // If sign-up, check if username is available
       if (url.pathname == "/api/auth/sign-up/email") {
+        const requestBody = SignUpRequest.safeParse(request.body);
+
+        if (!requestBody.success) {
+          console.log("Request validation failed: ", requestBody.error.message);
+          reply.status(400).send({
+            error: "Invalid request: " + requestBody.error.message,
+            code: "INVALID_REQUEST",
+          });
+          return;
+        }
+
         console.log("Received sign-up request with username: ", requestBody.data.username);
         console.log(`Checking availability for username: ${requestBody.data.username}`);
 
@@ -94,10 +94,6 @@ app.route({
       }
 
       // Log account deletion
-      if (url.pathname == "/api/auth/delete-user") {
-        console.log("Received account deletion request for user: ", requestBody.data.email);
-      }
-
       // Process authentication request
       const response = await auth.handler(req);
 
