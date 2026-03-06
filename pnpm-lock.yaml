@@ -239,6 +239,15 @@ importers:
         specifier: ^6.0.1
         version: 6.0.1
 
+  packages/s3:
+    dependencies:
+      '@wildlog/env':
+        specifier: workspace:*
+        version: link:../env
+      dotenv:
+        specifier: 'catalog:'
+        version: 17.2.3
+
 packages:
 
   '@babel/generator@7.28.6':

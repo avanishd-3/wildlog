@@ -41,6 +41,12 @@ First, install the dependencies:
 pnpm install
 ```
 
+## Environment Variable Setup
+You need to add a .env file in apps/server with all the relevant environment variables. See apps/server/.env.example for the environment variables you need to set.
+For Better Auth secret, run `openssl rand -base64 32`.
+
+For Garage RPC secret, run `openssl rand -hex 32`
+
 ## Server Setup
 
 Because iOS apps can only make HTTPS requests (technically you can disable this, but your app will not be approved), the server is configured to **require** a certificate and key to run. If you try to run the server without these, the server will error.
@@ -75,6 +81,12 @@ The API is running at [https://localhost:3000](https://localhost:3000).
 ### Seed Database
 1. Go to the /seed endpoint on the server.
 2. On success of the first step, go to the /seed-embed endpoint.
+
+## iOS Setup
+
+**Important**: Minimum Xcode 16.3
+
+Read the README in the apps/ios folder for instructions on how to add the certificate to the iOS simulator.
 
 ## Git Hooks and Formatting
 
@@ -126,4 +138,4 @@ So, to develop the mobile app, **only use Xcode** and don't worry about Turborep
 
 **Important**: Minimum Xcode 16.3 (Apollo iOS requires Swift 6.1).
 
-Read the README in the ios folder for more info on IOS-specific stuff.
+Read the README in the apps/ios folder for more info on IOS-specific stuff.

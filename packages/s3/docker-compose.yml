@@ -1,0 +1,22 @@
+name: wildlog-s3
+
+services:
+  garage:
+    image: dxflrs/garage:v2.2.0
+    container_name: wildlog-garage
+    ports:
+      - "3900:3900"
+      - "3901:3901"
+      - "3902:3902"
+      - "3903:3903"
+    restart: unless-stopped
+    volumes:
+      - ./garage.toml:/etc/garage.toml
+      - wildlog_garage_meta:/var/lib/garage/meta # SSD preferred for metadata
+      - wildlog_garage_data:/var/lib/garage/data
+    env_file:
+      - ../../apps/server/.env
+
+volumes:
+  wildlog_garage_meta:
+  wildlog_garage_data:

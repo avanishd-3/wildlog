@@ -1,0 +1,29 @@
+# Configuration file for Garage docker container
+
+metadata_dir = "/var/lib/garage/meta"
+data_dir = "/var/lib/garage/data"
+db_engine = "lmdb"
+metadata_auto_snapshot_interval = "6h"
+
+replication_factor = 1 # Using single-node setup
+
+compression_level = 2 # Zstd compression level to use for storing blocks (default in docs, shouldn't really matter for us)
+
+rpc_bind_addr = "[::]:3901"
+rpc_public_addr = "127.0.0.1:3901"
+rpc_secret = "" # Docker compose will put env variable into the container, so this can be left blank here
+
+[s3_api]
+s3_region = "garage"
+api_bind_addr = "[::]:3900"
+root_domain = ".s3.garage.localhost"
+
+[s3_web]
+bind_addr = "[::]:3902"
+root_domain = ".web.garage.localhost"
+index = "index.html"
+
+[admin]
+admin_bind_addr = "[::]:3903"
+admin_token = "" # Fine for local dev
+metrics_token = "" # Fine for local dev
