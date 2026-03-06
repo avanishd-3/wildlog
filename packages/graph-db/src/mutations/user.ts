@@ -20,3 +20,17 @@ export const createUser = async (username: string) => {
     await session.close();
   }
 };
+
+export const deleteUser = async (username: string) => {
+  const driver = await graphDBDriver();
+  const session = driver.session({ database: process.env.NEO4J_DATABASE });
+  try {
+    // Delete user from graph DB
+    // Detach delete removes all their relationships as well
+    await session.run("MATCH (u:User {username: $username}) DETACH DELETE u", {
+      username,
+    });
+  } finally {
+    await session.close();
+  }
+};

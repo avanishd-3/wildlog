@@ -1,4 +1,4 @@
-import Fastify from "fastify";
+import { fastify } from "fastify";
 import mercurius from "mercurius";
 import { apiSchema } from "./schema/schema";
 
@@ -18,13 +18,18 @@ import { closeDriver } from "@wildlog/graph-db";
 import { insertParksIntoGraph } from "@wildlog/graph-db/seed";
 import { createUser, deleteUser } from "@wildlog/graph-db/mutations/user";
 
-const app = Fastify({
-  logger: false,
-  https: {
-    key: readFileSync("localhost-key.pem"),
-    cert: readFileSync("localhost.pem"),
-  },
-});
+// ---- So TS doesn't complain when adding decorators ----
+
+// See: https://github.com/fastify/fastify/discussions/5100
+// The approach at the bottom didn't work for me, so I'm fine doing this
+// This is only for TS anyway, at runtime the decorator should be added properly
+declare module "fastify" {
+  interface FastifyRequest {
+    deleteUsername?: string; // For storing username during account deletion flow
+  }
+}
+
+// ---- Request validation schemas ----
 
 // Different than Better Auth docs, but what we mandate in UI
 const SignUpRequest = z.object({
@@ -37,6 +42,36 @@ const SignUpRequest = z.object({
     .max(20)
     .regex(/^[a-zA-Z0-9_]+$/),
 });
+
+// ---- Fastify Server Setup ----
+
+// Important to have this at the top to ensure the schema is registered before the app starts
+
+const app = fastify({
+  logger: false,
+  https: {
+    key: readFileSync("localhost-key.pem"),
+    cert: readFileSync("localhost.pem"),
+  },
+});
+
+app.register(mercurius, {
+  schema: apiSchema,
+  graphiql: true, // Enable GraphQL UI
+  context: async (request, _reply) => {
+    // Add user info to context if authenticated (per-request)
+    const session = await auth.api.getSession({
+      headers: request.headers,
+    });
+
+    return {
+      user: session?.user ?? null,
+      session,
+    };
+  },
+});
+
+// ---- Routes ----
 
 // Register authentication endpoint
 // See: https://www.better-auth.com/docs/integrations/fastify#prerequisites
@@ -91,9 +126,25 @@ app.route({
           });
           return;
         }
+      } else if (url.pathname == "/api/auth/delete-user") {
+        console.log("Received account deletion request");
+        const session = await auth.api.getSession({
+          headers: req.headers,
+        });
+
+        if (session?.user?.username) {
+          console.log(`Authenticated user ${session.user.username} is requesting account deletion`);
+          request.deleteUsername = session.user.username; // Store username on request for access in onResponse hook
+        } else {
+          console.log("No authenticated user found for account deletion request");
+          reply.status(401).send({
+            error: "Unauthorized: No authenticated user found",
+            code: "UNAUTHORIZED",
+          });
+          return;
+        }
       }
 
-      // Log account deletion
       // Process authentication request
       const response = await auth.handler(req);
 
@@ -110,22 +161,6 @@ app.route({
         code: "AUTH_FAILURE",
       });
     }
-  },
-});
-
-app.register(mercurius, {
-  schema: apiSchema,
-  graphiql: true, // Enable GraphQL UI
-  context: async (request, _reply) => {
-    // Add user info to context if authenticated (per-request)
-    const session = await auth.api.getSession({
-      headers: request.headers,
-    });
-
-    return {
-      user: session?.user ?? null,
-      session,
-    };
   },
 });
 
@@ -208,6 +243,8 @@ app.get("/graphdb", async (_request, reply) => {
   reply.redirect("http://localhost:7474");
 });
 
+// ---- Signal Handlers ----
+
 process.on("SIGTERM", () => {
   console.log("Received SIGTERM, shutting down gracefully...");
   app.close().then(() => {
@@ -249,6 +286,25 @@ app.addHook("onResponse", async (request, reply) => {
       console.log("User inserted into graph database successfully");
     } catch (error) {
       console.error("Error inserting user into graph database:", error);
+    }
+  }
+
+  // Delete from graph DB if account deletion is successful
+  else if (request.url === "/api/auth/delete-user" && reply.statusCode === 200) {
+    // Get username from request body (handler for this endpoint should set it)
+    const username = request.deleteUsername;
+
+    if (!username) {
+      // Won't happen if reply is 200, just to satisfy type checker
+      console.log("No username found on request for account deletion");
+      return;
+    }
+
+    try {
+      await deleteUser(username);
+      console.log("User deleted from graph database successfully");
+    } catch (error) {
+      console.error("Error deleting user from graph database:", error);
     }
   }
 });
