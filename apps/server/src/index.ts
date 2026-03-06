@@ -101,9 +101,9 @@ app.route({
         const requestBody = SignUpRequest.safeParse(request.body);
 
         if (!requestBody.success) {
-          console.log("Request validation failed: ", requestBody.error.message);
+          console.log("Sign-up request validation failed: ", requestBody.error.message);
           reply.status(400).send({
-            error: "Invalid request: " + requestBody.error.message,
+            error: "Invalid sign-up request: " + requestBody.error.message,
             code: "INVALID_REQUEST",
           });
           return;
