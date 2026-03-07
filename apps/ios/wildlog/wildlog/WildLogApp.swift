@@ -13,6 +13,7 @@ struct WildLogApp: App {
     @State var launchScreenState = LaunchScreenStateManager()
     @State var authManager = AuthenticationManager()
     @State private var likeManager = LikeManager()
+    @State private var bucketListManager = BucketListManager()
     
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
@@ -41,5 +42,6 @@ struct WildLogApp: App {
         .environment(authManager)
         .environment(likeManager)
         .modelContainer(sharedModelContainer)
+        .environment(bucketListManager)
     }
 }

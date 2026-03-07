@@ -52,6 +52,7 @@
 		A28823022F31473100148C3E /* Exceptions for "WildLog" folder in "WildLogUITests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Views/BucketListView.swift,
 				Views/ContentView.swift,
 				Views/LaunchScreenView.swift,
 				Views/LikedParksView.swift,

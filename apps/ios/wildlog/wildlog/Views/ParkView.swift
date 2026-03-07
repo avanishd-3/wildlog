@@ -7,21 +7,16 @@
 
 import SwiftUI
 
-// Basic apple settings-like design will probably change later to make it look more stylized
 struct ParkDetailView: View {
     let park: Park
     @Environment(\.dismiss) private var dismiss
     
-    // Like functionality
     @Environment(LikeManager.self) private var likeManager
-    
-    private var isLiked: Bool {
-        likeManager.isLiked(park.id.uuidString)
-    }
+    @Environment(BucketListManager.self) private var bucketListManager
 
     var body: some View {
         Form {
-            // Park Image Section
+            // Park Image Section with Like and Bucket List Buttons
             Section {
                 ZStack(alignment: .topTrailing) {
                     if let imageName = park.imageName {
@@ -33,21 +28,39 @@ struct ParkDetailView: View {
                             .clipped()
                     }
                     
-                    // Like button overlay on image
-                    Button {
-                        withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
-                            likeManager.toggleLike(for: park.id.uuidString)
+                    // Action buttons in top-right
+                    HStack(spacing: 20) {
+                        // Bucket list button
+                        Button {
+                            bucketListManager.toggleBucketList(for: park.id.uuidString)
+                        } label: {
+                            Image(systemName: bucketListManager.isInBucketList(park.id.uuidString) ? "flag.fill" : "flag")
+                                .font(.title)
+                                .foregroundStyle(bucketListManager.isInBucketList(park.id.uuidString) ? .orange : .white)
+                                .frame(width: 44, height: 44)
+                                .background(
+                                    Circle()
+                                        .fill(.ultraThinMaterial)
+                                )
+                                .shadow(radius: 4)
                         }
-                    } label: {
-                        Image(systemName: isLiked ? "heart.fill" : "heart")
-                            .font(.title2)
-                            .foregroundStyle(isLiked ? .red : .white)
-                            .padding(12)
-                            .background(
-                                Circle()
-                                    .fill(.ultraThinMaterial)
-                            )
-                            .shadow(radius: 4)
+                        .buttonStyle(.plain)
+                        
+                        // Like button
+                        Button {
+                            likeManager.toggleLike(for: park.id.uuidString)
+                        } label: {
+                            Image(systemName: likeManager.isLiked(park.id.uuidString) ? "heart.fill" : "heart")
+                                .font(.title)
+                                .foregroundStyle(likeManager.isLiked(park.id.uuidString) ? .red : .white)
+                                .frame(width: 44, height: 44)
+                                .background(
+                                    Circle()
+                                        .fill(.ultraThinMaterial)
+                                )
+                                .shadow(radius: 4)
+                        }
+                        .buttonStyle(.plain)
                     }
                     .padding()
                 }
@@ -124,5 +137,6 @@ struct ParkDetailView: View {
     NavigationStack {
         ParkDetailView(park: ParkData.sampleParks[0])
             .environment(LikeManager())
+            .environment(BucketListManager())
     }
 }

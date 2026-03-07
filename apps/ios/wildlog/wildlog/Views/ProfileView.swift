@@ -135,7 +135,7 @@ struct ProfileView: View {
                             CustomFormDivider()
 
                             CustomFormRow("Bucket List") {
-                                Text("Bucket List")
+                                BucketListView()
                             }
                             CustomFormDivider()
 
