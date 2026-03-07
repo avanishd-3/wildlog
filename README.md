@@ -56,7 +56,7 @@ To create a local SSL certificate, follow these instructions.
 1. Install [mkcert](https://github.com/FiloSottile/mkcert)
 2. Run `mkcert -install`
 3. Run `mkcert -cert-file localhost.pem -key-file localhost-key.pem localhost 127.0.0.01 ::1`
-4. Put localhost.pem and localhost-key.pem in apps/server
+4. Put localhost.pem and localhost-key.pem in the root directory (where this README is)
 
 ## Database Setup
 

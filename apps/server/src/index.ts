@@ -50,8 +50,8 @@ const SignUpRequest = z.object({
 const app = fastify({
   logger: false,
   https: {
-    key: readFileSync("localhost-key.pem"),
-    cert: readFileSync("localhost.pem"),
+    key: readFileSync("../../localhost-key.pem"),
+    cert: readFileSync("../../localhost.pem"),
   },
 });
 
