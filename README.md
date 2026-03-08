@@ -50,6 +50,8 @@ For Garage RPC secret, run `openssl rand -hex 32`.
 For Better Auth url, you can default to http://localhost:3000 for local development.
 For S3 url, you can default to http://localhost:3900 for local development.
 
+The server won't start without all the environment variables, so for GARAGE_ACCESS_KEY and GARAGE_SECRET_KEY you can put in random text before filling in the right values during S3 setup (see guide below).
+
 ## Server Setup
 
 Because iOS apps can only make HTTPS requests (technically you can disable this, but your app will not be approved), the server is configured to **require** a certificate and key to run. If you try to run the server without these, the server will error.
@@ -88,7 +90,7 @@ The API is running at [https://localhost:3000](https://localhost:3000).
 
 **Important**: This must be done after seeding the database.
 
-While running the S3 docker container (can use `pnpm dev` from root)
+While running the S3 docker container,
 
 1. Go to the admin UI (http://localhost:3909/)
 2. Go the keys tab and create a key.
