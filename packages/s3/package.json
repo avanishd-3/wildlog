@@ -19,8 +19,9 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1004.0",
-    "@wildlog/env": "workspace:*",
+    "@aws-sdk/s3-request-presigner": "^3.1004.0",
     "@wildlog/db": "workspace:*",
+    "@wildlog/env": "workspace:*",
     "dotenv": "catalog:"
   }
 }

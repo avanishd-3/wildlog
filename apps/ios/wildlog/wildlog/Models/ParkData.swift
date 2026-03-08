@@ -22,7 +22,8 @@ class ParkData {
             type: "National",
             free: false,
             cost: 6,
-            imageName: "acadia"
+            imageName: "acadia",
+            imageUrl: nil
         ),
         Park(
             id: UUID(),
@@ -35,7 +36,8 @@ class ParkData {
             type: "National",
             free: false,
             cost: 35,
-            imageName: "yosemite"
+            imageName: "yosemite",
+            imageUrl: nil
         ),
         Park(
             id: UUID(),
@@ -48,7 +50,8 @@ class ParkData {
             type: "National",
             free: false,
             cost: 35,
-            imageName: "zion"
+            imageName: "zion",
+            imageUrl: nil
         ),
         Park(
             id: UUID(),
@@ -61,7 +64,8 @@ class ParkData {
             type: "National",
             free: false,
             cost: 30,
-            imageName: "canyonlands"
+            imageName: "canyonlands",
+            imageUrl: nil
         ),
         Park(
             id: UUID(),
@@ -74,7 +78,8 @@ class ParkData {
             type: "National",
             free: false,
             cost: 35,
-            imageName: "glacier"
+            imageName: "glacier",
+            imageUrl: nil
         ),
         Park(
             id: UUID(),
@@ -87,7 +92,8 @@ class ParkData {
             type: "National",
             free: false,
             cost: 35,
-            imageName: "bryce"
+            imageName: "bryce",
+            imageUrl: nil
         )
     ]
     

@@ -4,6 +4,7 @@ import { parkDesignationEnum, parkTypeEnum } from "@wildlog/db/schema/park";
 
 import { getParkMapRecommendations } from "@wildlog/db/queries/park-queries";
 import { getParksFilters } from "@wildlog/db/utils/get-park-query-filters";
+import { getParkImageUrl } from "@wildlog/s3/park-url";
 
 const ParkDesignationEnum = createGraphQLEnumFromPgEnum(
   builder,
@@ -50,6 +51,9 @@ const park = builder.simpleObject("Park", {
     free: t.boolean({
       nullable: false,
     }),
+    imageUrl: t.string({
+      nullable: false,
+    }),
   }),
 });
 
@@ -85,18 +89,23 @@ builder.queryField("getParkMapRecommendations", (t) =>
         args.filters,
         whereClauses,
       );
-      return parks.map((park) => ({
-        id: park.publicId,
-        name: park.name,
-        description: park.description,
-        designation: park.designation,
-        latitude: typeof park.latitude === "number" ? park.latitude : null,
-        longitude: typeof park.longitude === "number" ? park.longitude : null,
-        states: park.states,
-        type: park.type,
-        cost: park.cost,
-        free: park.free,
-      }));
+
+      return Promise.all(
+        parks.map(async (park) => ({
+          id: park.publicId,
+          name: park.name,
+          description: park.description,
+          designation: park.designation,
+          latitude: typeof park.latitude === "number" ? park.latitude : null,
+          longitude: typeof park.longitude === "number" ? park.longitude : null,
+          states: park.states,
+          type: park.type,
+          cost: park.cost,
+          free: park.free,
+          // Hardcoded url, fine for local dev (reverse proxy always on this url and port)
+          imageUrl: await getParkImageUrl(park.publicId, park.imageId), // Get pre-signed URL for the park image from S3
+        })),
+      );
     },
   }),
 );

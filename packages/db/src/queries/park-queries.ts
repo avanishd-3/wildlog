@@ -1,6 +1,6 @@
 import { sql, and, cosineDistance, eq, desc, inArray } from "drizzle-orm";
 import { db } from "..";
-import { park, parkEmbedding } from "../schema";
+import { park, parkEmbedding, parkImage } from "../schema";
 import { computeEmbedding } from "@wildlog/embedding";
 
 export const getParkMapRecommendations = async (
@@ -37,6 +37,7 @@ export const getParkMapRecommendations = async (
         free: park.free,
         latitude: sql`ST_Y(${park.location})`,
         longitude: sql`ST_X(${park.location})`,
+        imageId: parkImage.imageId,
       })
       .from(park)
       // Word similarity is for trigram matching suitable for matching similarity for parts of words
@@ -44,7 +45,8 @@ export const getParkMapRecommendations = async (
       // With this threshold, yosem matches to Yosemite National Park alone
       // See: https://www.postgresql.org/docs/current/pgtrgm.html
       .where(sql`word_similarity(${park.name}, ${filters.search}) > 0.2`)
-      .limit(5); // Limit to top 5 results so users don't have that many options
+      .limit(5) // Limit to top 5 results so users don't have that many options
+      .innerJoin(parkImage, eq(park.id, parkImage.parkId)); // Join at the end for performance (only relevant parks)
 
     if (similarTrigramParks.length > 0) {
       // If we have trigram results, we can return those without needing to do the embedding search, which is more expensive
@@ -82,12 +84,14 @@ export const getParkMapRecommendations = async (
         latitude: sql`ST_Y(${park.location})`,
         longitude: sql`ST_X(${park.location})`,
         similarity: cosineSimilarity,
+        imageId: parkImage.imageId,
       })
       .from(park)
       .innerJoin(parkEmbedding, eq(park.id, parkEmbedding.parkId)) // Join on internal id to improve cache performance
       .where(inArray(park.id, filteredParkIds))
       .orderBy((t) => desc(t.similarity))
-      .limit(10); // Limit to top 10 results so users don't have that many options
+      .limit(10) // Limit to top 10 results so users don't have that many options
+      .innerJoin(parkImage, eq(park.id, parkImage.parkId)); // Join at the end to only use the parks we're interested in
   } else {
     return getParksByBoundingBox(x_min, x_max, y_min, y_max, where_clauses);
   }
@@ -119,6 +123,7 @@ const getParksByBoundingBox = async (
 
   const where = filters ? [...filters, boundingBoxClause] : [boundingBoxClause];
 
+  // Need to join with park-images table to get the image ID for each park
   return (
     db
       .select({
@@ -133,6 +138,7 @@ const getParksByBoundingBox = async (
         free: park.free,
         latitude: sql`ST_Y(${park.location})`,
         longitude: sql`ST_X(${park.location})`,
+        imageId: parkImage.imageId,
       })
       .from(park)
       .where(and(...where))
@@ -140,5 +146,6 @@ const getParksByBoundingBox = async (
       // So people who zoom out heavily don't see a ton of parks
       // 15 is too low because when they use the filters and then untoggle them, parks "disappear"
       .limit(30)
+      .innerJoin(parkImage, eq(park.id, parkImage.parkId))
   );
 };

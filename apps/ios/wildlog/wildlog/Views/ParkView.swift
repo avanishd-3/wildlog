@@ -16,7 +16,16 @@ struct ParkDetailView: View {
         Form {
             // Park Image Section
             Section {
-                if let imageName = park.imageName {
+                if let imageUrl = park.imageUrl {
+                    AsyncImage(url: URL(string: imageUrl))
+                        .scaledToFit()
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 250)
+                        .clipped()
+                        .listRowInsets(EdgeInsets())
+                    }
+                
+                else if let imageName = park.imageName {
                     Image(imageName)
                         .resizable()
                         .scaledToFill()
