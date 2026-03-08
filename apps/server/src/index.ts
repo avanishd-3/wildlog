@@ -3,13 +3,13 @@ import mercurius from "mercurius";
 import { apiSchema } from "./schema/schema";
 
 import { seed } from "@wildlog/db/seed";
+import { seedS3 } from "@wildlog/s3/seed";
 import { getParkLocation } from "@wildlog/db/queries/test";
 
 import { readFileSync } from "fs";
 
 // Import embedding function to ensure the model is loaded at startup
 import { computeEmbedding } from "@wildlog/embedding";
-import { seedEmbeddings } from "@wildlog/db/seed-embed";
 import { auth } from "@wildlog/auth";
 import z from "zod";
 
@@ -191,14 +191,14 @@ app.get("/seed", async (_request, reply) => {
   }
 });
 
-app.get("/seed-embed", async (_request, reply) => {
-  // Takes a few seconds
+app.get("/seed-s3", async (_request, reply) => {
+  // Seed script configures client, so don't need to worry about env vars here
   try {
-    await seedEmbeddings();
-    reply.send({ message: "Database seeded successfully" });
-  } catch (error) {
-    console.error("Error seeding database:", error);
-    reply.status(500).send({ error: "Failed to seed database" });
+    await seedS3();
+    reply.send({ message: "S3 seeded successfully" });
+  } catch {
+    // console.error("Error seeding S3:", error);
+    reply.status(500).send({ error: "Failed to seed S3" });
   }
 });
 
