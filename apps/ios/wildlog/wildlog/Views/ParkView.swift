@@ -13,6 +13,8 @@ struct ParkDetailView: View {
     
     @Environment(LikeManager.self) private var likeManager
     @Environment(BucketListManager.self) private var bucketListManager
+    
+    @State private var showWriteReview = false
 
     var body: some View {
         Form {
@@ -117,6 +119,19 @@ struct ParkDetailView: View {
                     Text(String(park.longitude))
                 }
             }
+            
+            // Quick Review Section
+            Section {
+                Button {
+                    showWriteReview = true
+                } label: {
+                    HStack {
+                        Image(systemName: "square.and.pencil")
+                        Text("Write a Review")
+                        Spacer()
+                    }
+                }
+            }
         }
         .navigationBarTitle(park.name)
         .toolbar {
@@ -129,6 +144,9 @@ struct ParkDetailView: View {
                         .font(.title2)
                 }
             }
+        }
+        .sheet(isPresented: $showWriteReview) {
+            WriteReviewSheet(park: park)
         }
     }
 }

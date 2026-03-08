@@ -29,15 +29,21 @@ struct InteractiveStarRatingView: View {
 struct WriteReviewSheet: View {
     @Environment(\.dismiss) private var dismiss
     
+    // Accept optional park parameter for quick review from ParkDetailView
+    var park: Park?
     
-    // TODO: Replace hardcoded default with parkID + parkName
-    
-    var parkName: String = "Yosemite National Park"
+    // If no park provided, default to placeholder (for toolbar button in ReviewView)
+    var parkName: String {
+        park?.name ?? "Select a park"
+    }
 
     @State private var starRating: Int = 0
     @State private var descriptionText: String = ""
+    @State private var visitedDate: Date = .now
 
-    var canSubmit: Bool { starRating > 0 }
+    var canSubmit: Bool {
+        starRating > 0 && park != nil
+    }
 
     var body: some View {
         NavigationStack {
@@ -48,6 +54,10 @@ struct WriteReviewSheet: View {
 
                 Section("Rating") {
                     InteractiveStarRatingView(rating: $starRating)
+                }
+                
+                Section("Visited") {
+                    DatePicker("Date", selection: $visitedDate, displayedComponents: .date)
                 }
 
                 Section("Description") {
@@ -75,5 +85,5 @@ struct WriteReviewSheet: View {
 
 
 #Preview {
-    WriteReviewSheet(parkName: "Yosemite National Park")
+    WriteReviewSheet(park: ParkData.sampleParks[0])
 }
