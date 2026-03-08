@@ -80,7 +80,19 @@ The API is running at [https://localhost:3000](https://localhost:3000).
 
 ### Seed Database
 1. Go to the /seed endpoint on the server.
-2. On success of the first step, go to the /seed-embed endpoint.
+
+## S3 Setup
+
+While running the S3 docker container (can use `pnpm dev` from root)
+
+1. Go to the admin UI (http://localhost:3909/)
+2. Go the keys tab and create a key.
+3. In your apps/server .env file, set GARAGE_ACCESS_KEY = Key ID from Garage and GARAGE_SECRET_KEY = Secret Key from Garage
+4. Go to the buckets tab and create a bucket called `park-images`
+5. In the park-images bucket, go to manage -> permissions and give your key (created in step 2) read, write, and owner permissions.
+6. Go to [https://localhost:3000/seed-s3](https://localhost:3000/seed-s3)
+
+Now, you can run the s3 seed script.
 
 ## iOS Setup
 

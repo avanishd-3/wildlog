@@ -4,7 +4,6 @@ import { park, parkImage } from "@wildlog/db/schema/park";
 import { promises } from "fs";
 
 import { env } from "@wildlog/env/server";
-import path from "path";
 
 export async function seedS3() {
   console.log("Seeding S3...");
@@ -34,47 +33,33 @@ export async function seedS3() {
     `Found ${parks.length} parks in the database. Starting to seed images for each park...`,
   );
 
-  let numFailures = 0;
   await Promise.all(
     parks.map(async (park) => {
-      // const imagePath = `../data/park_images/${park.name}.jpg`; // Relative to apps/server
       const imagePath = `../data/park_images/${park.name}.jpg`; // Relative to apps/server
 
       try {
         const imageData = await promises.readFile(imagePath);
-      } catch (error) {
-        console.log(`Error reading image for park '${park.name}' at path '${imagePath}'`);
-        numFailures++;
-        console.log(`Current number of failures: ${numFailures}`);
-        throw new Error(
-          `Error reading image for park '${park.name}' at path '${imagePath}': ${error}`,
-        );
-      }
-      // try {
-      //     const imageData = await promises.readFile(imagePath);
-      //     // Generate UUID for the image ID
-      //     const imageId = crypto.randomUUID();
-      //     const putObjectCommand = new PutObjectCommand({
-      //         Bucket: "park-images",
-      //         Key: `${park.publicId}/${imageId}.jpg`,
-      //         Body: imageData
-      //     });
-      //     await s3.send(putObjectCommand);
+        // Generate UUID for the image ID
+        const imageId = crypto.randomUUID();
+        const putObjectCommand = new PutObjectCommand({
+          Bucket: "park-images",
+          Key: `${park.publicId}/${imageId}.jpg`,
+          Body: imageData,
+        });
+        await s3.send(putObjectCommand);
 
-      //     // Insert image metadata into the parkImages table
-      //     await db.insert(parkImage).values({
-      //         imageId: imageId,
-      //         parkId: park.id,
-      //     });
-      //     console.log(`Uploaded image for park '${park.name}' and inserted metadata into database`);
-      // } catch (error) {
-      //     console.error(`Error uploading image for park '${park.name}':`, error);
-      // }
+        // Insert image id into the parkImages table
+        await db.insert(parkImage).values({
+          imageId: imageId,
+          parkId: park.id,
+        });
+        console.log(`Uploaded image for park '${park.name}' and inserted image idinto database`);
+      } catch (error) {
+        console.error(`Error uploading image for park '${park.name}':`, error);
+        throw new Error(`Error uploading image for park '${park.name}': ${error}`); // So route sends error response if any image fails to upload
+      }
     }),
   );
 
   console.log("S3 seeding complete");
-  console.log(`Number of failures: ${numFailures}`);
-
-  return numFailures;
 }
