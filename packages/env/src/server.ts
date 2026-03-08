@@ -12,6 +12,8 @@ export const env = createEnv({
     BETTER_AUTH_URL: z.url(),
     S3_URL: z.string().min(1),
     GARAGE_RPC_SECRET: z.string().min(1),
+    GARAGE_ACCESS_KEY: z.string().min(1),
+    GARAGE_SECRET_KEY: z.string().min(1),
     NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
   },
   runtimeEnv: process.env,

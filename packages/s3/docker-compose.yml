@@ -1,5 +1,14 @@
 name: wildlog-s3
 
+volumes:
+  wildlog_garage_meta:
+  wildlog_garage_data:
+
+networks:
+  wildlog_network:
+    
+# Auto apply garage layout on startup, so it's ready to use without manual CLI steps
+# Idea from: https://spwoodcock.dev/blog/2026-03-03-automate-garage-standalone/
 services:
   garage:
     image: dxflrs/garage:v2.2.0
@@ -10,13 +19,67 @@ services:
       - "3902:3902"
       - "3903:3903"
     restart: unless-stopped
+    networks: [wildlog_network]
     volumes:
       - ./garage.toml:/etc/garage.toml
       - wildlog_garage_meta:/var/lib/garage/meta # SSD preferred for metadata
       - wildlog_garage_data:/var/lib/garage/data
     env_file:
       - ../../apps/server/.env
+  
+  garage-init:
+    image: docker.io/alpine:3.23
+    depends_on:
+      garage:
+        condition: service_started
+    network_mode: service:garage
+    pid: service:garage
+    environment:
+      GARAGE_ADMIN_TOKEN: "garage-admin-token" # Must match garage.toml, fine for local dev
+    env_file:
+      - ../../apps/server/.env
+    restart: "on-failure:2"
+    entrypoint:
+      - /bin/sh
+      - -eu
+      - -c
+      - |
+        # chroot into the s3 container's filesystem so the garage binary runs
+        # with its own libs/linker, while the shared network namespace keeps
+        # 127.0.0.1:3901 pointing at the live Garage server
+        G="chroot /proc/1/root /garage -c /etc/garage.toml"
 
-volumes:
-  wildlog_garage_meta:
-  wildlog_garage_data:
+        # Wait for server
+        for i in $$(seq 1 20); do
+          if $$G node id -q 2>/dev/null; then break; fi
+          echo "Waiting for Garage RPC... ($$i/20)"
+          sleep 3
+        done
+        $$G node id -q || { echo "Garage RPC not ready"; exit 1; }
+
+        # Init garage nodes
+        if $$G status 2>&1 | grep -q 'NO ROLE ASSIGNED'; then
+          NODE_ID=$$($$G node id -q | cut -c1-16)
+          $$G layout assign "$$NODE_ID" -z local -c 1G
+          $$G layout apply --version 1
+        fi
+
+        echo "Garage initialized successfully"
+
+  # Much easier to use than command line
+  # Similar to AWS S3 console
+  webui:
+    image: khairul169/garage-webui:latest
+    container_name: garage-webui
+    networks: [wildlog_network]
+    restart: unless-stopped
+    volumes:
+      - ./garage.toml:/etc/garage.toml:ro
+    ports:
+      - 3909:3909
+    environment:
+      API_BASE_URL: "http://garage:3903"
+      S3_ENDPOINT_URL: "http://garage:3900"
+      API_ADMIN_KEY: "garage-admin-token"
+
+  

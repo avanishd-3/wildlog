@@ -18,12 +18,11 @@ s3_region = "garage"
 api_bind_addr = "[::]:3900"
 root_domain = ".s3.garage.localhost"
 
-[s3_web]
+[s3_web] # Optional, for browsing bucket contents in a web UI
 bind_addr = "[::]:3902"
 root_domain = ".web.garage.localhost"
 index = "index.html"
 
-[admin]
-admin_bind_addr = "[::]:3903"
-admin_token = "" # Fine for local dev
-metrics_token = "" # Fine for local dev
+[admin] # Required
+api_bind_addr = "[::]:3903"
+admin_token = "garage-admin-token" # Fine for local dev
