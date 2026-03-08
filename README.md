@@ -42,10 +42,13 @@ pnpm install
 ```
 
 ## Environment Variable Setup
-You need to add a .env file in apps/server with all the relevant environment variables. See apps/server/.env.example for the environment variables you need to set.
+You need to add a .env file in apps/server with all the relevant environment variables. See `packages/env/src/server.ts` for the environment variables you need to set.
 For Better Auth secret, run `openssl rand -base64 32`.
 
-For Garage RPC secret, run `openssl rand -hex 32`
+For Garage RPC secret, run `openssl rand -hex 32`.
+
+For Better Auth url, you can default to http://localhost:3000 for local development.
+For S3 url, you can default to http://localhost:3900 for local development.
 
 ## Server Setup
 
@@ -62,7 +65,7 @@ To create a local SSL certificate, follow these instructions.
 
 This project uses PostgreSQL with Drizzle ORM and Neo4j.
 
-1. Update your `apps/server/.env` file with your connection details. See `packages/env/src/server.ts` for required fields (for dev, you can take the database info from the docker compose files in the db and graph-db packages).
+1. Update your `apps/server/.env` file with your connection details as mentioned above.
 
 2. Apply the schema to your PostgreSQL database:
 
@@ -82,6 +85,8 @@ The API is running at [https://localhost:3000](https://localhost:3000).
 1. Go to the /seed endpoint on the server.
 
 ## S3 Setup
+
+**Important**: This must be done after seeding the database.
 
 While running the S3 docker container (can use `pnpm dev` from root)
 
