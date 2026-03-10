@@ -7,7 +7,7 @@ metadata_auto_snapshot_interval = "6h"
 
 replication_factor = 1 # Using single-node setup
 
-compression_level = 2 # Zstd compression level to use for storing blocks (default in docs, shouldn't really matter for us)
+compression_level = 'none' # No compression for best image quality
 
 rpc_bind_addr = "[::]:3901"
 rpc_public_addr = "127.0.0.1:3901"
