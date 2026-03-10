@@ -7,24 +7,66 @@
 
 import SwiftUI
 
-// Basic apple settings-like design will probably change later to make it look more stylized
 struct ParkDetailView: View {
     let park: Park
     @Environment(\.dismiss) private var dismiss
+    
+    @Environment(LikeManager.self) private var likeManager
+    @Environment(BucketListManager.self) private var bucketListManager
+    
+    @State private var showWriteReview = false
 
     var body: some View {
         Form {
-            // Park Image Section
+            // Park Image Section with Like and Bucket List Buttons
             Section {
-                if let imageName = park.imageName {
-                    Image(imageName)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 250)
-                        .clipped()
-                        .listRowInsets(EdgeInsets())
+                ZStack(alignment: .topTrailing) {
+                    if let imageName = park.imageName {
+                        Image(imageName)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 250)
+                            .clipped()
+                    }
+                    
+                    // Action buttons in top-right
+                    HStack(spacing: 20) {
+                        // Bucket list button
+                        Button {
+                            bucketListManager.toggleBucketList(for: park.id.uuidString)
+                        } label: {
+                            Image(systemName: bucketListManager.isInBucketList(park.id.uuidString) ? "flag.fill" : "flag")
+                                .font(.title)
+                                .foregroundStyle(bucketListManager.isInBucketList(park.id.uuidString) ? .orange : .white)
+                                .frame(width: 44, height: 44)
+                                .background(
+                                    Circle()
+                                        .fill(.ultraThinMaterial)
+                                )
+                                .shadow(radius: 4)
+                        }
+                        .buttonStyle(.plain)
+                        
+                        // Like button
+                        Button {
+                            likeManager.toggleLike(for: park.id.uuidString)
+                        } label: {
+                            Image(systemName: likeManager.isLiked(park.id.uuidString) ? "heart.fill" : "heart")
+                                .font(.title)
+                                .foregroundStyle(likeManager.isLiked(park.id.uuidString) ? .red : .white)
+                                .frame(width: 44, height: 44)
+                                .background(
+                                    Circle()
+                                        .fill(.ultraThinMaterial)
+                                )
+                                .shadow(radius: 4)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .padding()
                 }
+                .listRowInsets(EdgeInsets())
             }
             
             // Description Section
@@ -77,6 +119,19 @@ struct ParkDetailView: View {
                     Text(String(park.longitude))
                 }
             }
+            
+            // Quick Review Section
+            Section {
+                Button {
+                    showWriteReview = true
+                } label: {
+                    HStack {
+                        Image(systemName: "square.and.pencil")
+                        Text("Write a Review")
+                        Spacer()
+                    }
+                }
+            }
         }
         .navigationBarTitle(park.name)
         .toolbar {
@@ -90,11 +145,16 @@ struct ParkDetailView: View {
                 }
             }
         }
+        .sheet(isPresented: $showWriteReview) {
+            WriteReviewSheet(park: park)
+        }
     }
 }
 
 #Preview {
     NavigationStack {
         ParkDetailView(park: ParkData.sampleParks[0])
+            .environment(LikeManager())
+            .environment(BucketListManager())
     }
 }
