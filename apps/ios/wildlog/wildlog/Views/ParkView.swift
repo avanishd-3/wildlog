@@ -20,14 +20,25 @@ struct ParkDetailView: View {
         Form {
             // Park Image Section with Like and Bucket List Buttons
             Section {
+                
                 ZStack(alignment: .topTrailing) {
-                    if let imageName = park.imageName {
-                        Image(imageName)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 250)
-                            .clipped()
+                    if let imageUrl = park.imageUrl {
+                      AsyncImage(url: URL(string: imageUrl))
+                          .scaledToFit()
+                          .frame(maxWidth: .infinity)
+                          .frame(height: 250)
+                          .clipped()
+                          .listRowInsets(EdgeInsets())
+                    }
+                
+                    else if let imageName = park.imageName {
+                      Image(imageName)
+                          .resizable()
+                          .scaledToFill()
+                          .frame(maxWidth: .infinity)
+                          .frame(height: 250)
+                          .clipped()
+                          .listRowInsets(EdgeInsets())
                     }
                     
                     // Action buttons in top-right

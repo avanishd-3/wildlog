@@ -20,6 +20,10 @@ struct Park: Identifiable, Codable, Hashable {
     let free: Bool
     let cost: Int
     let imageName: String?
+    
+    // Will be a URL, GraphQL just doesn't have a URL type
+    // Optional so previews can use image name
+    let imageUrl: String?
 }
 
 // Custom init for Park
@@ -40,7 +44,8 @@ extension Park {
             type: removeUnderscoreAndAllCaps(for: gql.type.rawValue),
             free: gql.free,
             cost: gql.cost,
-            imageName: nil
+            imageName: nil,
+            imageUrl: gql.imageUrl
         )
     }
 }

@@ -6,16 +6,18 @@ import { sql } from "drizzle-orm";
 import { park } from "./schema/park";
 
 import { db } from "./index";
+import { seedEmbeddings } from "./seed-embed";
 
 export const seed = async () => {
-  const csvPath = path.resolve("../../apps/data/park_data_21126_1301.csv");
+  const csvPath = path.resolve("../../apps/data/park_data_30726_1853.csv");
   console.log(`Seeding database from CSV file at: ${csvPath}`);
 
-  // If there are already parks in the database, skip seeding
-  const existingParks = await db.select().from(park).limit(1);
+  // If there are already parks in the database, delete them all and re-seed
+  // So can easily re-seed if the seed data changes, without having to manually delete the database or tables
+
+  const existingParks = await db.select().from(park);
   if (existingParks.length > 0) {
-    console.log("Parks already exist in the database. Skipping relational DB seeding.");
-    return;
+    await db.delete(park).execute(); // Delete all rows in DB
   }
 
   // See https://www.importcsv.com/blog/typescript-csv-parser for parsing logic.
@@ -104,6 +106,11 @@ export const seed = async () => {
           ),
         );
       });
+
+      // Seed embeddings after seeding parks, since we need the park IDs to seed the embeddings
+      await seedEmbeddings();
+
+      console.log("Relational database seeding complete.");
     })
     .on("error", (err) => {
       console.error("Error parsing CSV:", err.message);

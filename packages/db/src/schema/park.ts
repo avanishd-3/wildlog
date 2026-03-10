@@ -91,3 +91,13 @@ export const parkEmbedding = pgTable(
     index("embeddingIndex").using("hnsw", t.embedding.op("vector_cosine_ops")), // Need to index for good performance
   ],
 );
+
+// This table is append only b/c there is a trigger that auto cancels updates and deletes
+// See 0008_empty_blue_blade migration file for implementation details
+export const parkImage = pgTable("park_image", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  parkId: integer("park_id")
+    .notNull()
+    .references(() => park.id, { onDelete: "cascade" }), // Foreign key to park table
+  imageId: uuid("image_id").notNull(), // ID of the image in S3
+});

@@ -57,6 +57,13 @@
       "when": 1772690298087,
       "tag": "0007_empty_celestials",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1772824839314,
+      "tag": "0008_empty_blue_blade",
+      "breakpoints": true
     }
   ]
 }

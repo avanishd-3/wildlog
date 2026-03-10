@@ -22,5 +22,6 @@ query GetParkMapRecommendations(
     type
     cost
     free
+    imageUrl
   }
 }

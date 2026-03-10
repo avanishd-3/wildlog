@@ -8,7 +8,7 @@ public struct GetParkMapRecommendationsQuery: GraphQLQuery {
   public static let operationName: String = "GetParkMapRecommendations"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query GetParkMapRecommendations($filters: ParkFiltersInput, $x_max: Float!, $x_min: Float!, $y_max: Float!, $y_min: Float!) { getParkMapRecommendations( filters: $filters x_max: $x_max x_min: $x_min y_max: $y_max y_min: $y_min ) { __typename id name description designation latitude longitude states type cost free } }"#
+      #"query GetParkMapRecommendations($filters: ParkFiltersInput, $x_max: Float!, $x_min: Float!, $y_max: Float!, $y_min: Float!) { getParkMapRecommendations( filters: $filters x_max: $x_max x_min: $x_min y_max: $y_max y_min: $y_min ) { __typename id name description designation latitude longitude states type cost free imageUrl } }"#
     ))
 
   public var filters: GraphQLNullable<ParkFiltersInput>
@@ -79,6 +79,7 @@ public struct GetParkMapRecommendationsQuery: GraphQLQuery {
         .field("type", GraphQLEnum<WildLogAPI.ParkTypeEnum>.self),
         .field("cost", Int.self),
         .field("free", Bool.self),
+        .field("imageUrl", String.self),
       ] }
       @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
         GetParkMapRecommendationsQuery.Data.GetParkMapRecommendation.self
@@ -94,6 +95,7 @@ public struct GetParkMapRecommendationsQuery: GraphQLQuery {
       public var type: GraphQLEnum<WildLogAPI.ParkTypeEnum> { __data["type"] }
       public var cost: Int { __data["cost"] }
       public var free: Bool { __data["free"] }
+      public var imageUrl: String { __data["imageUrl"] }
     }
   }
 }

@@ -101,7 +101,7 @@ Once you have done that, you can add the root certificate to the simulator by fo
 
 1. Go to Xcode and launch the simulator
 2. In the terminal, run `mkcert -CAROOT`. This will tell you where the mkcert root certificates are.
-3. In finder, navigate to the folder outputted in step 6 (I got the format /Users/username/Library/Application Support/mkcert), but your's may be different.
+3. In finder, navigate to the folder outputted in step 6 (I got the format /Users/username/Library/Application Support/mkcert), but yours may be different.
 4. Drag and drop rootCA.pem onto the simulator homescreen.
 5. On the simulator, go to Settings -> General -> About -> Certificate Trust Settings and verify that you see the certificate there.
 6. On the simulator, re-open the app and go to the Lists tab. If you click the fetch park info button, you should see the text Yellowstone National Park.

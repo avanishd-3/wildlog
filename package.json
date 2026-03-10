@@ -19,6 +19,7 @@
     "db:watch": "turbo -F @wildlog/db db:watch",
     "db:stop": "turbo -F @wildlog/db db:stop",
     "db:down": "turbo -F @wildlog/db db:down",
+    "s3": "turbo -F @wildlog/s3 dev",
     "check": "oxlint && oxfmt --write",
     "prepare": "husky",
     "package:list": "pnpm list --recursive --depth -1"

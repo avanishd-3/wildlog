@@ -52,6 +52,7 @@ type Park {
   designation: ParkDesignationEnum!
   free: Boolean!
   id: String!
+  imageUrl: String!
   latitude: Float
   longitude: Float
   name: String!

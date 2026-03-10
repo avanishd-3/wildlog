@@ -41,6 +41,17 @@ First, install the dependencies:
 pnpm install
 ```
 
+## Environment Variable Setup
+You need to add a .env file in apps/server with all the relevant environment variables. See `packages/env/src/server.ts` for the environment variables you need to set.
+For Better Auth secret, run `openssl rand -base64 32`.
+
+For Garage RPC secret, run `openssl rand -hex 32`.
+
+For Better Auth url, you can default to http://localhost:3000 for local development.
+For S3 url, you can default to http://localhost:3900 for local development.
+
+The server won't start without all the environment variables, so for GARAGE_ACCESS_KEY and GARAGE_SECRET_KEY you can put in random text before filling in the right values during S3 setup (see guide below).
+
 ## Server Setup
 
 Because iOS apps can only make HTTPS requests (technically you can disable this, but your app will not be approved), the server is configured to **require** a certificate and key to run. If you try to run the server without these, the server will error.
@@ -50,13 +61,13 @@ To create a local SSL certificate, follow these instructions.
 1. Install [mkcert](https://github.com/FiloSottile/mkcert)
 2. Run `mkcert -install`
 3. Run `mkcert -cert-file localhost.pem -key-file localhost-key.pem localhost 127.0.0.01 ::1`
-4. Put localhost.pem and localhost-key.pem in apps/server
+4. Put localhost.pem and localhost-key.pem in the root directory (where this README is)
 
 ## Database Setup
 
 This project uses PostgreSQL with Drizzle ORM and Neo4j.
 
-1. Update your `apps/server/.env` file with your connection details. See `packages/env/src/server.ts` for required fields (for dev, you can take the database info from the docker compose files in the db and graph-db packages).
+1. Update your `apps/server/.env` file with your connection details as mentioned above.
 
 2. Apply the schema to your PostgreSQL database:
 
@@ -74,7 +85,27 @@ The API is running at [https://localhost:3000](https://localhost:3000).
 
 ### Seed Database
 1. Go to the /seed endpoint on the server.
-2. On success of the first step, go to the /seed-embed endpoint.
+
+## S3 Setup
+
+**Important**: This must be done after seeding the database.
+
+While running the S3 docker container,
+
+1. Go to the admin UI (http://localhost:3909/)
+2. Go the keys tab and create a key.
+3. In your apps/server .env file, set GARAGE_ACCESS_KEY = Key ID from Garage and GARAGE_SECRET_KEY = Secret Key from Garage
+4. Go to the buckets tab and create a bucket called `park-images`
+5. In the park-images bucket, go to manage -> permissions and give your key (created in step 2) read, write, and owner permissions.
+6. Go to [https://localhost:3000/seed-s3](https://localhost:3000/seed-s3)
+
+Now, you can run the s3 seed script.
+
+## iOS Setup
+
+**Important**: Minimum Xcode 16.3
+
+Read the README in the apps/ios folder for instructions on how to add the certificate to the iOS simulator.
 
 ## Git Hooks and Formatting
 
@@ -126,4 +157,4 @@ So, to develop the mobile app, **only use Xcode** and don't worry about Turborep
 
 **Important**: Minimum Xcode 16.3 (Apollo iOS requires Swift 6.1).
 
-Read the README in the ios folder for more info on IOS-specific stuff.
+Read the README in the apps/ios folder for more info on IOS-specific stuff.
