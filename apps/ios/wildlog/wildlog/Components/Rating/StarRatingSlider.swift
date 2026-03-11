@@ -22,14 +22,14 @@ public struct StarRatingSlider: View {
         }
         .gesture(
             // I'm not even going to try to figure out a good min distance
-            // Need this
+            // Allow sliding up and down to 0
             DragGesture()
                 .onChanged { value in
                     let totalWidth = CGFloat(maximum) * (starSize + spacing) - spacing
                     let x = min(max(value.location.x, 0), totalWidth)
-                    let rawRating = x / (starSize + spacing) + 1
+                    let rawRating = x / (starSize + spacing)
                     let halfStep = (rawRating * 2).rounded() / 2
-                    rating = min(max(halfStep, 1), Double(maximum))
+                    rating = min(max(halfStep, 0), Double(maximum))
                 }
         )
         .animation(.easeInOut, value: rating)
