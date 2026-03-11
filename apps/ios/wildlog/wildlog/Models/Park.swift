@@ -30,7 +30,6 @@ struct Park: Identifiable, Codable, Hashable {
 // See: https://www.hackingwithswift.com/example-code/language/how-to-add-a-custom-initializer-to-a-struct-without-losing-its-memberwise-initializer
 extension Park {
     // Create park based on result of graph ql query
-    // TODO: Add free, cost, and imageName to GraphQL API
     init?(from gql: GetParkMapRecommendationsQuery.Data.GetParkMapRecommendation) {
         guard let lat = gql.latitude, let lon = gql.longitude else { return nil }
         self.init(
