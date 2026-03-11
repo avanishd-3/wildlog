@@ -26,3 +26,11 @@ mutation updateUserInfo($name: String!, $website: String!) {
     website
   }
 }
+
+mutation likePark($parkPublicId: String!) {
+  likePark(parkPublicId: $parkPublicId)
+}
+
+mutation unlikePark($parkPublicId: String!) {
+  unlikePark(parkPublicId: $parkPublicId)
+}

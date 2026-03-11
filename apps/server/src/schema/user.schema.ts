@@ -1,5 +1,10 @@
 import { builder } from "@/builder";
-import { updateBaseUserInfo, updateUserBio } from "@wildlog/db/mutations/user-mutations";
+import {
+  likePark,
+  unlikePark,
+  updateBaseUserInfo,
+  updateUserBio,
+} from "@wildlog/db/mutations/user-mutations";
 
 const user = builder.simpleObject("User", {
   fields: (t) => ({
@@ -156,6 +161,52 @@ builder.mutationField("updateBaseUserInfo", (t) =>
         website: updatedUser.website,
         bio: context.user.bio,
       };
+    },
+  }),
+);
+
+// ---- Main stuff, likes, bucket list, reviews ----
+
+builder.mutationField("likePark", (t) =>
+  t.field({
+    type: "Boolean",
+    args: {
+      parkPublicId: t.arg.string({ required: true }),
+    },
+    authScopes: {
+      loggedIn: true, // Only allow logged in users to like parks
+    },
+    resolve: async (_parent, args, context) => {
+      if (!context.user) {
+        // Won't happen b/c of authScope (just to satisfy type checker)
+        throw new Error("Not authenticated");
+      }
+
+      await likePark(context.user.id, context.user.username, args.parkPublicId);
+
+      return true;
+    },
+  }),
+);
+
+builder.mutationField("unlikePark", (t) =>
+  t.field({
+    type: "Boolean",
+    args: {
+      parkPublicId: t.arg.string({ required: true }),
+    },
+    authScopes: {
+      loggedIn: true, // Only allow logged in users to unlike parks
+    },
+    resolve: async (_parent, args, context) => {
+      if (!context.user) {
+        // Won't happen b/c of authScope (just to satisfy type checker)
+        throw new Error("Not authenticated");
+      }
+
+      await unlikePark(context.user.id, context.user.username, args.parkPublicId);
+
+      return true;
     },
   }),
 );

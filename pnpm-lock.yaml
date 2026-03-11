@@ -182,6 +182,9 @@ importers:
       '@wildlog/config':
         specifier: workspace:*
         version: link:../config
+      '@wildlog/graph-db':
+        specifier: workspace:*
+        version: link:../graph-db
       drizzle-kit:
         specifier: ^0.31.8
         version: 0.31.9
@@ -229,9 +232,6 @@ importers:
       '@neo4j/cypher-builder':
         specifier: ^2.12.0
         version: 2.12.0
-      '@wildlog/db':
-        specifier: workspace:*
-        version: link:../db
       '@wildlog/env':
         specifier: workspace:*
         version: link:../env

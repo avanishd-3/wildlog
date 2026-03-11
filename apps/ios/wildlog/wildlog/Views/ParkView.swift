@@ -23,12 +23,31 @@ struct ParkDetailView: View {
                 
                 ZStack(alignment: .topTrailing) {
                     if let imageUrl = park.imageUrl {
-                      AsyncImage(url: URL(string: imageUrl))
-                          .scaledToFit()
-                          .frame(maxWidth: .infinity)
-                          .frame(height: 250)
-                          .clipped()
-                          .listRowInsets(EdgeInsets())
+                        AsyncImage(url: URL(string: imageUrl)) { phase in
+                            switch phase {
+                            case .empty:
+                                // Placeholder while loading
+                                Color(.systemGray)
+                                    .scaledToFill()
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 250)
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                                    .scaledToFit()
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 250)
+                            case .failure(_):
+                                // Error placeholder
+                                Color(.systemRed)
+                                    .scaledToFill()
+                                    .frame(height: 250)
+                            @unknown default:
+                                EmptyView()
+                            }
+                        }
+                        .clipped()
                     }
                 
                     else if let imageName = park.imageName {

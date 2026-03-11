@@ -33,6 +33,7 @@
   "devDependencies": {
     "@types/pg": "^8.16.0",
     "@wildlog/config": "workspace:*",
+    "@wildlog/graph-db": "workspace:*",
     "drizzle-kit": "^0.31.8",
     "typescript": "catalog:"
   }

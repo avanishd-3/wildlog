@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WildLogAPI
 
 // Manages park likes across the app
 // TODO: Wire this to Apollo mutations for creating/deleting likes in the backend
@@ -44,10 +45,25 @@ class LikeManager {
     func toggleLike(for parkId: String) {
         if likedParkIds.contains(parkId) {
             likedParkIds.remove(parkId)
-            // TODO: Call Apollo mutation to delete like from backend
+            Task {
+                do {
+                    let _ = try await apolloClient.perform(mutation: UnlikeParkMutation(parkPublicId: parkId))
+                    
+                    // Do nothing, removing anyway
+                }
+            }
         } else {
-            likedParkIds.insert(parkId)
-            // TODO: Call Apollo mutation to create like in backend
+            likedParkIds.insert(parkId) // Optimistic update
+            Task {
+                do {
+                    let response = try await apolloClient.perform(mutation: LikeParkMutation(parkPublicId: parkId))
+                    
+                    //
+                    if !(response.data?.likePark ?? false) {
+                        likedParkIds.remove(parkId)
+                    }
+                }
+            }
         }
     }
 }
