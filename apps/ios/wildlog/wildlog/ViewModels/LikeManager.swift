@@ -9,7 +9,6 @@ import SwiftUI
 import WildLogAPI
 
 // Manages park likes across the app
-// TODO: Wire this to Apollo mutations for creating/deleting likes in the backend
 
 @Observable
 class LikeManager {

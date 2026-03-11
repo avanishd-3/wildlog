@@ -59,6 +59,28 @@ export const likeIntoGraph = async (username: string, parkPublicId: string) => {
   }
 };
 
+export const bucketListIntoGraph = async (username: string, parkPublicId: string) => {
+  const driver = await graphDBDriver();
+  const session = driver.session({ database: process.env.NEO4J_DATABASE });
+
+  // Create a WANTS_TO_VISIT relationship between the user and park
+  // Use merge to prevent duplicates
+  try {
+    console.log(
+      `Creating WANTS_TO_VISIT relationship in graph DB for user ${username} and park ${parkPublicId}`,
+    );
+    await session.run(
+      "MATCH (u:User {username: $username}), (p:Park {publicId: $parkPublicId}) MERGE (u)-[:WANTS_TO_VISIT]->(p)",
+      {
+        username,
+        parkPublicId,
+      },
+    );
+  } finally {
+    await session.close();
+  }
+};
+
 export const unlikeParkInGraph = async (username: string, parkPublicId: string) => {
   const driver = await graphDBDriver();
   const session = driver.session({ database: process.env.NEO4J_DATABASE });
@@ -70,6 +92,27 @@ export const unlikeParkInGraph = async (username: string, parkPublicId: string) 
     );
     await session.run(
       "MATCH (u:User {username: $username})-[r:LIKES]->(p:Park {publicId: $parkPublicId}) DELETE r",
+      {
+        username,
+        parkPublicId,
+      },
+    );
+  } finally {
+    await session.close();
+  }
+};
+
+export const removeFromBucketListInGraph = async (username: string, parkPublicId: string) => {
+  const driver = await graphDBDriver();
+  const session = driver.session({ database: process.env.NEO4J_DATABASE });
+
+  // Delete the WANTS_TO_VISIT relationship between the user and park
+  try {
+    console.log(
+      `Deleting WANTS_TO_VISIT relationship in graph DB for user ${username} and park ${parkPublicId}`,
+    );
+    await session.run(
+      "MATCH (u:User {username: $username})-[r:WANTS_TO_VISIT]->(p:Park {publicId: $parkPublicId}) DELETE r",
       {
         username,
         parkPublicId,

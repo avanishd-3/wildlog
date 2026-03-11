@@ -42,7 +42,9 @@ directive @defer(
 ) on FRAGMENT_SPREAD | INLINE_FRAGMENT
 
 type Mutation {
+  addToBucketList(parkPublicId: String!): Boolean
   likePark(parkPublicId: String!): Boolean
+  removeFromBucketList(parkPublicId: String!): Boolean
   unlikePark(parkPublicId: String!): Boolean
   updateBaseUserInfo(name: String!, website: String!): User
   updateBio(bio: String!): User

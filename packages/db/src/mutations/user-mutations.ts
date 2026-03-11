@@ -2,10 +2,15 @@ import { db } from "..";
 import { user } from "../schema/auth";
 import { eq, and } from "drizzle-orm";
 
-import { userLike } from "../schema/user";
+import { userBucketList, userLike } from "../schema/user";
 import { park } from "../schema";
 
-import { likeIntoGraph, unlikeParkInGraph } from "@wildlog/graph-db/mutations/user";
+import {
+  bucketListIntoGraph,
+  likeIntoGraph,
+  removeFromBucketListInGraph,
+  unlikeParkInGraph,
+} from "@wildlog/graph-db/mutations/user";
 
 export const updateUserBio = async (userId: string, bio: string) => {
   await db.update(user).set({ bio }).where(eq(user.id, userId));
@@ -54,6 +59,19 @@ export const likePark = async (userId: string, username: string, parkPublicId: s
   await likeIntoGraph(username, parkPublicId);
 };
 
+export const bucketListPark = async (userId: string, username: string, parkPublicId: string) => {
+  const parkId = await db.select({ id: park.id }).from(park).where(eq(park.publicId, parkPublicId));
+
+  if (!parkId[0]) {
+    // Should not happen
+    throw new Error("Park not found");
+  }
+  await db.insert(userBucketList).values({ userId: userId, parkId: parkId[0].id });
+
+  // Also need to insert into Neo4j database
+  await bucketListIntoGraph(username, parkPublicId);
+};
+
 export const unlikePark = async (userId: string, username: string, parkPublicId: string) => {
   const parkId = await db.select({ id: park.id }).from(park).where(eq(park.publicId, parkPublicId));
 
@@ -67,4 +85,24 @@ export const unlikePark = async (userId: string, username: string, parkPublicId:
 
   // Also need to remove from Neo4j database
   await unlikeParkInGraph(username, parkPublicId);
+};
+
+export const removeParkFromBucketList = async (
+  userId: string,
+  username: string,
+  parkPublicId: string,
+) => {
+  const parkId = await db.select({ id: park.id }).from(park).where(eq(park.publicId, parkPublicId));
+
+  if (!parkId[0]) {
+    // Should not happen
+    throw new Error("Park not found");
+  }
+  await db
+    .delete(userBucketList)
+    .where(and(eq(userBucketList.userId, userId), eq(userBucketList.parkId, parkId[0].id)));
+
+  // Also need to remove from Neo4j database
+
+  await removeFromBucketListInGraph(username, parkPublicId);
 };

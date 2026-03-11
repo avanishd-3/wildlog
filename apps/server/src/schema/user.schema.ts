@@ -1,6 +1,8 @@
 import { builder } from "@/builder";
 import {
+  bucketListPark,
   likePark,
+  removeParkFromBucketList,
   unlikePark,
   updateBaseUserInfo,
   updateUserBio,
@@ -189,6 +191,28 @@ builder.mutationField("likePark", (t) =>
   }),
 );
 
+builder.mutationField("addToBucketList", (t) =>
+  t.field({
+    type: "Boolean",
+    args: {
+      parkPublicId: t.arg.string({ required: true }),
+    },
+    authScopes: {
+      loggedIn: true, // Only allow logged in users to add parks to bucket list
+    },
+    resolve: async (_parent, args, context) => {
+      if (!context.user) {
+        // Won't happen b/c of authScope (just to satisfy type checker)
+        throw new Error("Not authenticated");
+      }
+
+      await bucketListPark(context.user.id, context.user.username, args.parkPublicId);
+
+      return true;
+    },
+  }),
+);
+
 builder.mutationField("unlikePark", (t) =>
   t.field({
     type: "Boolean",
@@ -205,6 +229,28 @@ builder.mutationField("unlikePark", (t) =>
       }
 
       await unlikePark(context.user.id, context.user.username, args.parkPublicId);
+
+      return true;
+    },
+  }),
+);
+
+builder.mutationField("removeFromBucketList", (t) =>
+  t.field({
+    type: "Boolean",
+    args: {
+      parkPublicId: t.arg.string({ required: true }),
+    },
+    authScopes: {
+      loggedIn: true, // Only allow logged in users to remove parks from bucket list
+    },
+    resolve: async (_parent, args, context) => {
+      if (!context.user) {
+        // Won't happen b/c of authScope (just to satisfy type checker)
+        throw new Error("Not authenticated");
+      }
+
+      await removeParkFromBucketList(context.user.id, context.user.username, args.parkPublicId);
 
       return true;
     },
