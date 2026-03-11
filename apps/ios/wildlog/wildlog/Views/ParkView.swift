@@ -47,9 +47,9 @@ struct ParkDetailView: View {
                         Button {
                             bucketListManager.toggleBucketList(for: park.id.uuidString)
                         } label: {
-                            Image(systemName: bucketListManager.isInBucketList(park.id.uuidString) ? "flag.fill" : "flag")
+                            Image(systemName: bucketListManager.isInBucketList(park.id.uuidString) ? "clock.badge.checkmark.fill" : "clock.badge.checkmark")
                                 .font(.title)
-                                .foregroundStyle(bucketListManager.isInBucketList(park.id.uuidString) ? .orange : .white)
+                                .foregroundStyle(bucketListManager.isInBucketList(park.id.uuidString) ? Color(.systemOrange) : .white)
                                 .frame(width: 44, height: 44)
                                 .background(
                                     Circle()
@@ -60,12 +60,13 @@ struct ParkDetailView: View {
                         .buttonStyle(.plain)
                         
                         // Like button
+                        // Green like rest of app
                         Button {
                             likeManager.toggleLike(for: park.id.uuidString)
                         } label: {
                             Image(systemName: likeManager.isLiked(park.id.uuidString) ? "heart.fill" : "heart")
                                 .font(.title)
-                                .foregroundStyle(likeManager.isLiked(park.id.uuidString) ? .red : .white)
+                                .foregroundStyle(likeManager.isLiked(park.id.uuidString) ? Color(.systemGreen) : .white)
                                 .frame(width: 44, height: 44)
                                 .background(
                                     Circle()

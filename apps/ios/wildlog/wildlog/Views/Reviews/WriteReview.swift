@@ -7,23 +7,6 @@
 
 import SwiftUI
 
-// Interactive Star Rating (Input)
-
-struct InteractiveStarRatingView: View {
-    @Binding var rating: Int
-
-    var body: some View {
-        HStack {
-            ForEach(1...5, id: \.self) { star in
-                Image(systemName: star <= rating ? "star.fill" : "star")
-                    .onTapGesture {
-                        rating = star == rating ? 0 : star
-                    }
-            }
-        }
-    }
-}
-
 // Write Review Sheet
 
 struct WriteReviewSheet: View {
@@ -37,7 +20,7 @@ struct WriteReviewSheet: View {
         park?.name ?? "Select a park"
     }
 
-    @State private var starRating: Int = 0
+    @State private var starRating: Double = 0
     @State private var descriptionText: String = ""
     @State private var visitedDate: Date = .now
 
@@ -53,7 +36,7 @@ struct WriteReviewSheet: View {
                 }
 
                 Section("Rating") {
-                    InteractiveStarRatingView(rating: $starRating)
+                    StarRatingSlider(rating: $starRating)
                 }
                 
                 Section("Visited") {
@@ -76,6 +59,7 @@ struct WriteReviewSheet: View {
                         // TODO: wire up Apollo mutation here
                         dismiss()
                     }
+                    .tint(Color(.systemGreen))
                     .disabled(!canSubmit)
                 }
             }
