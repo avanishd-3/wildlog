@@ -19,6 +19,7 @@ import { insertParksIntoGraph } from "@wildlog/graph-db/seed";
 import { createUser, deleteUser } from "@wildlog/graph-db/mutations/user";
 import { db } from "@wildlog/db";
 import { park } from "@wildlog/db/schema/park";
+import { seedTestData } from "./seed-random";
 
 // ---- So TS doesn't complain when adding decorators ----
 
@@ -206,6 +207,17 @@ app.get("/seed-s3", async (_request, reply) => {
   } catch {
     // console.error("Error seeding S3:", error);
     reply.status(500).send({ error: "Failed to seed S3" });
+  }
+});
+
+// Seed random users, friends, and reviews for testing
+app.get("/seed-test-data", async (_request, reply) => {
+  try {
+    await seedTestData();
+    reply.send({ message: "Test data seeded successfully" });
+  } catch (error) {
+    console.error("Error seeding test data:", error);
+    reply.status(500).send({ error: "Failed to seed test data" });
   }
 });
 

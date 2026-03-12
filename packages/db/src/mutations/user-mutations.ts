@@ -2,10 +2,11 @@ import { db } from "..";
 import { user } from "../schema/auth";
 import { eq, and } from "drizzle-orm";
 
-import { userBucketList, userLike, userReview } from "../schema/user";
+import { userBucketList, userFriend, userLike, userReview } from "../schema/user";
 import { park } from "../schema";
 
 import {
+  addFriendInGraph,
   bucketListIntoGraph,
   insertRatedHighlyInGraph,
   likeIntoGraph,
@@ -47,6 +48,18 @@ export const updateBaseUserInfo = async (
     .select({ name: user.name, website: user.website })
     .from(user)
     .where(eq(user.id, userId));
+};
+
+export const addFriend = async (
+  userId: string,
+  friendId: string,
+  username: string,
+  friendUsername: string,
+) => {
+  await db.insert(userFriend).values({ userId, friendId });
+
+  // Insert into Neo4j database
+  await addFriendInGraph(username, friendUsername);
 };
 
 export const mutateReview = async (
@@ -94,15 +107,13 @@ export const mutateReview = async (
   } else {
     console.log("Review does not exist, creating new review");
     // Insert new park review with default rating of 0 (user can update rating later)
-    await db
-      .insert(userReview)
-      .values({
-        userId: userId,
-        parkId: parkId[0].id,
-        rating: newRating,
-        reviewText: review,
-        visitedAt: visitedAt,
-      });
+    await db.insert(userReview).values({
+      userId: userId,
+      parkId: parkId[0].id,
+      rating: newRating,
+      reviewText: review,
+      visitedAt: visitedAt,
+    });
 
     // Insert visited at in Neo4j database
     await visitedParkIntoGraph(username, parkPublicId, visitedAt);

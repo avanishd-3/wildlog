@@ -28,6 +28,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@faker-js/faker": "^10.3.0",
     "@types/node": "catalog:",
     "@wildlog/config": "workspace:*",
     "tsdown": "^0.16.5",

@@ -85,6 +85,7 @@ The API is running at [https://localhost:3000](https://localhost:3000).
 
 ### Seed Database
 1. Go to the /seed endpoint on the server.
+2. If you want to use test data, go to the /seed-test-data endpoint on the server (**must** be after completing step 1).
 
 ## S3 Setup
 

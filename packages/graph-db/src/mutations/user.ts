@@ -35,6 +35,17 @@ export const deleteUser = async (username: string) => {
   }
 };
 
+export const deleteAllUsers = async () => {
+  const driver = await graphDBDriver();
+  const session = driver.session({ database: process.env.NEO4J_DATABASE });
+  try {
+    // Delete all users from graph DB including relationship
+    await session.run("MATCH (u:User) DETACH DELETE u");
+  } finally {
+    await session.close();
+  }
+};
+
 // ---- Relationship mutations ----
 // IMPORTANT: Need to lowercase public id b/c Neo4j is case sensitive and GraphQL returns all caps
 
@@ -101,6 +112,30 @@ export const visitedParkIntoGraph = async (
         username,
         parkPublicId: parkPublicId.toLowerCase(),
         visitedAt: visitedAt.toISOString(),
+      },
+    );
+  } finally {
+    await session.close();
+  }
+};
+
+export const addFriendInGraph = async (username: string, friendUsername: string) => {
+  const driver = await graphDBDriver();
+  const session = driver.session({ database: process.env.NEO4J_DATABASE });
+
+  // Create a FRIEND relationship between the two users
+  // Use merge to prevent duplicates
+  // This should be bidirectional for better recommendations
+  try {
+    console.log(
+      `Creating FRIEND relationship in graph DB between user ${username} and friend ${friendUsername}`,
+    );
+
+    await session.run(
+      "MATCH (u1:User {username: $username}), (u2:User {username: $friendUsername}) MERGE (u1)-[:FRIEND]->(u2) MERGE (u2)-[:FRIEND]->(u1)",
+      {
+        username,
+        friendUsername,
       },
     );
   } finally {

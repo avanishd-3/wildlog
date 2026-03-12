@@ -3,6 +3,14 @@ import { db } from "..";
 import { park, parkEmbedding, parkImage } from "../schema";
 import { computeEmbedding } from "@wildlog/embedding";
 
+export const getParkPublicIdsByInternalIds = async (idList: number[]) => {
+  const result = await db
+    .select({ publicId: park.publicId })
+    .from(park)
+    .where(inArray(park.id, idList));
+  return result.map((r) => r.publicId);
+};
+
 export const getParkMapRecommendations = async (
   x_min: number,
   x_max: number,
