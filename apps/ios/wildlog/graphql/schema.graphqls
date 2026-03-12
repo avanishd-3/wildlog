@@ -44,6 +44,7 @@ directive @defer(
 type Mutation {
   addToBucketList(parkPublicId: String!): Boolean
   likePark(parkPublicId: String!): Boolean
+  mutateReview(parkPublicId: String!, rating: String!, review: String!, visitedAt: String!): Boolean
   removeFromBucketList(parkPublicId: String!): Boolean
   unlikePark(parkPublicId: String!): Boolean
   updateBaseUserInfo(name: String!, website: String!): User

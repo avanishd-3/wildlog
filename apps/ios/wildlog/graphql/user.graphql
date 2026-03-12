@@ -42,3 +42,7 @@ mutation unlikePark($parkPublicId: String!) {
 mutation removeParkFromBucketList($parkPublicId: String!) {
   removeFromBucketList(parkPublicId: $parkPublicId)
 }
+
+mutation submitReview($parkPublicId: String!, $review: String!, $rating: String!, $visitedAt: String!) {
+  mutateReview(parkPublicId: $parkPublicId, review: $review, rating: $rating, visitedAt: $visitedAt)
+}

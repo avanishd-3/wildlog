@@ -13,7 +13,12 @@ Neo4J is schema-less, which means there's no code to enforce consistency of node
 
 ## Relationships
 
-- User can like, want to visit (i.e., in bucket list) park
+All relationships are from user to user or user to park. Park does not have any outgoing edges.
+
+- User to park:
+  - Like
+  - Wants to visit
+  - Visited (attribute at: )
 
 ## Constraints
 

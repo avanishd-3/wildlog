@@ -2,14 +2,17 @@ import { db } from "..";
 import { user } from "../schema/auth";
 import { eq, and } from "drizzle-orm";
 
-import { userBucketList, userLike } from "../schema/user";
+import { userBucketList, userLike, userReview } from "../schema/user";
 import { park } from "../schema";
 
 import {
   bucketListIntoGraph,
+  insertRatedHighlyInGraph,
   likeIntoGraph,
   removeFromBucketListInGraph,
+  removeRatedHighlyInGraph,
   unlikeParkInGraph,
+  visitedParkIntoGraph,
 } from "@wildlog/graph-db/mutations/user";
 
 export const updateUserBio = async (userId: string, bio: string) => {
@@ -44,6 +47,75 @@ export const updateBaseUserInfo = async (
     .select({ name: user.name, website: user.website })
     .from(user)
     .where(eq(user.id, userId));
+};
+
+export const mutateReview = async (
+  userId: string,
+  username: string,
+  parkPublicId: string,
+  review: string,
+  newRating: string,
+  visitedAt: Date,
+) => {
+  const parkId = await db.select({ id: park.id }).from(park).where(eq(park.publicId, parkPublicId));
+
+  if (parkId.length === 0 || !parkId[0]) {
+    // Should not happen
+    throw new Error("Park not found");
+  }
+
+  const reviewExists = await db
+    .select()
+    .from(userReview)
+    .where(and(eq(userReview.userId, userId), eq(userReview.parkId, parkId[0].id)));
+
+  if (reviewExists.length > 0 && reviewExists[0]) {
+    // Update park review
+    console.log("Review already exists, updating review");
+    await db
+      .update(userReview)
+      .set({ reviewText: review, rating: newRating, visitedAt: visitedAt })
+      .where(and(eq(userReview.userId, userId), eq(userReview.parkId, parkId[0].id)));
+
+    // If new rating is 4.0 or higher and old rating is lower than 4.0, add rated highly relationship in Neo4j database
+    if (parseFloat(newRating) >= 4.0 && parseFloat(reviewExists[0].rating) < 4.0) {
+      console.log(
+        "New rating is 4.0 or higher and old rating is lower than 4.0, adding RATED_HIGHLY relationship in graph DB",
+      );
+      return await insertRatedHighlyInGraph(username, parkPublicId);
+    }
+    // If new rating is lower than 4.0 and old rating is 4.0 or higher, remove rated highly relationship in Neo4j database
+    else if (parseFloat(newRating) < 4.0 && parseFloat(reviewExists[0].rating) >= 4.0) {
+      console.log(
+        "New rating is lower than 4.0 and old rating is 4.0 or higher, removing RATED_HIGHLY relationship in graph DB",
+      );
+      return await removeRatedHighlyInGraph(username, parkPublicId);
+    }
+  } else {
+    console.log("Review does not exist, creating new review");
+    // Insert new park review with default rating of 0 (user can update rating later)
+    await db
+      .insert(userReview)
+      .values({
+        userId: userId,
+        parkId: parkId[0].id,
+        rating: newRating,
+        reviewText: review,
+        visitedAt: visitedAt,
+      });
+
+    // Insert visited at in Neo4j database
+    await visitedParkIntoGraph(username, parkPublicId, visitedAt);
+
+    // If new rating is 4.0 or higher and old rating is lower than 4.0, add rated highly relationship in Neo4j database
+    if (parseFloat(newRating) >= 4.0) {
+      console.log("New rating is 4.0 or higher, adding RATED_HIGHLY relationship in graph DB");
+      return await insertRatedHighlyInGraph(username, parkPublicId);
+    } else {
+      console.log("New rating is lower than 4.0, not adding RATED_HIGHLY relationship in graph DB");
+      return;
+    }
+  }
 };
 
 export const likePark = async (userId: string, username: string, parkPublicId: string) => {

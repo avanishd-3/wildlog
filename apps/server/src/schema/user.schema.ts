@@ -2,6 +2,7 @@ import { builder } from "@/builder";
 import {
   bucketListPark,
   likePark,
+  mutateReview,
   removeParkFromBucketList,
   unlikePark,
   updateBaseUserInfo,
@@ -251,6 +252,44 @@ builder.mutationField("removeFromBucketList", (t) =>
       }
 
       await removeParkFromBucketList(context.user.id, context.user.username, args.parkPublicId);
+
+      return true;
+    },
+  }),
+);
+
+builder.mutationField("mutateReview", (t) =>
+  t.field({
+    type: "Boolean",
+    args: {
+      parkPublicId: t.arg.string({ required: true }),
+      review: t.arg.string({ required: true }),
+      rating: t.arg.string({ required: true }),
+      visitedAt: t.arg.string({ required: true }), // ISO string of date, GraphQL just doesn't have a date type, will convert to Date in resolver
+    },
+    authScopes: {
+      loggedIn: true, // Only allow logged in users to add reviews
+    },
+    resolve: async (_parent, args, context) => {
+      console.log("Received mutateReview mutation with args:", args);
+      if (!context.user) {
+        // Won't happen b/c of authScope (just to satisfy type checker)
+        throw new Error("Not authenticated");
+      }
+
+      try {
+        await mutateReview(
+          context.user.id,
+          context.user.username,
+          args.parkPublicId,
+          args.review,
+          args.rating,
+          new Date(args.visitedAt),
+        );
+      } catch (error) {
+        console.error("Error occurred while mutating review:", error);
+        return false; // Indicate failure to mutate review
+      }
 
       return true;
     },
