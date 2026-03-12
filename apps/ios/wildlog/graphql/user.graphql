@@ -14,6 +14,22 @@ query getUserInfo {
   }
 }
 
+query getUserReview($parkPublicId: String!) {
+  getUserReview(parkPublicId: $parkPublicId) {
+    rating
+    reviewText
+    visitedAt
+  }
+}
+
+query hasLikedPark($parkPublicId: String!) {
+  isParkLiked(parkPublicId: $parkPublicId)
+}
+
+query hasBucketListedPark($parkPublicId: String!) {
+  isParkBucketListed(parkPublicId: $parkPublicId)
+}
+
 mutation updateBio($bio: String!) {
   updateBio(bio: $bio) {
     bio

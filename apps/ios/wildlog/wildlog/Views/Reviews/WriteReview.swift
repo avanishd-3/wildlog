@@ -10,6 +10,12 @@ import WildLogAPI
 
 // Write Review Sheet
 
+struct Review {
+    var starRating: Double = 0
+    var descriptionText: String = ""
+    var visitedDate: Date = .now
+}
+
 struct WriteReviewSheet: View {
     @Environment(\.dismiss) private var dismiss
     
@@ -21,19 +27,15 @@ struct WriteReviewSheet: View {
         park?.name ?? "Select a park"
     }
     
-    @State private var Review: Review?
-
-    @State private var starRating: Double = 0
-    @State private var descriptionText: String = ""
-    @State private var visitedDate: Date = .now
-    @State private var savingNewInfo: Bool = false
+    @State private var reviewInfo: Review = .init()
+    @State private var savingNewInfo = false
     
     // To close view
     @FocusState private var isFocused: Bool
     @Environment(\.dismiss) private var dimiss
 
     var canSubmit: Bool {
-        starRating > 0 && park != nil
+        reviewInfo.starRating > 0 && park != nil
     }
 
     var body: some View {
@@ -44,15 +46,15 @@ struct WriteReviewSheet: View {
                 }
 
                 Section("Rating") {
-                    StarRatingSlider(rating: $starRating)
+                    StarRatingSlider(rating: $reviewInfo.starRating)
                 }
                 
                 Section("Visited") {
-                    DatePicker("Date", selection: $visitedDate, displayedComponents: .date)
+                    DatePicker("Date", selection: $reviewInfo.visitedDate, displayedComponents: .date)
                 }
 
                 Section("Description") {
-                    TextEditor(text: $descriptionText)
+                    TextEditor(text: $reviewInfo.descriptionText)
                         .frame(minHeight: 100)
                 }
             }
@@ -68,8 +70,8 @@ struct WriteReviewSheet: View {
                             do {
                                 savingNewInfo = true
                                 let parkIdString = park?.id.uuidString ?? ""
-                                let visitedAtString = visitedDate.description
-                                let _ = try await apolloClient.perform(mutation: SubmitReviewMutation(parkPublicId: parkIdString, review: descriptionText, rating: String(starRating), visitedAt: visitedAtString))
+                                let visitedAtString = reviewInfo.visitedDate.description
+                                let _ = try await apolloClient.perform(mutation: SubmitReviewMutation(parkPublicId: parkIdString, review: reviewInfo.descriptionText, rating: String(reviewInfo.starRating), visitedAt: visitedAtString))
                                 
                                 savingNewInfo = false
                                 isFocused = false
@@ -84,8 +86,27 @@ struct WriteReviewSheet: View {
                 }
             }
         }
+        .onAppear {
+            guard let park = park else { return }
+            Task {
+                do {
+                    let parkIdString = park.id.uuidString
+                    let result = try await apolloClient.fetch(query: GetUserReviewQuery(parkPublicId: parkIdString))
+                    if let review = result.data?.getUserReview {
+                        reviewInfo = Review(
+                            starRating: Double(review.rating) ?? 0,
+                            descriptionText: review.reviewText ?? "",
+                            visitedDate: ISO8601DateFormatter().date(from: review.visitedAt ?? "") ?? .now
+                        )
+                    }
+                } catch {
+                    // Handle error (optional)
+                }
+            }
+        }
     }
 }
+
 
 
 #Preview {

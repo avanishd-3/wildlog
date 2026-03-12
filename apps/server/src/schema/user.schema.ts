@@ -9,6 +9,12 @@ import {
   updateUserBio,
 } from "@wildlog/db/mutations/user-mutations";
 
+import {
+  getUserReview,
+  hasUserBucketListedPark,
+  hasUserLikedPark,
+} from "@wildlog/db/queries/user-queries";
+
 const user = builder.simpleObject("User", {
   fields: (t) => ({
     id: t.string({
@@ -31,6 +37,100 @@ const user = builder.simpleObject("User", {
     }),
   }),
 });
+
+const review = builder.simpleObject("Review", {
+  fields: (t) => ({
+    rating: t.string({
+      nullable: false,
+    }),
+    reviewText: t.string({
+      nullable: true,
+    }),
+    visitedAt: t.string({
+      nullable: true,
+    }),
+  }),
+});
+
+// ---- User queries ----
+
+// Load review if it already exists for the park
+builder.queryField("getUserReview", (t) =>
+  t.field({
+    type: review,
+    args: {
+      parkPublicId: t.arg.string({ required: true }),
+    },
+    authScopes: {
+      loggedIn: true, // Only allow logged in users to see their reviews
+    },
+    resolve: async (_parent, _args, context) => {
+      if (!context.user) {
+        // Won't happen b/c of authScope (just to satisfy type checker)
+        throw new Error("Not authenticated");
+      }
+
+      const result = await getUserReview(context.user.id, _args.parkPublicId);
+
+      if (result === null || result === undefined) {
+        return null;
+      }
+      return {
+        reviewText: result.review,
+        rating: result.rating,
+        visitedAt: result.visitedAt ? result.visitedAt.toISOString() : null,
+      };
+    },
+  }),
+);
+
+builder.queryField("isParkLiked", (t) =>
+  t.field({
+    type: "Boolean",
+    args: {
+      parkPublicId: t.arg.string({ required: true }),
+    },
+    authScopes: {
+      loggedIn: true, // Only allow logged in users to see if they liked a park
+    },
+    resolve: async (_parent, _args, context) => {
+      if (!context.user) {
+        // Won't happen b/c of authScope (just to satisfy type checker)
+        throw new Error("Not authenticated");
+      }
+
+      // Check if the user has liked the park in the database
+      const isLiked = await hasUserLikedPark(context.user.id, _args.parkPublicId);
+
+      return isLiked;
+    },
+  }),
+);
+
+builder.queryField("isParkBucketListed", (t) =>
+  t.field({
+    type: "Boolean",
+    args: {
+      parkPublicId: t.arg.string({ required: true }),
+    },
+    authScopes: {
+      loggedIn: true, // Only allow logged in users to see if they have bucket listed a park
+    },
+    resolve: async (_parent, _args, context) => {
+      if (!context.user) {
+        // Won't happen b/c of authScope (just to satisfy type checker)
+        throw new Error("Not authenticated");
+      }
+
+      // Check if the user has bucket listed the park in the database
+      const isBucketListed = await hasUserBucketListedPark(context.user.id, _args.parkPublicId);
+
+      return isBucketListed;
+    },
+  }),
+);
+
+// ---- User mutations ----
 
 builder.queryField("me", (t) =>
   t.field({
