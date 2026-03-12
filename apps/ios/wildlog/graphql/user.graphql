@@ -22,11 +22,8 @@ query getUserReview($parkPublicId: String!) {
   }
 }
 
-query hasLikedPark($parkPublicId: String!) {
+query LikeAndBucketListStatus($parkPublicId: String!) {
   isParkLiked(parkPublicId: $parkPublicId)
-}
-
-query hasBucketListedPark($parkPublicId: String!) {
   isParkBucketListed(parkPublicId: $parkPublicId)
 }
 

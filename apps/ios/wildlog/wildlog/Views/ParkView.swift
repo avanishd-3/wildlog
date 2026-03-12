@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WildLogAPI
 
 struct ParkDetailView: View {
     let park: Park
@@ -178,6 +179,31 @@ struct ParkDetailView: View {
         }
         .sheet(isPresented: $showWriteReview) {
             WriteReviewSheet(park: park)
+        }
+        .onAppear {
+            Task {
+                do {
+                    let parkIdString = park.id.uuidString
+                    let result = try await apolloClient.fetch(query: LikeAndBucketListStatusQuery(parkPublicId: parkIdString))
+                    if let isLiked = result.data?.isParkLiked {
+                        debugPrint("Checking if park is liked...")
+                        // Park is liked so toggle it
+                        if isLiked {
+                            debugPrint("Park is liked, so toggle it...")
+                            likeManager.likePark(for: parkIdString)
+                        }
+                    }
+                    
+                    if let isInBucketList = result.data?.isParkBucketListed {
+                        // Park in bucket list, so toggle it
+                        if isInBucketList {
+                            bucketListManager.addtoBucketList(for: parkIdString)
+                        }
+                    }
+                } catch {
+                    // TODO: Handle error
+                }
+            }
         }
     }
 }

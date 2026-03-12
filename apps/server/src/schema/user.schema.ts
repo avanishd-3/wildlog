@@ -102,6 +102,10 @@ builder.queryField("isParkLiked", (t) =>
       // Check if the user has liked the park in the database
       const isLiked = await hasUserLikedPark(context.user.id, _args.parkPublicId);
 
+      console.log(
+        `User ${context.user.username} has${isLiked ? "" : " not"} liked park with public ID ${_args.parkPublicId}`,
+      ); // Debug log
+
       return isLiked;
     },
   }),

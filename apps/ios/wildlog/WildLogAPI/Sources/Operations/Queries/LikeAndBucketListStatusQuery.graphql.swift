@@ -4,11 +4,11 @@
 @_exported import ApolloAPI
 @_spi(Execution) @_spi(Unsafe) import ApolloAPI
 
-public struct HasBucketListedParkQuery: GraphQLQuery {
-  public static let operationName: String = "hasBucketListedPark"
+public struct LikeAndBucketListStatusQuery: GraphQLQuery {
+  public static let operationName: String = "LikeAndBucketListStatus"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query hasBucketListedPark($parkPublicId: String!) { isParkBucketListed(parkPublicId: $parkPublicId) }"#
+      #"query LikeAndBucketListStatus($parkPublicId: String!) { isParkLiked(parkPublicId: $parkPublicId) isParkBucketListed(parkPublicId: $parkPublicId) }"#
     ))
 
   public var parkPublicId: String
@@ -25,12 +25,14 @@ public struct HasBucketListedParkQuery: GraphQLQuery {
 
     @_spi(Execution) public static var __parentType: any ApolloAPI.ParentType { WildLogAPI.Objects.Query }
     @_spi(Execution) public static var __selections: [ApolloAPI.Selection] { [
+      .field("isParkLiked", Bool?.self, arguments: ["parkPublicId": .variable("parkPublicId")]),
       .field("isParkBucketListed", Bool?.self, arguments: ["parkPublicId": .variable("parkPublicId")]),
     ] }
     @_spi(Execution) public static var __fulfilledFragments: [any ApolloAPI.SelectionSet.Type] { [
-      HasBucketListedParkQuery.Data.self
+      LikeAndBucketListStatusQuery.Data.self
     ] }
 
+    public var isParkLiked: Bool? { __data["isParkLiked"] }
     public var isParkBucketListed: Bool? { __data["isParkBucketListed"] }
   }
 }

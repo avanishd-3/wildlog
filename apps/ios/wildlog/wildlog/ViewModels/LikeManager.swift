@@ -41,6 +41,14 @@ class LikeManager {
         likedParkIds.contains(parkId)
     }
     
+    // So can auto-set when receiving like status from API
+    func likePark(for parkId: String) {
+        if !likedParkIds.contains(parkId) {
+            likedParkIds.insert(parkId)
+            
+        }
+    }
+    
     func toggleLike(for parkId: String) {
         if likedParkIds.contains(parkId) {
             likedParkIds.remove(parkId)

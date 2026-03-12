@@ -42,6 +42,14 @@ class BucketListManager {
         bucketListParkIds.contains(parkId)
     }
     
+    // So can auto-set when receiving like status from API
+    func addtoBucketList(for parkId: String) {
+        if !bucketListParkIds.contains(parkId) {
+            bucketListParkIds.insert(parkId)
+            
+        }
+    }
+    
     func toggleBucketList(for parkId: String) {
         if bucketListParkIds.contains(parkId) {
             bucketListParkIds.remove(parkId)
