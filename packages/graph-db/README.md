@@ -16,8 +16,9 @@ Neo4J is schema-less, which means there's no code to enforce consistency of node
 All relationships are from user to user or user to park. Park does not have any outgoing edges.
 
 - User to park:
-  - Like
+  - Likes
   - Wants to visit
+  - Rated highly
   - Visited (attribute at: )
 
 ## Constraints
