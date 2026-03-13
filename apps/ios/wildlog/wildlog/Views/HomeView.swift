@@ -9,34 +9,39 @@ import SwiftUI
 import WildLogAPI
 
 struct HomeView: View {
-    @State private var communityParks: [Park] = []
-    @State private var forYouParks: [Park] = []
+    
+    @Binding var homeData: HomePageParkRecommendations
 
     var body: some View {
         NavigationStack {
             VStack {
                 Text("Popular with your community")
-                CarouselView(parks: communityParks)
+                CarouselView(parks: homeData.communityParks)
                 Spacer()
                 Text("For you")
-                CarouselView(parks: forYouParks)
+                CarouselView(parks: homeData.forYouParks)
             }
             .frame(maxWidth: .infinity)
             .task {
-                await loadRecommendations()
+                await loadRecommendationsIfNeeded()
             }
         }
     }
 
-    func loadRecommendations() async {
+    func loadRecommendationsIfNeeded() async {
         do {
-            let result = try await apolloClient.fetch(query: GetHomePageRecommendationsQuery())
-            debugPrint("Got result back from recommendations query")
-            if let community = result.data?.getCommunityRecommendations {
-                communityParks = community.compactMap { Park(from: $0) }
+            if homeData.communityParks.count > 0 && homeData.forYouParks.count > 0 {
+                return
             }
-            if let forYou = result.data?.getForYouRecommendations {
-                forYouParks = forYou.compactMap { Park(from: $0) }
+            else { // Only need to fetch home page recommendations if they just signed up or logged in
+                let result = try await apolloClient.fetch(query: GetHomePageRecommendationsQuery())
+                debugPrint("Got result back from recommendations query")
+                if let community = result.data?.getCommunityRecommendations {
+                    homeData.communityParks = community.compactMap { Park(from: $0) }
+                }
+                if let forYou = result.data?.getForYouRecommendations {
+                    homeData.forYouParks = forYou.compactMap { Park(from: $0) }
+                }
             }
         } catch {
             print("Failed to load recommendations: \(error)")
@@ -45,5 +50,5 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView()
+    HomeView(homeData: .constant(HomePageParkRecommendations(from: [])))
 }
