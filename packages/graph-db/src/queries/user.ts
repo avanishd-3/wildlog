@@ -79,6 +79,10 @@ const getNodeSimilarityParkRecommendations = async (
           VISITED: {
               type: 'VISITED',
               orientation: 'UNDIRECTED'
+          },
+          WANTS_TO_VISIT: {
+              type: 'WANTS_TO_VISIT',
+              orientation: 'UNDIRECTED'
           }
         }
     )
@@ -105,9 +109,9 @@ const getNodeSimilarityParkRecommendations = async (
     WHERE sourceUser:User AND similarUser:User 
     AND similarUser.username <> $username
 
-    // Find parks similar users like or rated highly
-    MATCH (similarUser)-[:LIKES|RATED_HIGHLY]->(p:Park)
-    WHERE NOT (u)-[:LIKES|RATED_HIGHLY]->(p) // Exclude parks the user already likes or rated highly
+    // Find parks similar users like or rated highly or want to visit
+    MATCH (similarUser)-[:LIKES|RATED_HIGHLY|WANTS_TO_VISIT]->(p:Park)
+    WHERE NOT (u)-[:LIKES|RATED_HIGHLY|VISITED]->(p) // Exclude parks the user already likes or rated highly or visited (since they might not want to visit again)
 
     // Use max(similarity) so if multiple similar users like the same park, you choose the highest similarity value
 
@@ -184,9 +188,13 @@ const getEmbeddingBasedParkRecommendations = async (
               VISITED: {
                   type: 'VISITED',
                   orientation: 'UNDIRECTED'
+              },
+              WANTS_TO_VISIT: {
+                  type: 'WANTS_TO_VISIT',
+                  orientation: 'UNDIRECTED'
               }
-            }
-        )
+          }
+      )
       `);
 
         // Create embeddings based on graph projection above (add them as a property to each node for knn to use)
@@ -221,9 +229,9 @@ const getEmbeddingBasedParkRecommendations = async (
         AND sourceUser.username = $username 
         AND similarUser.username <> $username
 
-        // Find parks similar users like or rated highly
-        MATCH (similarUser)-[:LIKES|RATED_HIGHLY]->(p:Park)
-        WHERE NOT (u)-[:LIKES|RATED_HIGHLY]->(p) // Exclude parks the user already likes or rated highly
+        // Find parks similar users like or rated highly or want to visit
+        MATCH (similarUser)-[:LIKES|RATED_HIGHLY|WANTS_TO_VISIT]->(p:Park)
+        WHERE NOT (u)-[:LIKES|RATED_HIGHLY|VISITED]->(p) // Exclude parks the user already likes or rated highly or visited (since they might not want to visit again)
 
         // Use max(similarity) so if multiple similar users like the same park, you choose the highest similarity value
 
