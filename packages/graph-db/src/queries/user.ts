@@ -147,19 +147,6 @@ const getEmbeddingBasedParkRecommendations = async (
   // Projection is a virtual graph to speed up the algorithm
   // Pretend links are undirected for better recommendations (friends are bidirectional anyways)
   try {
-    console.log(`Creating graph projection for embedding-basedrecommendations for ${username}`);
-
-    const existsResult = await session.run(`
-      CALL gds.graph.exists('userParkGraphEmbedding') YIELD exists
-      RETURN exists
-    `);
-    const exists = existsResult.records[0].get("exists");
-
-    // Drop projection so new data can be included
-    if (exists) {
-      await session.run(`CALL gds.graph.drop('userParkGraphEmbedding') YIELD graphName`);
-    }
-
     console.log(
       `Getting "For you" park recommendations for ${username} using embedding-based algorithm`,
     );
@@ -170,6 +157,17 @@ const getEmbeddingBasedParkRecommendations = async (
     // Using transaction for safety (mutate and knn also have to be in different queries)
     const result = await session.executeWrite(
       async (tx: { run: (arg0: string, arg1?: { username: string }) => any }) => {
+        const existsResult = await tx.run(`
+          CALL gds.graph.exists('userParkGraphEmbedding') YIELD exists
+          RETURN exists
+        `);
+        const exists = existsResult.records[0].get("exists");
+
+        // Drop projection so new data can be included
+        if (exists) {
+          await tx.run(`CALL gds.graph.drop('userParkGraphEmbedding') YIELD graphName`);
+        }
+
         await tx.run(`
         CALL gds.graph.project(
             'userParkGraphEmbedding',
