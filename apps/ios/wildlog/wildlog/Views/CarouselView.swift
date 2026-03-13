@@ -7,39 +7,46 @@
 
 import SwiftUI
 
+import SwiftUI
+
 struct CarouselView: View {
-    private let sampleTrips = [
-        "acadia",
-        "yosemite",
-        "zion",
-        "canyonlands",
-        "glacier",
-        "bryce"
-    ]
-    
+    let parks: [Park]
+
     var body: some View {
         ScrollView(.horizontal) {
             LazyHStack(spacing: 0) {
-                ForEach(sampleTrips, id: \.self) { trip in
-                    if let park = ParkData.getPark(byImageName: trip) {
-                        NavigationLink(destination: ParkDetailView(park: park)) {
-                            Image(trip)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 150, height: 250)
-                                .clipShape(RoundedRectangle(cornerRadius: 16))
-                                .padding(.horizontal, 10)
+                ForEach(parks, id: \.id) { park in
+                    NavigationLink(destination: ParkDetailView(park: park)) {
+                        Group {
+                            if let imageName = park.imageName {
+                                Image(imageName)
+                                    .resizable()
+                                    .scaledToFill()
+                            } else if let imageUrl = park.imageUrl, let url = URL(string: imageUrl) {
+                                AsyncImage(url: url) { image in
+                                    image.resizable().scaledToFill()
+                                } placeholder: {
+                                    ProgressView()
+                                }
+                            } else {
+                                Color.gray // fallback
+                            }
                         }
+                        .frame(width: 150, height: 250)
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                        .padding(.horizontal, 10)
                     }
                 }
             }
         }
-        .scrollTargetBehavior(.paging) // Requires IOS 17
+        // Move smoothly by default
+        // Requires iOS 17
+        .scrollTargetBehavior(.paging)
     }
 }
 
 #Preview {
     NavigationStack {
-        CarouselView()
+        CarouselView(parks: ParkData.sampleParks)
     }
 }

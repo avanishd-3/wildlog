@@ -1,0 +1,29 @@
+query getHomePageRecommendations {
+  getCommunityRecommendations {
+    id
+    name
+    description
+    designation
+    latitude
+    longitude
+    states
+    type
+    cost
+    free
+    imageUrl
+  }
+  
+  getForYouRecommendations {
+    id
+    name
+    description
+    designation
+    latitude
+    longitude
+    states
+    type
+    cost
+    free
+    imageUrl
+    }
+}

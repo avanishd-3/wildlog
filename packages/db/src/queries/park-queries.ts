@@ -11,6 +11,28 @@ export const getParkPublicIdsByInternalIds = async (idList: number[]) => {
   return result.map((r) => r.publicId);
 };
 
+export const getParksByPublicIds = async (publicIdList: string[]) => {
+  const result = await db
+    .select({
+      publicId: park.publicId,
+      name: park.name,
+      description: park.description,
+      designation: park.designation,
+      states: park.states,
+      type: park.type,
+      cost: park.cost,
+      free: park.free,
+      latitude: sql`ST_Y(${park.location})`,
+      longitude: sql`ST_X(${park.location})`,
+      imageId: parkImage.imageId,
+    })
+    .from(park)
+    .where(inArray(park.publicId, publicIdList))
+    .innerJoin(parkImage, eq(park.id, parkImage.parkId)); // Join at the end for performance (only relevant parks)
+
+  return result;
+};
+
 export const getParkMapRecommendations = async (
   x_min: number,
   x_max: number,

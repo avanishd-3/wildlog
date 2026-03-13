@@ -114,6 +114,11 @@ enum ParkTypeEnum {
 }
 
 type Query {
+  """Community recommendations"""
+  getCommunityRecommendations: [Park!]
+
+  """For you recommendations"""
+  getForYouRecommendations: [Park!]
   getParkMapRecommendations(filters: ParkFiltersInput, x_max: Float!, x_min: Float!, y_max: Float!, y_min: Float!): [Park!]
   getUserReview(parkPublicId: String!): Review
   isParkBucketListed(parkPublicId: String!): Boolean

@@ -17,7 +17,7 @@ const ParkCostFilter = builder.enumType("ParkCostFilterEnum", {
   values: ["Free", "Low", "Medium", "High"] as const,
 });
 
-const park = builder.simpleObject("Park", {
+export const park = builder.simpleObject("Park", {
   fields: (t) => ({
     id: t.string({
       nullable: false,
@@ -102,7 +102,6 @@ builder.queryField("getParkMapRecommendations", (t) =>
           type: park.type,
           cost: park.cost,
           free: park.free,
-          // Hardcoded url, fine for local dev (reverse proxy always on this url and port)
           imageUrl: await getParkImageUrl(park.publicId, park.imageId), // Get pre-signed URL for the park image from S3
         })),
       );
