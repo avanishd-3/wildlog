@@ -45,81 +45,83 @@ const getNodeSimilarityParkRecommendations = async (
   // Projection is a virtual graph to speed up the algorithm
   // Pretend links are undirected for better recommendations (friends are bidirectional anyways)
   try {
-    console.log(`Creating graph projection for node similarity recommendations for ${username}`);
-
-    const existsResult = await session.run(`
-      CALL gds.graph.exists('userParkGraph') YIELD exists
-      RETURN exists
-    `);
-    const exists = existsResult.records[0].get("exists");
-
-    // Drop projection so new data can be included
-    if (exists) {
-      await session.run(`CALL gds.graph.drop('userParkGraph') YIELD graphName`);
-    }
-
-    // Create projection for node similarity algorithm
-    await session.run(`
-    CALL gds.graph.project(
-        'userParkGraph',
-        ['User', 'Park'],
-        {
-          FRIEND: {
-              type: 'FRIEND',
-              orientation: 'UNDIRECTED'
-          },
-          LIKES: {
-              type: 'LIKES',
-              orientation: 'UNDIRECTED'
-          },
-          RATED_HIGHLY: {
-              type: 'RATED_HIGHLY',
-              orientation: 'UNDIRECTED'
-          },
-          VISITED: {
-              type: 'VISITED',
-              orientation: 'UNDIRECTED'
-          },
-          WANTS_TO_VISIT: {
-              type: 'WANTS_TO_VISIT',
-              orientation: 'UNDIRECTED'
-          }
-        }
-    )
-    `);
-
     console.log(
       `Getting "For you" park recommendations for ${username} using node similarity algorithm`,
     );
-    const result = await session.run(
-      `
-    MATCH (u:User {username:$username})
 
-    // Stream for better performance and to handle larger graphs
-    // See: https://neo4j.com/docs/graph-data-science/current/algorithms/node-similarity/#algorithms-node-similarity-examples-stream
-    CALL gds.nodeSimilarity.stream('userParkGraph', {
-      topK: 50
-    })
-    YIELD node1, node2, similarity
+    const result = await session.executeWrite(
+      async (tx: { run: (arg0: string, arg1?: { username: string }) => any }) => {
+        const existsResult = await tx.run(`
+          CALL gds.graph.exists('userParkGraph') YIELD exists
+          RETURN exists
+        `);
+        const exists = existsResult.records[0].get("exists");
 
-    // Convert node ids back to real nodes
-    WITH u, gds.util.asNode(node1) AS sourceUser, gds.util.asNode(node2) AS similarUser, similarity
+        // Drop projection so new data can be included
+        if (exists) {
+          await tx.run(`CALL gds.graph.drop('userParkGraph') YIELD graphName`);
+        }
+        // Create projection for node similarity algorithm
+        await tx.run(`
+          CALL gds.graph.project(
+              'userParkGraph',
+              ['User', 'Park'],
+              {
+                FRIEND: {
+                    type: 'FRIEND',
+                    orientation: 'UNDIRECTED'
+                },
+                LIKES: {
+                    type: 'LIKES',
+                    orientation: 'UNDIRECTED'
+                },
+                RATED_HIGHLY: {
+                    type: 'RATED_HIGHLY',
+                    orientation: 'UNDIRECTED'
+                },
+                VISITED: {
+                    type: 'VISITED',
+                    orientation: 'UNDIRECTED'
+                },
+                WANTS_TO_VISIT: {
+                    type: 'WANTS_TO_VISIT',
+                    orientation: 'UNDIRECTED'
+                }
+              }
+          )
+        `);
 
-    // Exclude the user themselves (since they are 100% similar to themselves)
-    WHERE sourceUser:User AND similarUser:User 
-    AND similarUser.username <> $username
+        return await tx.run(
+          `
+          MATCH (u:User {username:$username})
 
-    // Find parks similar users like or rated highly or want to visit
-    MATCH (similarUser)-[:LIKES|RATED_HIGHLY|WANTS_TO_VISIT]->(p:Park)
-    WHERE NOT (u)-[:LIKES|RATED_HIGHLY|VISITED]->(p) // Exclude parks the user already likes or rated highly or visited (since they might not want to visit again)
+          // Stream for better performance and to handle larger graphs
+          // See: https://neo4j.com/docs/graph-data-science/current/algorithms/node-similarity/#algorithms-node-similarity-examples-stream
+          CALL gds.nodeSimilarity.stream('userParkGraph', {
+            topK: 50
+          })
+          YIELD node1, node2, similarity
 
-    // Use max(similarity) so if multiple similar users like the same park, you choose the highest similarity value
+          // Convert node ids back to real nodes
+          WITH u, gds.util.asNode(node1) AS sourceUser, gds.util.asNode(node2) AS similarUser, similarity
 
-    RETURN p.publicId as publicId, max(similarity) as similarity
-    ORDER BY similarity DESC
-    LIMIT 10
-    `,
-      { username },
+          // Exclude the user themselves (since they are 100% similar to themselves)
+          WHERE sourceUser:User AND similarUser:User 
+          AND similarUser.username <> $username
+
+          // Find parks similar users like or rated highly or want to visit
+          MATCH (similarUser)-[:LIKES|RATED_HIGHLY|WANTS_TO_VISIT]->(p:Park)
+          WHERE NOT (u)-[:LIKES|RATED_HIGHLY|VISITED]->(p) // Exclude parks the user already likes or rated highly or visited (since they might not want to visit again)
+
+          // Use max(similarity) so if multiple similar users like the same park, you choose the highest similarity value
+
+          RETURN p.publicId as publicId, max(similarity) as similarity
+          ORDER BY similarity DESC
+          LIMIT 10
+          `,
+          { username },
+        );
+      },
     );
 
     return result.records.map((record: { get: (arg0: string) => any }) => ({
