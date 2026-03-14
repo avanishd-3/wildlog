@@ -5,7 +5,12 @@ import { db } from "@wildlog/db";
 import { park } from "@wildlog/db/schema/park";
 import { faker } from "@faker-js/faker";
 import { auth } from "@wildlog/auth";
-import { addFriend, mutateReview } from "@wildlog/db/mutations/user-mutations";
+import {
+  addFriend,
+  bucketListPark,
+  likePark,
+  mutateReview,
+} from "@wildlog/db/mutations/user-mutations";
 import { user } from "@wildlog/db/schema/auth";
 import { userFriend, userLike } from "@wildlog/db/schema/user";
 import { getParkPublicIdsByInternalIds } from "@wildlog/db/queries/park-queries";
@@ -15,6 +20,8 @@ import { createUser, deleteAllUsers } from "@wildlog/graph-db/mutations/user";
 const NUM_USERS = 20;
 const FRIENDS_PER_USER = 5;
 const REVIEWS_PER_USER = 10;
+const LIKES_PER_USER = 10;
+const BUCKET_LIST_PER_USER = 10;
 
 // --- Helpers ---
 function randomRating() {
@@ -80,8 +87,26 @@ export async function seedTestData() {
   }
 
   // Load Parks
-  const parkRows = await db.select({ id: park.id }).from(park);
+  const parkRows = await db.select({ id: park.id, publicId: park.publicId }).from(park);
   const parkIds = parkRows.map((p) => p.id);
+  const parkPublicIds = parkRows.map((p) => p.publicId);
+
+  // Add some random likes and bucket list additions
+  for (const user of users) {
+    if (!user.username) {
+      console.log("User missing username during seeding");
+      continue;
+    }
+    const likedParks = sample(parkPublicIds, LIKES_PER_USER);
+
+    for (const publicId of likedParks) {
+      await likePark(user.id, user.username, publicId);
+    }
+
+    for (const publicId of sample(parkPublicIds, BUCKET_LIST_PER_USER)) {
+      await bucketListPark(user.id, user.username, publicId);
+    }
+  }
 
   // Generate friendships
   const friends = [];
