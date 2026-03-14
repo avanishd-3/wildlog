@@ -62,9 +62,13 @@ There's a WWDC video on this somewhere. Watch it if you need more info.
 
 Unfortunately, map stuff doesn't work in the preview. Use the simulator instead.
 
+# Remote Images
+Use Kingfisher instead of AsyncImage. Kingfisher actually caches the image, so in combination with lazy views, this massively reduces network requests compared to AsyncImage.
+**Also**, use backgroundDecode(true) top avoid blocking the main thread. See the RemoteImage component for good defaults for Kingfisher.
+
 # Custom UI components
 
-See the README in the Components folder for when to use the custom components. For most use cases, you shouldn't need them.
+See the README in the Components folder for when to use the custom components.
 
 # Other
 
