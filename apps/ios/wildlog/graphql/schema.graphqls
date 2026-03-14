@@ -114,6 +114,9 @@ enum ParkTypeEnum {
 }
 
 type Query {
+  """Get all parks that the current user has bucket listed"""
+  bucketListedParks: [Park!]!
+
   """Community recommendations"""
   getCommunityRecommendations: [Park!]
 
@@ -123,6 +126,9 @@ type Query {
   getUserReview(parkPublicId: String!): Review
   isParkBucketListed(parkPublicId: String!): Boolean
   isParkLiked(parkPublicId: String!): Boolean
+
+  """Get all parks that the current user has liked"""
+  likedParks: [Park!]!
   me: User
 }
 

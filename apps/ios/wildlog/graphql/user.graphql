@@ -22,6 +22,38 @@ query getUserReview($parkPublicId: String!) {
   }
 }
 
+query getLikedParks {
+  likedParks {
+    id
+    name
+    description
+    designation
+    latitude
+    longitude
+    states
+    type
+    cost
+    free
+    imageUrl
+  }
+}
+
+query getBucketListedParks {
+  bucketListedParks {
+    id
+    name
+    description
+    designation
+    latitude
+    longitude
+    states
+    type
+    cost
+    free
+    imageUrl
+  }
+}
+
 query LikeAndBucketListStatus($parkPublicId: String!) {
   isParkLiked(parkPublicId: $parkPublicId)
   isParkBucketListed(parkPublicId: $parkPublicId)

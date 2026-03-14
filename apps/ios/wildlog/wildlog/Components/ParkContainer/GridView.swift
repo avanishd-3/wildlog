@@ -1,20 +1,27 @@
 //
-//  CarouselView.swift
+//  CarouselViewVertical.swift
 //  WildLog
 //
-//  Created by Avanish Davuluri on 2/2/26.
+//  Created by Avanish Davuluri on 3/13/26.
 //
 
 import SwiftUI
 
-import SwiftUI
+struct GridView: View {
 
-struct CarouselView: View {
     let parks: [Park]
+    
+    // Create adpative number of columns
+    // Choose these numbers to get padding between columns
+    // Only tested on iPhone 16 Pro simulator, so YMMV
+    let columns = [
+        GridItem(.adaptive(minimum: 100, maximum: 160))
+    ]
 
     var body: some View {
-        ScrollView(.horizontal) {
-            LazyHStack(spacing: 0) {
+        ScrollView(.vertical) {
+            // Spacing is how far the columns are spaced out horizontally
+            LazyVGrid(columns: columns, spacing: 30) {
                 ForEach(parks, id: \.id) { park in
                     NavigationLink(destination: ParkDetailView(park: park)) {
                         Group {
@@ -32,21 +39,19 @@ struct CarouselView: View {
                                 Color.gray // fallback
                             }
                         }
-                        .frame(width: 150, height: 250)
+                        // Choose these numbers b/c they look good
+                        .frame(width: 120, height: 200)
                         .clipShape(RoundedRectangle(cornerRadius: 16))
                         .padding(.horizontal, 10)
                     }
                 }
             }
         }
-        // Move smoothly by default
-        // Requires iOS 17
-        .scrollTargetBehavior(.paging)
     }
 }
 
 #Preview {
     NavigationStack {
-        CarouselView(parks: ParkData.sampleParks)
+        GridView(parks: ParkData.sampleParks)
     }
 }

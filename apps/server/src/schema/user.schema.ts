@@ -15,7 +15,7 @@ import {
   hasUserLikedPark,
 } from "@wildlog/db/queries/user-queries";
 
-const user = builder.simpleObject("User", {
+export const user = builder.simpleObject("User", {
   fields: (t) => ({
     id: t.string({
       nullable: false,
@@ -134,8 +134,6 @@ builder.queryField("isParkBucketListed", (t) =>
   }),
 );
 
-// ---- User mutations ----
-
 builder.queryField("me", (t) =>
   t.field({
     type: user,
@@ -156,6 +154,8 @@ builder.queryField("me", (t) =>
     },
   }),
 );
+
+// ---- User mutations ----
 
 builder.mutationField("updateBio", (t) =>
   t.field({

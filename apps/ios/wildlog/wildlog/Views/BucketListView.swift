@@ -6,41 +6,42 @@
 //
 
 import SwiftUI
-
-// TODO: Replace with Apollo query that fetches user's bucket list parks from backend
-// Query should return parks where user has created a "wants to visit" relationship in Neo4j
+import WildLogAPI
 
 struct BucketListView: View {
-    @Environment(BucketListManager.self) private var bucketListManager
-    
-    // TODO: This will be replaced with actual Park objects from GraphQL
-    // For now just showing the IDs
+    @Environment(BucketListManager.self) private var likeManager
+    @State private var bucketListedParks: [Park] = []
+    @State private var fetchErrorFlag: Bool = false
     
     var body: some View {
         NavigationStack {
-            if bucketListManager.bucketListParkIds.isEmpty {
-                ContentUnavailableView(
-                    "No Parks in Bucket List",
-                    systemImage: "list.bullet.clipboard",
-                    description: Text("Parks you want to visit will appear here")
-                )
-            } else {
-                List {
-                    // TODO: Replace with ForEach over actual Park objects from Apollo query
-                    ForEach(Array(bucketListManager.bucketListParkIds), id: \.self) { parkId in
-                        HStack {
-                            Image(systemName: "flag.fill")
-                                .foregroundStyle(.orange)
-                            Text("Park ID: \(parkId)")
-                            // TODO: Show actual park name, image, etc from Park object
-                        }
-                    }
-                }
-                .navigationTitle("Bucket List")
+            if fetchErrorFlag {
+                Text("Error fetching bucket listed parks... Please try again later.")
+
             }
+            
+            else {
+                GridView(parks: bucketListedParks)
+            }
+        }
+        .navigationTitle("Bucket Listed Parks")
+        .task {
+            Task {
+                do {
+                    let response = try await apolloClient.fetch(query: GetBucketListedParksQuery())
+                    if let parksResponse = response.data?.bucketListedParks {
+                        bucketListedParks = parksResponse.compactMap { Park(from: $0) }
+                    }
+                } catch {
+                    // Update so error state is shown
+                    fetchErrorFlag = true
+                }
+            }
+            
         }
     }
 }
+
 
 #Preview {
     BucketListView()

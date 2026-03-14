@@ -86,4 +86,40 @@ extension Park {
             imageUrl: gql.imageUrl
         )
     }
+    
+    init?(from gql: GetLikedParksQuery.Data.LikedPark) {
+        guard let lat = gql.latitude, let lon = gql.longitude else { return nil }
+        self.init(
+            id: UUID(uuidString: gql.id) ?? UUID(),
+            name: gql.name,
+            description: gql.description,
+            designation: removeUnderscoreAndAllCaps(for: gql.designation.rawValue),
+            latitude: lat,
+            longitude: lon,
+            states: gql.states,
+            type: removeUnderscoreAndAllCaps(for: gql.type.rawValue),
+            free: gql.free,
+            cost: gql.cost,
+            imageName: nil,
+            imageUrl: gql.imageUrl
+        )
+    }
+    
+    init?(from gql: GetBucketListedParksQuery.Data.BucketListedPark) {
+        guard let lat = gql.latitude, let lon = gql.longitude else { return nil }
+        self.init(
+            id: UUID(uuidString: gql.id) ?? UUID(),
+            name: gql.name,
+            description: gql.description,
+            designation: removeUnderscoreAndAllCaps(for: gql.designation.rawValue),
+            latitude: lat,
+            longitude: lon,
+            states: gql.states,
+            type: removeUnderscoreAndAllCaps(for: gql.type.rawValue),
+            free: gql.free,
+            cost: gql.cost,
+            imageName: nil,
+            imageUrl: gql.imageUrl
+        )
+    }
 }

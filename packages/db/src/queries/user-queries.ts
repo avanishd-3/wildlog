@@ -1,8 +1,8 @@
 import { db } from "..";
 import { userBucketList, userLike, userReview } from "../schema/user";
-import { park } from "../schema";
+import { park, parkImage } from "../schema";
 
-import { eq, and } from "drizzle-orm";
+import { eq, and, sql } from "drizzle-orm";
 
 // Get user review for a specific park, if it exists
 export const getUserReview = async (userId: string, parkPublicId: string) => {
@@ -28,6 +28,50 @@ export const hasUserLikedPark = async (userId: string, parkPublicId: string) => 
     .innerJoin(park, eq(park.publicId, parkPublicId));
 
   return like.length > 0;
+};
+
+// Get all parks that a user has liked
+export const getUserLikedParks = async (userId: string) => {
+  return db
+    .select({
+      publicId: park.publicId,
+      name: park.name,
+      description: park.description,
+      designation: park.designation,
+      states: park.states,
+      type: park.type,
+      cost: park.cost,
+      free: park.free,
+      latitude: sql`ST_Y(${park.location})`,
+      longitude: sql`ST_X(${park.location})`,
+      imageId: parkImage.imageId,
+    })
+    .from(userLike)
+    .where(eq(userLike.userId, userId))
+    .innerJoin(park, eq(park.id, userLike.parkId))
+    .innerJoin(parkImage, eq(parkImage.parkId, park.id)); // Join with parkImage to get image data for each liked park
+};
+
+// Get all parks that a user has bucket listed
+export const getUserBucketListedParks = async (userId: string) => {
+  return db
+    .select({
+      publicId: park.publicId,
+      name: park.name,
+      description: park.description,
+      designation: park.designation,
+      states: park.states,
+      type: park.type,
+      cost: park.cost,
+      free: park.free,
+      latitude: sql`ST_Y(${park.location})`,
+      longitude: sql`ST_X(${park.location})`,
+      imageId: parkImage.imageId,
+    })
+    .from(userBucketList)
+    .where(eq(userBucketList.userId, userId))
+    .innerJoin(park, eq(park.id, userBucketList.parkId))
+    .innerJoin(parkImage, eq(parkImage.parkId, park.id)); // Join with parkImage to get image data for each bucket listed park
 };
 
 // Check if user has bucket listed a park

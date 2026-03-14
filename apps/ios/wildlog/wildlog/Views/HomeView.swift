@@ -16,10 +16,10 @@ struct HomeView: View {
         NavigationStack {
             VStack {
                 Text("Popular with your community")
-                CarouselView(parks: homeData.communityParks)
+                CarouselViewHorizontal(parks: homeData.communityParks)
                 Spacer()
                 Text("For you")
-                CarouselView(parks: homeData.forYouParks)
+                CarouselViewHorizontal(parks: homeData.forYouParks)
             }
             .frame(maxWidth: .infinity)
         }
