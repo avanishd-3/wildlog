@@ -33,6 +33,29 @@ export const getParksByPublicIds = async (publicIdList: string[]) => {
   return result;
 };
 
+export const randomlySampleParks = async (sampleSize: number) => {
+  const result = await db
+    .select({
+      publicId: park.publicId,
+      name: park.name,
+      description: park.description,
+      designation: park.designation,
+      states: park.states,
+      type: park.type,
+      cost: park.cost,
+      free: park.free,
+      latitude: sql`ST_Y(${park.location})`,
+      longitude: sql`ST_X(${park.location})`,
+      imageId: parkImage.imageId,
+    })
+    .from(park)
+    .orderBy(sql`RANDOM()`)
+    .limit(sampleSize)
+    .innerJoin(parkImage, eq(park.id, parkImage.parkId)); // Join at the end for performance (only relevant parks)
+
+  return result;
+};
+
 export const getParkMapRecommendations = async (
   x_min: number,
   x_max: number,

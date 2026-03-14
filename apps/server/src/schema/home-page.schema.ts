@@ -4,6 +4,8 @@ import { getForYouRecommendations, getPopularWithCommunity } from "@wildlog/grap
 import { getParkImageUrl } from "@wildlog/s3/park-url";
 import { getParksByPublicIds } from "@wildlog/db/queries/park-queries";
 
+import { randomlySampleParks } from "@wildlog/db/queries/park-queries";
+
 builder.queryField("getCommunityRecommendations", (t) =>
   t.field({
     description: "Community recommendations",
@@ -21,9 +23,16 @@ builder.queryField("getCommunityRecommendations", (t) =>
         parks.map((p) => p.publicId),
       );
 
-      const parks = await getParksByPublicIds(publicIds);
+      let parks = await getParksByPublicIds(publicIds);
 
       console.log("Got community recommendations");
+
+      if (parks.length === 0) {
+        console.log(
+          "No parks found for community recommendations, randomly sampling parks as fallback",
+        );
+        parks = await randomlySampleParks(10);
+      }
 
       // Get park details from database based on public ids
       return Promise.all(
@@ -61,9 +70,16 @@ builder.queryField("getForYouRecommendations", (t) =>
         (p) => p.publicId,
       );
 
-      const parks = await getParksByPublicIds(publicIds);
+      let parks = await getParksByPublicIds(publicIds);
 
       console.log("Got for you recommendations");
+
+      if (parks.length === 0) {
+        console.log(
+          'No parks found for "For You" recommendations, randomly sampling parks as fallback',
+        );
+        parks = await randomlySampleParks(10);
+      }
 
       // Get park details from database based on public ids
       return Promise.all(
