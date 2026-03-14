@@ -22,29 +22,6 @@ struct HomeView: View {
                 CarouselView(parks: homeData.forYouParks)
             }
             .frame(maxWidth: .infinity)
-            .task {
-                await loadRecommendationsIfNeeded()
-            }
-        }
-    }
-
-    func loadRecommendationsIfNeeded() async {
-        do {
-            if homeData.communityParks.count > 0 && homeData.forYouParks.count > 0 {
-                return
-            }
-            else { // Only need to fetch home page recommendations if they just signed up or logged in
-                let result = try await apolloClient.fetch(query: GetHomePageRecommendationsQuery())
-                debugPrint("Got result back from recommendations query")
-                if let community = result.data?.getCommunityRecommendations {
-                    homeData.communityParks = community.compactMap { Park(from: $0) }
-                }
-                if let forYou = result.data?.getForYouRecommendations {
-                    homeData.forYouParks = forYou.compactMap { Park(from: $0) }
-                }
-            }
-        } catch {
-            print("Failed to load recommendations: \(error)")
         }
     }
 }

@@ -44,10 +44,14 @@ struct ContentView: View {
                 }
             }
             
+            // This runs even when the user has to sign in manually (i.e., they have no cookie on device or active session with backend)
+            // I think it's because once the auth container is done, the app loads the content view which executes this code
+            // So either you see the green launch screen with the animated log while this is running
+            // or the spinner under the log-in button
             if isAuthenticated {
                 do {
                     let result = try await apolloClient.fetch(query: GetHomePageRecommendationsQuery())
-                    debugPrint("Got result back from recommendations query")
+                    debugPrint("Got result from recommendations query in content view")
                     if let community = result.data?.getCommunityRecommendations {
                         homeData.communityParks = community.compactMap { Park(from: $0) }
                     }
