@@ -93,17 +93,17 @@ builder.queryField("isParkLiked", (t) =>
     authScopes: {
       loggedIn: true, // Only allow logged in users to see if they liked a park
     },
-    resolve: async (_parent, _args, context) => {
+    resolve: async (_parent, args, context) => {
       if (!context.user) {
         // Won't happen b/c of authScope (just to satisfy type checker)
         throw new Error("Not authenticated");
       }
 
       // Check if the user has liked the park in the database
-      const isLiked = await hasUserLikedPark(context.user.id, _args.parkPublicId);
+      const isLiked = await hasUserLikedPark(context.user.id, args.parkPublicId);
 
       console.log(
-        `User ${context.user.username} has${isLiked ? "" : " not"} liked park with public ID ${_args.parkPublicId}`,
+        `User ${context.user.username} has${isLiked ? "" : " not"} liked park with public ID ${args.parkPublicId}`,
       ); // Debug log
 
       return isLiked;
@@ -120,14 +120,14 @@ builder.queryField("isParkBucketListed", (t) =>
     authScopes: {
       loggedIn: true, // Only allow logged in users to see if they have bucket listed a park
     },
-    resolve: async (_parent, _args, context) => {
+    resolve: async (_parent, args, context) => {
       if (!context.user) {
         // Won't happen b/c of authScope (just to satisfy type checker)
         throw new Error("Not authenticated");
       }
 
       // Check if the user has bucket listed the park in the database
-      const isBucketListed = await hasUserBucketListedPark(context.user.id, _args.parkPublicId);
+      const isBucketListed = await hasUserBucketListedPark(context.user.id, args.parkPublicId);
 
       return isBucketListed;
     },
