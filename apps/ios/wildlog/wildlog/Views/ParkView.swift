@@ -23,32 +23,8 @@ struct ParkDetailView: View {
             Section {
                 
                 ZStack(alignment: .topTrailing) {
-                    if let imageUrl = park.imageUrl {
-                        AsyncImage(url: URL(string: imageUrl)) { phase in
-                            switch phase {
-                            case .empty:
-                                // Placeholder while loading
-                                Color(.systemGray)
-                                    .scaledToFill()
-                                    .frame(maxWidth: .infinity)
-                                    .frame(height: 250)
-                            case .success(let image):
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                                    .scaledToFit()
-                                    .frame(maxWidth: .infinity)
-                                    .frame(height: 250)
-                            case .failure(_):
-                                // Error placeholder
-                                Color(.systemRed)
-                                    .scaledToFill()
-                                    .frame(height: 250)
-                            @unknown default:
-                                EmptyView()
-                            }
-                        }
-                        .clipped()
+                    if let imageUrl = park.imageUrl, let url = URL(string: imageUrl) {
+                        RemoteImage(url: url)
                     }
                 
                     else if let imageName = park.imageName {

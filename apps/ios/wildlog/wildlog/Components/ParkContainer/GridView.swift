@@ -23,27 +23,8 @@ struct GridView: View {
             // Spacing is how far the columns are spaced out horizontally
             LazyVGrid(columns: columns, spacing: 30) {
                 ForEach(parks, id: \.id) { park in
-                    NavigationLink(destination: ParkDetailView(park: park)) {
-                        Group {
-                            if let imageName = park.imageName {
-                                Image(imageName)
-                                    .resizable()
-                                    .scaledToFill()
-                            } else if let imageUrl = park.imageUrl, let url = URL(string: imageUrl) {
-                                AsyncImage(url: url) { image in
-                                    image.resizable().scaledToFill()
-                                } placeholder: {
-                                    ProgressView()
-                                }
-                            } else {
-                                Color.gray // fallback
-                            }
-                        }
-                        // Choose these numbers b/c they look good
-                        .frame(width: 120, height: 200)
-                        .clipShape(RoundedRectangle(cornerRadius: 16))
-                        .padding(.horizontal, 10)
-                    }
+                    // Chose these width and height numbers b/c they look good
+                    ParkNav(park: park, width: 120, height: 200)
                 }
             }
         }
