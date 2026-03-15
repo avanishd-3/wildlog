@@ -36,7 +36,7 @@ builder.queryField("getCommunityRecommendations", (t) =>
           console.log(
             "No parks found for community recommendations, randomly sampling parks as fallback",
           );
-          parks = await randomlySampleParks(10);
+          parks = await randomlySampleParks(10, context.user?.id);
         }
 
         // Get park details from database based on public ids
@@ -58,8 +58,12 @@ builder.queryField("getCommunityRecommendations", (t) =>
       } catch (error) {
         console.error("Error getting community recommendations:", error);
 
+        if (!context.user?.id) {
+          throw new Error("User not authenticated"); // This should never happen due to authScopes, but just to satisfy TypeScript
+        }
+
         // Randomly sample parks as fallback in case of error
-        const parks = await randomlySampleParks(10);
+        const parks = await randomlySampleParks(10, context.user?.id);
         return Promise.all(
           parks.map(async (park) => ({
             id: park.publicId,
@@ -109,7 +113,7 @@ builder.queryField("getForYouRecommendations", (t) =>
           console.log(
             'No parks found for "For You" recommendations, randomly sampling parks as fallback',
           );
-          parks = await randomlySampleParks(10);
+          parks = await randomlySampleParks(10, context.user?.id);
         }
 
         // Get park details from database based on public ids
@@ -130,8 +134,12 @@ builder.queryField("getForYouRecommendations", (t) =>
         );
       } catch (error) {
         console.error("Error getting 'For You' recommendations:", error);
+
+        if (!context.user?.id) {
+          throw new Error("User not authenticated"); // This should never happen due to authScopes, just to satisfy TypeScript
+        }
         // Randomly sample parks as fallback in case of error
-        const parks = await randomlySampleParks(10);
+        const parks = await randomlySampleParks(10, context.user?.id);
         return Promise.all(
           parks.map(async (park) => ({
             id: park.publicId,

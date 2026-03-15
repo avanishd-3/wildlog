@@ -78,7 +78,10 @@ builder.queryField("getParkMapRecommendations", (t) =>
     authScopes: {
       loggedIn: true, // Require authentication for this query
     },
-    resolve: async (_, args) => {
+    resolve: async (_, args, context) => {
+      if (!context.user?.id) {
+        throw new Error("User not authenticated"); // This should never happen due to authScopes, but just to satisfy TypeScript
+      }
       console.log("Received filters:", args.filters);
       const whereClauses = getParksFilters(args.filters);
       const parks = await getParkMapRecommendations(
@@ -86,6 +89,7 @@ builder.queryField("getParkMapRecommendations", (t) =>
         args.x_max,
         args.y_min,
         args.y_max,
+        context.user.id,
         args.filters,
         whereClauses,
       );
