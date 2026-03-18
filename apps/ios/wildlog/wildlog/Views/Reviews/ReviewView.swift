@@ -6,43 +6,15 @@
 //
 
 import SwiftUI
+import WildLogAPI
 
+// This should only be for looking at reviews (not writing them)
 struct ReviewView: View {
     @State private var selectedTab = 0
-    @State private var showWriteReview = false
     
-    // This is just a preview sample to demonstrate what the UI might look like
-    // The arrays will eventually be replaced with Apollo query results
-    let friendReviews: [ParkReview] = [
-        ParkReview(
-            authorName: "Alex Kim",
-            authorInitials: "AK",
-            parkName: "Yosemite National Park",
-            rating: 5,
-            description: "El Capitan at sunrise is something else entirely.",
-            visitedDate: Calendar.current.date(byAdding: .day, value: -3, to: .now)!
-        ),
-        ParkReview(
-            authorName: "Jordan Lee",
-            authorInitials: "JL",
-            parkName: "Joshua Tree National Park",
-            rating: 4,
-            description: "Incredible night sky. Bring extra water.",
-            visitedDate: Calendar.current.date(byAdding: .day, value: -10, to: .now)!
-        ),
-    ]
-    
-    let yourReviews: [ParkReview] = [
-        ParkReview(
-            authorName: "You",
-            authorInitials: "ME",
-            parkName: "Sequoia National Park",
-            rating: 5,
-            description: "Standing next to General Sherman is humbling.",
-            visitedDate: Calendar.current.date(byAdding: .day, value: -30, to: .now)!,
-            isCurrentUser: true
-        ),
-    ]
+    // Need to be state so UI is updated when these are changed on refresh
+    @State var friendReviews: [ParkReview] = []
+    @State var yourReviews: [ParkReview] = []
 
     var displayedReviews: [ParkReview] {
         selectedTab == 0 ? friendReviews : yourReviews
@@ -70,23 +42,22 @@ struct ReviewView: View {
                 Spacer()
             }
             .navigationTitle("Reviews")
-            .toolbar {
-                // This will eventually pass the current park context into WriteReview
-                ToolbarItem(placement: .primaryAction) {
-                    Button {
-                        showWriteReview = true
-                    } label: {
-                        Image(systemName: "square.and.pencil")
-                    }
+        }
+        .onAppear {
+            Task {
+                do {
+                    let response = try await apolloClient.fetch(query: GetReviewPageRecommendationsQuery())
+                    
+                    friendReviews = response.data?.friendReviews?.compactMap { ParkReview(from: $0) } ?? []
+                    yourReviews = response.data?.meReviews?.compactMap { ParkReview(from: $0) } ?? []
+                } catch {
+                    // TODO: Handle error
                 }
-            }
-            .sheet(isPresented: $showWriteReview) {
-                WriteReviewSheet()
             }
         }
     }
 }
 
 #Preview {
-    ReviewView()
+    ReviewView(friendReviews: ReviewData.friendReviews, yourReviews: ReviewData.yourReviews)
 }

@@ -38,6 +38,7 @@ export const user = builder.simpleObject("User", {
   }),
 });
 
+// For user writing reviews
 const review = builder.simpleObject("Review", {
   fields: (t) => ({
     rating: t.string({
