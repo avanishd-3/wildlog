@@ -47,6 +47,8 @@ const createUserParkProjection = async (session: SessionLike, graphName: string)
 const uniqueSuffix = (): string => `${Date.now()}_${Math.floor(Math.random() * 1_000_000)}`;
 
 // Get list of parks liked or reviewed highly by the user's friends and friends-of-friends, ordered by most liked/reviewed first
+// NOTE: Not adding wants to visit b/c a like means they probably visited the park. Wanted means they didn't visit
+// I think popular with community should only be for parks that the friend network has actually visited.
 export const getPopularWithCommunity = async (
   username: string,
 ): Promise<{ publicId: string }[]> => {
