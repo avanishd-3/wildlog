@@ -26,14 +26,25 @@ struct LikedParksView: View {
         }
         .navigationTitle("Liked Parks")
         .task {
+            do {
+                try await apolloClient.store.clearCache()
+                let response = try await apolloClient.fetch(query: GetLikedParksQuery())
+                if let parksResponse = response.data?.likedParks {
+                    likedParks = parksResponse.compactMap { Park(from: $0) }
+                }
+            } catch {
+                fetchErrorFlag = true
+            }
+        }
+        .onChange(of: likeManager.likedParkIds) {
             Task {
                 do {
+                    try await apolloClient.store.clearCache()
                     let response = try await apolloClient.fetch(query: GetLikedParksQuery())
                     if let parksResponse = response.data?.likedParks {
                         likedParks = parksResponse.compactMap { Park(from: $0) }
                     }
                 } catch {
-                    // Update so error state is shown
                     fetchErrorFlag = true
                 }
             }
