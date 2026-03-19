@@ -24,6 +24,7 @@ struct BucketListView: View {
         .navigationTitle("Bucket Listed Parks")
         .task {
             do {
+                // Clearing entire cache is fine b/c going into bucket list page is not very common
                 try await apolloClient.store.clearCache()
                 let response = try await apolloClient.fetch(query: GetBucketListedParksQuery())
                 if let parksResponse = response.data?.bucketListedParks {
