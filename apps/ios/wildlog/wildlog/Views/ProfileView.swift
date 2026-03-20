@@ -126,8 +126,7 @@ struct ProfileView: View {
                     // MARK: - Social
                     ProfileSection(title: "Social") {
                         ProfileFormGroup {
-                            ProfileFormRow(label: "Followers", icon: "person.2") { Text("Followers") }
-                            ProfileFormRow(label: "Following", icon: "person.badge.plus", isLast: true) { Text("Following") }
+                            ProfileFormRow(label: "Friends", icon: "person.2", isLast: true) { Text("Friends") }
                         }
                     }
 
