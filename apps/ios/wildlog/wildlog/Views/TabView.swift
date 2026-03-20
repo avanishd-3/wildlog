@@ -12,9 +12,10 @@ import SwiftUI
 // so we need to dip into UIKit to set UITabBarAppearance manually.
 struct UIKitTabView: UIViewControllerRepresentable {
     @Binding var selectedTab: Tabs
+    @Binding var homeData: HomePageParkRecommendations
     
     func makeUIViewController(context: Context) -> UIViewController {
-        let controller = UIHostingController(rootView: SwiftUITabView(selectedTab: $selectedTab))
+        let controller = UIHostingController(rootView: SwiftUITabView(selectedTab: $selectedTab, homeData: $homeData))
         
         // See: https://code-examples.net/en/q/4c170ed/mastering-uitabbarappearance-solving-icon-color-bugs-in-ios-26
         let appearance = UITabBarAppearance()
@@ -39,13 +40,14 @@ struct UIKitTabView: UIViewControllerRepresentable {
     
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
         if let hostingController = uiViewController as? UIHostingController<SwiftUITabView> {
-            hostingController.rootView = SwiftUITabView(selectedTab: $selectedTab)
+            hostingController.rootView = SwiftUITabView(selectedTab: $selectedTab, homeData: $homeData)
         }
     }
 }
 
 struct SwiftUITabView: View {
     @Binding var selectedTab: Tabs
+    @Binding var homeData: HomePageParkRecommendations
     
     private func handleTabUpdate() {
         debugPrint("New tab selected : \(selectedTab)")
@@ -57,7 +59,7 @@ struct SwiftUITabView: View {
                 handleTabUpdate()
             }) {
                 Tab("Home", systemImage: "house", value: .home) {
-                    HomeView()
+                    HomeView(homeData: $homeData)
                 }
                 Tab("Your Lists", systemImage: "list.bullet", value: .lists) {
                     ListView()
@@ -79,7 +81,7 @@ struct SwiftUITabView: View {
             TabView(selection: $selectedTab.onUpdate {
                 handleTabUpdate()
             }) {
-                HomeView().tabItem {
+                HomeView(homeData: $homeData).tabItem {
                     Label("Home", systemImage: "house")
                 }
                 .tag(Tabs.home)

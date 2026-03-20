@@ -19,6 +19,7 @@
 		A285AAAA2F3055CD00C0D9FA /* WildLog.icon in Resources */ = {isa = PBXBuildFile; fileRef = A285AAA82F3055CD00C0D9FA /* WildLog.icon */; };
 		A285AAAB2F3055CD00C0D9FA /* WildLog.icon in Resources */ = {isa = PBXBuildFile; fileRef = A285AAA82F3055CD00C0D9FA /* WildLog.icon */; };
 		A2B963BC2F3F9EEB00E86543 /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = A2B963BB2F3F9EEB00E86543 /* Apollo */; };
+		A2F0D6DF2F65DF9000BA1313 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = A2F0D6DE2F65DF9000BA1313 /* Kingfisher */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,6 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A2F0D6DF2F65DF9000BA1313 /* Kingfisher in Frameworks */,
 				A27F90E02F3FCA5400380225 /* WildLogAPI in Frameworks */,
 				A20373322F3FAF9400DE929C /* WildLogAPI in Frameworks */,
 				A2B963BC2F3F9EEB00E86543 /* Apollo in Frameworks */,
@@ -174,6 +176,7 @@
 				A2B963BB2F3F9EEB00E86543 /* Apollo */,
 				A20373312F3FAF9400DE929C /* WildLogAPI */,
 				A27F90DF2F3FCA5400380225 /* WildLogAPI */,
+				A2F0D6DE2F65DF9000BA1313 /* Kingfisher */,
 			);
 			productName = WildLog;
 			productReference = A27E39982F30542E0079200D /* WildLog.app */;
@@ -248,7 +251,7 @@
 					};
 				};
 			};
-			buildConfigurationList = A27E39932F30542E0079200D /* Build configuration list for PBXProject "wildlog" */;
+			buildConfigurationList = A27E39932F30542E0079200D /* Build configuration list for PBXProject "WildLog" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -260,6 +263,7 @@
 			packageReferences = (
 				A2B963BA2F3F9EEB00E86543 /* XCRemoteSwiftPackageReference "apollo-ios" */,
 				A20373302F3FAF9400DE929C /* XCLocalSwiftPackageReference "WildLogAPI" */,
+				A2F0D6DD2F65DF9000BA1313 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A27E39992F30542E0079200D /* Products */;
@@ -604,7 +608,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A27E39932F30542E0079200D /* Build configuration list for PBXProject "wildlog" */ = {
+		A27E39932F30542E0079200D /* Build configuration list for PBXProject "WildLog" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A27E39BC2F30542F0079200D /* Debug */,
@@ -658,6 +662,14 @@
 				minimumVersion = 2.0.6;
 			};
 		};
+		A2F0D6DD2F65DF9000BA1313 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.8.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -673,6 +685,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A2B963BA2F3F9EEB00E86543 /* XCRemoteSwiftPackageReference "apollo-ios" */;
 			productName = Apollo;
+		};
+		A2F0D6DE2F65DF9000BA1313 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A2F0D6DD2F65DF9000BA1313 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

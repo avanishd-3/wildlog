@@ -17,7 +17,7 @@ const ParkCostFilter = builder.enumType("ParkCostFilterEnum", {
   values: ["Free", "Low", "Medium", "High"] as const,
 });
 
-const park = builder.simpleObject("Park", {
+export const park = builder.simpleObject("Park", {
   fields: (t) => ({
     id: t.string({
       nullable: false,
@@ -78,7 +78,10 @@ builder.queryField("getParkMapRecommendations", (t) =>
     authScopes: {
       loggedIn: true, // Require authentication for this query
     },
-    resolve: async (_, args) => {
+    resolve: async (_, args, context) => {
+      if (!context.user?.id) {
+        throw new Error("User not authenticated"); // This should never happen due to authScopes, but just to satisfy TypeScript
+      }
       console.log("Received filters:", args.filters);
       const whereClauses = getParksFilters(args.filters);
       const parks = await getParkMapRecommendations(
@@ -86,6 +89,7 @@ builder.queryField("getParkMapRecommendations", (t) =>
         args.x_max,
         args.y_min,
         args.y_max,
+        context.user.id,
         args.filters,
         whereClauses,
       );
@@ -102,7 +106,6 @@ builder.queryField("getParkMapRecommendations", (t) =>
           type: park.type,
           cost: park.cost,
           free: park.free,
-          // Hardcoded url, fine for local dev (reverse proxy always on this url and port)
           imageUrl: await getParkImageUrl(park.publicId, park.imageId), // Get pre-signed URL for the park image from S3
         })),
       );

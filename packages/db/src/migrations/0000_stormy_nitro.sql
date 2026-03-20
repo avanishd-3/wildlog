@@ -1,6 +1,6 @@
 -- Custom SQL migration file, put your code below! --
 
-CREATE EXTENSION postgis;
+CREATE EXTENSION IF NOT EXISTS postgis;
 
 --> statement-breakpoint
 CREATE TYPE "public"."park_designation" AS ENUM('National Seashore', 'National Trail', 'State Vehicular Recreation Area', 'National Historic Site', 'National Military Park', 'National River', 'State Natural Reserve', 'National Parkway', 'State Marine Reserve', 'Memorial', 'National Park', 'Park Property', 'National Military Park Site', 'National Recreation Area', 'National Lakeshore', 'State Historic Site', 'State Historic Park', 'State Park', 'National Historic Park', 'National Reserve', 'State Beach', 'National Historical Park', 'Point of Interest', 'National Preserve', 'National Memorial', 'State Recreation Area', 'National Monument');--> statement-breakpoint

@@ -42,6 +42,11 @@ directive @defer(
 ) on FRAGMENT_SPREAD | INLINE_FRAGMENT
 
 type Mutation {
+  addToBucketList(parkPublicId: String!): Boolean
+  likePark(parkPublicId: String!): Boolean
+  mutateReview(parkPublicId: String!, rating: String!, review: String!, visitedAt: String!): Boolean
+  removeFromBucketList(parkPublicId: String!): Boolean
+  unlikePark(parkPublicId: String!): Boolean
   updateBaseUserInfo(name: String!, website: String!): User
   updateBio(bio: String!): User
 }
@@ -109,8 +114,39 @@ enum ParkTypeEnum {
 }
 
 type Query {
+  """Get all parks that the current user has bucket listed"""
+  bucketListedParks: [Park!]!
+  friendReviews: [ReviewDetailed!]
+
+  """Community recommendations"""
+  getCommunityRecommendations: [Park!]
+
+  """For you recommendations"""
+  getForYouRecommendations: [Park!]
   getParkMapRecommendations(filters: ParkFiltersInput, x_max: Float!, x_min: Float!, y_max: Float!, y_min: Float!): [Park!]
+  getUserReview(parkPublicId: String!): Review
+  isParkBucketListed(parkPublicId: String!): Boolean
+  isParkLiked(parkPublicId: String!): Boolean
+
+  """Get all parks that the current user has liked"""
+  likedParks: [Park!]!
   me: User
+  meReviews: [ReviewDetailed!]
+}
+
+type Review {
+  rating: String!
+  reviewText: String
+  visitedAt: String
+}
+
+type ReviewDetailed {
+  authorName: String!
+  id: String!
+  parkName: String!
+  rating: String!
+  reviewText: String
+  visitedDate: String!
 }
 
 type User {

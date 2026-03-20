@@ -1,0 +1,18 @@
+query getReviewPageRecommendations {
+    meReviews { # Don't need to get authorName b/c we know the author is the current user for this subquery
+        id
+        parkName
+        rating
+        reviewText
+        visitedDate
+    }
+
+    friendReviews {
+        id
+        authorName
+        parkName
+        rating
+        reviewText
+        visitedDate
+    }
+}

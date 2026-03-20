@@ -1,8 +1,15 @@
 import { graphDBDriver } from ".";
-import { db } from "@wildlog/db";
-import { park } from "@wildlog/db/schema/park";
 
-export const insertParksIntoGraph = async () => {
+type ParkSimplified = {
+  id: number;
+  publicId: string;
+  name: string;
+};
+
+// Need to get list of parks so this doesn't use the relational db
+// The relational DB needs to call the graph db to insert likes, bucket list, reviews
+// So we need to do this to avoid a circular dependency between the two databases
+export const insertParksIntoGraph = async (parksList: ParkSimplified[]) => {
   const driver = await graphDBDriver();
   const session = driver.session({ database: process.env.NEO4J_DATABASE });
   try {
@@ -17,11 +24,7 @@ export const insertParksIntoGraph = async () => {
     // Delete existing park nodes and relationships to avoid duplicates when seeding multiple times
     await session.run("MATCH (p:Park) DETACH DELETE p");
 
-    // Insert parks into graph DB
-
-    const parks = await db.select().from(park);
-
-    for (const p of parks) {
+    for (const p of parksList) {
       await session.run("CREATE (p:Park {id: $id, publicId: $publicId, name: $name})", {
         id: p.id,
         publicId: p.publicId,

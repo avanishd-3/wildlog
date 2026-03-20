@@ -29,9 +29,83 @@ struct Park: Identifiable, Codable, Hashable {
 // Custom init for Park
 // See: https://www.hackingwithswift.com/example-code/language/how-to-add-a-custom-initializer-to-a-struct-without-losing-its-memberwise-initializer
 extension Park {
-    // Create park based on result of graph ql query
-    // TODO: Add free, cost, and imageName to GraphQL API
+    // MARK: Create park based on result of graph ql query
+    // Having 3 different ones is duplication, but we only get results from these places, so it's fine
+    
+    
     init?(from gql: GetParkMapRecommendationsQuery.Data.GetParkMapRecommendation) {
+        guard let lat = gql.latitude, let lon = gql.longitude else { return nil }
+        self.init(
+            id: UUID(uuidString: gql.id) ?? UUID(),
+            name: gql.name,
+            description: gql.description,
+            designation: removeUnderscoreAndAllCaps(for: gql.designation.rawValue),
+            latitude: lat,
+            longitude: lon,
+            states: gql.states,
+            type: removeUnderscoreAndAllCaps(for: gql.type.rawValue),
+            free: gql.free,
+            cost: gql.cost,
+            imageName: nil,
+            imageUrl: gql.imageUrl
+        )
+    }
+    
+    init?(from gql: GetHomePageRecommendationsQuery.Data.GetCommunityRecommendation) {
+        guard let lat = gql.latitude, let lon = gql.longitude else { return nil }
+        self.init(
+            id: UUID(uuidString: gql.id) ?? UUID(),
+            name: gql.name,
+            description: gql.description,
+            designation: removeUnderscoreAndAllCaps(for: gql.designation.rawValue),
+            latitude: lat,
+            longitude: lon,
+            states: gql.states,
+            type: removeUnderscoreAndAllCaps(for: gql.type.rawValue),
+            free: gql.free,
+            cost: gql.cost,
+            imageName: nil,
+            imageUrl: gql.imageUrl
+        )
+    }
+    
+    init?(from gql: GetHomePageRecommendationsQuery.Data.GetForYouRecommendation) {
+        guard let lat = gql.latitude, let lon = gql.longitude else { return nil }
+        self.init(
+            id: UUID(uuidString: gql.id) ?? UUID(),
+            name: gql.name,
+            description: gql.description,
+            designation: removeUnderscoreAndAllCaps(for: gql.designation.rawValue),
+            latitude: lat,
+            longitude: lon,
+            states: gql.states,
+            type: removeUnderscoreAndAllCaps(for: gql.type.rawValue),
+            free: gql.free,
+            cost: gql.cost,
+            imageName: nil,
+            imageUrl: gql.imageUrl
+        )
+    }
+    
+    init?(from gql: GetLikedParksQuery.Data.LikedPark) {
+        guard let lat = gql.latitude, let lon = gql.longitude else { return nil }
+        self.init(
+            id: UUID(uuidString: gql.id) ?? UUID(),
+            name: gql.name,
+            description: gql.description,
+            designation: removeUnderscoreAndAllCaps(for: gql.designation.rawValue),
+            latitude: lat,
+            longitude: lon,
+            states: gql.states,
+            type: removeUnderscoreAndAllCaps(for: gql.type.rawValue),
+            free: gql.free,
+            cost: gql.cost,
+            imageName: nil,
+            imageUrl: gql.imageUrl
+        )
+    }
+    
+    init?(from gql: GetBucketListedParksQuery.Data.BucketListedPark) {
         guard let lat = gql.latitude, let lon = gql.longitude else { return nil }
         self.init(
             id: UUID(uuidString: gql.id) ?? UUID(),

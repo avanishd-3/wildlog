@@ -2,12 +2,76 @@ import { sql, and, cosineDistance, eq, desc, inArray } from "drizzle-orm";
 import { db } from "..";
 import { park, parkEmbedding, parkImage } from "../schema";
 import { computeEmbedding } from "@wildlog/embedding";
+import { userReview } from "../schema/user";
+
+export const getParkPublicIdsByInternalIds = async (idList: number[]) => {
+  const result = await db
+    .select({ publicId: park.publicId })
+    .from(park)
+    .where(inArray(park.id, idList));
+  return result.map((r) => r.publicId);
+};
+
+export const getParksByPublicIds = async (publicIdList: string[]) => {
+  const result = await db
+    .select({
+      publicId: park.publicId,
+      name: park.name,
+      description: park.description,
+      designation: park.designation,
+      states: park.states,
+      type: park.type,
+      cost: park.cost,
+      free: park.free,
+      latitude: sql`ST_Y(${park.location})`,
+      longitude: sql`ST_X(${park.location})`,
+      imageId: parkImage.imageId,
+    })
+    .from(park)
+    .where(inArray(park.publicId, publicIdList))
+    .innerJoin(parkImage, eq(park.id, parkImage.parkId)); // Join at the end for performance (only relevant parks)
+
+  return result;
+};
+
+export const randomlySampleParks = async (sampleSize: number, userId: string) => {
+  /**
+   * @description Randomly sample parks from the set of available parks. An available park is one that the user has not rated a 2.0 or less
+   * @argument sampleSize - the number of parks to sample
+   * @returns a list of parks with their publicId, name, description, designation, states, type, cost, free, latitude, longitude, and imageId
+   * @notes This is used to show users a random selection of parks when they first sign up to avoid the cold start problem.
+   */
+  const result = await db
+    .select({
+      publicId: park.publicId,
+      name: park.name,
+      description: park.description,
+      designation: park.designation,
+      states: park.states,
+      type: park.type,
+      cost: park.cost,
+      free: park.free,
+      latitude: sql`ST_Y(${park.location})`,
+      longitude: sql`ST_X(${park.location})`,
+      imageId: parkImage.imageId,
+    })
+    .from(park)
+    .where(
+      sql`NOT EXISTS (SELECT 1 FROM ${userReview} WHERE ${userReview}.park_id = ${park.id} AND ${userReview}.user_id = ${userId} AND ${userReview}.rating <= 2.0)`,
+    )
+    .orderBy(sql`RANDOM()`)
+    .limit(sampleSize)
+    .innerJoin(parkImage, eq(park.id, parkImage.parkId)); // Join at the end for performance (only relevant parks)
+
+  return result;
+};
 
 export const getParkMapRecommendations = async (
   x_min: number,
   x_max: number,
   y_min: number,
   y_max: number,
+  userId: string,
   filters?: any | null,
   where_clauses?: any | null,
 ) => {
@@ -24,6 +88,7 @@ export const getParkMapRecommendations = async (
 
     // Compute trigrams for search query
     // Ignoring bounding box here b/c user wants a specific park and we should return it even if it's far from them
+    // Ignoring low rated parks here because if they searched for it, they probably want to see it even if they rated it low before
     const similarTrigramParks = await db
       .select({
         id: park.id,
@@ -66,7 +131,14 @@ export const getParkMapRecommendations = async (
     const cosineSimilarity = sql<number>`1 - (${cosineDistance(parkEmbedding.embedding, queryEmbedding)})`;
 
     // Get parks within bounding box and apply filters, then order by similarity to search query
-    const filteredParks = await getParksByBoundingBox(x_min, x_max, y_min, y_max, where_clauses);
+    const filteredParks = await getParksByBoundingBox(
+      x_min,
+      x_max,
+      y_min,
+      y_max,
+      userId,
+      where_clauses,
+    );
 
     const filteredParkIds = filteredParks.map((park) => park.id);
 
@@ -93,7 +165,7 @@ export const getParkMapRecommendations = async (
       .limit(10) // Limit to top 10 results so users don't have that many options
       .innerJoin(parkImage, eq(park.id, parkImage.parkId)); // Join at the end to only use the parks we're interested in
   } else {
-    return getParksByBoundingBox(x_min, x_max, y_min, y_max, where_clauses);
+    return getParksByBoundingBox(x_min, x_max, y_min, y_max, userId, where_clauses);
   }
 };
 
@@ -102,6 +174,7 @@ const getParksByBoundingBox = async (
   x_max: number,
   y_min: number,
   y_max: number,
+  userId: string,
   filters?: any | null,
 ) => {
   /**
@@ -122,6 +195,11 @@ const getParksByBoundingBox = async (
   const boundingBoxClause = sql`ST_Within(${park.location}, ST_MakeEnvelope(${point.x1}, ${point.y1}, ${point.x2}, ${point.y2}, 4326))`;
 
   const where = filters ? [...filters, boundingBoxClause] : [boundingBoxClause];
+
+  // Filter out parks the user has rated a 2.0 or less
+  where.push(
+    sql`NOT EXISTS (SELECT 1 FROM ${userReview} WHERE ${userReview}.park_id = ${park.id} AND ${userReview}.user_id = ${userId} AND ${userReview}.rating <= 2.0)`,
+  );
 
   // Need to join with park-images table to get the image ID for each park
   return (

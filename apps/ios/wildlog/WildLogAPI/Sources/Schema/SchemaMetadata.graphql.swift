@@ -23,6 +23,8 @@ public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
     case "Mutation": return WildLogAPI.Objects.Mutation
     case "Park": return WildLogAPI.Objects.Park
     case "Query": return WildLogAPI.Objects.Query
+    case "Review": return WildLogAPI.Objects.Review
+    case "ReviewDetailed": return WildLogAPI.Objects.ReviewDetailed
     case "User": return WildLogAPI.Objects.User
     default: return nil
     }

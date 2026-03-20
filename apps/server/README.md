@@ -6,7 +6,8 @@ The server has the following endpoints.
 - `/api/auth`: auth endpoints (handled by Better Auth)
    - `/api/auth/reference`: OpenAPI specification for Better Auth handler
 - `/seed`: seed script for db park info (should **not** be used by client)
-- `/seed-embed`: seed script for db embeddings (should **not** be used by client)
+- `/seed-s3`: seed script for s3 (should **not** be used by client)
+- `/seed-test-data`: add test user visit and friend data
 - `/graphql`: endpoint for all GraphQL requests
 - `/graphiql`: UI for testing out queries (similar to Postman)
 - `/graphdb`: redirects to Neo4J browser (which is on localhost:7474)

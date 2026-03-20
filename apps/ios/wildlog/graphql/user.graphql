@@ -14,6 +14,51 @@ query getUserInfo {
   }
 }
 
+query getUserReview($parkPublicId: String!) {
+  getUserReview(parkPublicId: $parkPublicId) {
+    rating
+    reviewText
+    visitedAt
+  }
+}
+
+query getLikedParks {
+  likedParks {
+    id
+    name
+    description
+    designation
+    latitude
+    longitude
+    states
+    type
+    cost
+    free
+    imageUrl
+  }
+}
+
+query getBucketListedParks {
+  bucketListedParks {
+    id
+    name
+    description
+    designation
+    latitude
+    longitude
+    states
+    type
+    cost
+    free
+    imageUrl
+  }
+}
+
+query LikeAndBucketListStatus($parkPublicId: String!) {
+  isParkLiked(parkPublicId: $parkPublicId)
+  isParkBucketListed(parkPublicId: $parkPublicId)
+}
+
 mutation updateBio($bio: String!) {
   updateBio(bio: $bio) {
     bio
@@ -25,4 +70,24 @@ mutation updateUserInfo($name: String!, $website: String!) {
     name
     website
   }
+}
+
+mutation likePark($parkPublicId: String!) {
+  likePark(parkPublicId: $parkPublicId)
+}
+
+mutation addParktoBucketList($parkPublicId: String!) {
+  addToBucketList(parkPublicId: $parkPublicId)
+}
+
+mutation unlikePark($parkPublicId: String!) {
+  unlikePark(parkPublicId: $parkPublicId)
+}
+
+mutation removeParkFromBucketList($parkPublicId: String!) {
+  removeFromBucketList(parkPublicId: $parkPublicId)
+}
+
+mutation submitReview($parkPublicId: String!, $review: String!, $rating: String!, $visitedAt: String!) {
+  mutateReview(parkPublicId: $parkPublicId, review: $review, rating: $rating, visitedAt: $visitedAt)
 }

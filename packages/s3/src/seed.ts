@@ -24,6 +24,30 @@ export async function seedS3() {
   // It uses a per-bucket, per-key access policy b/c it's much simpler than AWS policy config stuff
   console.log("Beginning S3 seeding...");
 
+  // Delete from parkImages and send delete object request for all objects in the bucket to start with a clean slate
+  console.log("Deleting existing park images from S3 and database...");
+  const existingParkImages = await db.select().from(parkImage);
+  await Promise.all(
+    existingParkImages.map(async (parkImage) => {
+      try {
+        const deleteObjectCommand = new PutObjectCommand({
+          Bucket: "park-images",
+          Key: `${parkImage.parkId}/${parkImage.imageId}.jpg`,
+        });
+
+        await s3.send(deleteObjectCommand);
+      } catch (error) {
+        console.error(
+          `Error deleting image with ID ${parkImage.imageId} for park ID ${parkImage.parkId}:`,
+          error,
+        );
+        // Continue deleting other images even if one fails
+      }
+    }),
+  );
+  await db.delete(parkImage);
+  console.log("Deleted existing park images from S3 and database");
+
   // Insert images from .../apps/data/park_images folder into the bucket
   // Also need to insert the image into the parkImages table in the relational database
   const parks = await db

@@ -6,38 +6,50 @@
 //
 
 import SwiftUI
-
-// TODO: Replace with Apollo query that fetches user's liked parks from backend
-// Query should return parks where user has created a "like" relationship in Neo4j
+import WildLogAPI
 
 struct LikedParksView: View {
     @Environment(LikeManager.self) private var likeManager
-    
-    // TODO: This will be replaced with actual Park objects from GraphQL
-    // For now just showing the IDs
+    @State private var likedParks: [Park] = []
+    @State private var fetchErrorFlag: Bool = false
     
     var body: some View {
         NavigationStack {
-            if likeManager.likedParkIds.isEmpty {
-                ContentUnavailableView(
-                    "No Liked Parks",
-                    systemImage: "heart.slash",
-                    description: Text("Parks you like will appear here")
-                )
-            } else {
-                List {
-                    // TODO: Replace with ForEach over actual Park objects from Apollo query
-                    ForEach(Array(likeManager.likedParkIds), id: \.self) { parkId in
-                        HStack {
-                            Image(systemName: "heart.fill")
-                                .foregroundStyle(.red)
-                            Text("Park ID: \(parkId)")
-                            // TODO: Show actual park name, image, etc from Park object
-                        }
-                    }
-                }
-                .navigationTitle("Liked Parks")
+            if fetchErrorFlag {
+                Text("Error fetching liked parks... Please try again later.")
+
             }
+            
+            else {
+                GridView(parks: likedParks)
+            }
+        }
+        .navigationTitle("Liked Parks")
+        .task {
+            do {
+                // Clearing entire cache is fine b/c going into bucket list page is not very common
+                try await apolloClient.store.clearCache()
+                let response = try await apolloClient.fetch(query: GetLikedParksQuery())
+                if let parksResponse = response.data?.likedParks {
+                    likedParks = parksResponse.compactMap { Park(from: $0) }
+                }
+            } catch {
+                fetchErrorFlag = true
+            }
+        }
+        .onChange(of: likeManager.likedParkIds) {
+            Task {
+                do {
+                    try await apolloClient.store.clearCache()
+                    let response = try await apolloClient.fetch(query: GetLikedParksQuery())
+                    if let parksResponse = response.data?.likedParks {
+                        likedParks = parksResponse.compactMap { Park(from: $0) }
+                    }
+                } catch {
+                    fetchErrorFlag = true
+                }
+            }
+            
         }
     }
 }

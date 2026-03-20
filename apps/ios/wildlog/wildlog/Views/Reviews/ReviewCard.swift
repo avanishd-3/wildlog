@@ -7,23 +7,9 @@
 
 import SwiftUI
 
-// Model
-
-// The local struct will likely be replaced with Apollo generated type once codegen is set up
-struct ParkReview: Identifiable {
-    let id = UUID()
-    let authorName: String      // TODO: joined from User table
-    let authorInitials: String // TODO: derived from authorName
-    let parkName: String // TODO: joined from Park table
-    let rating: Double  // Stored in DB increments of .25 out of 8
-    let description: String
-    let visitedDate: Date
-    var isCurrentUser: Bool = false //TODO: derive by comparing userId to session
-}
 
 // Star Rating Display
-
-// TODO: Pull real ratings from the DB
+// Reviws tab doesn't need the sliding capability of the write reviews reviews (rating is immutable here)
 struct StarRatingView: View {
     let rating: Double
     let maxRating: Int = 5
@@ -77,8 +63,8 @@ struct ReviewCard: View {
 
 #Preview {
     ReviewCard(review: ParkReview(
+        id: UUID(),
         authorName: "Alex Kim",
-        authorInitials: "AK",
         parkName: "Yosemite National Park",
         rating: 4.5,
         description: "El Capitan at sunrise is worth every early alarm.",

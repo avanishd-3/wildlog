@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WildLogAPI
 
 // Manages bucket list across the app
 // TODO: Wire this to Apollo mutations for creating/deleting bucket list items in the backend
@@ -41,13 +42,36 @@ class BucketListManager {
         bucketListParkIds.contains(parkId)
     }
     
+    // So can auto-set when receiving like status from API
+    func addtoBucketList(for parkId: String) {
+        if !bucketListParkIds.contains(parkId) {
+            bucketListParkIds.insert(parkId)
+            
+        }
+    }
+    
     func toggleBucketList(for parkId: String) {
         if bucketListParkIds.contains(parkId) {
             bucketListParkIds.remove(parkId)
-            // TODO: Call Apollo mutation to delete bucket list item from backend
+            Task {
+                do {
+                    let _ = try await apolloClient.perform(mutation: RemoveParkFromBucketListMutation(parkPublicId: parkId))
+                    
+                    // Do nothing, removing anyway
+                }
+            }
         } else {
             bucketListParkIds.insert(parkId)
-            // TODO: Call Apollo mutation to create bucket list item in backend
+            Task {
+                do {
+                    let response = try await apolloClient.perform(mutation: AddParktoBucketListMutation(parkPublicId: parkId))
+                    
+                    //
+                    if !(response.data?.addToBucketList ?? false) {
+                        bucketListParkIds.remove(parkId)
+                    }
+                }
+            }
         }
     }
 }

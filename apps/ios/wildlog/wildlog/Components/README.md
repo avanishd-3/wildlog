@@ -13,10 +13,6 @@ The custom form wraps this in a familiar interface, allowing the entire page to 
 
 Only use this if you have this use case. If the entire page is a form, use the default form.
 
-## SecureField Component
-
-This just augments the secure field with an eye slash icon the user can toggle on and off for visibility. When they toggle the button, it switches from a secure field to a text field (and vice versa).
-
 ## Map Components
 
 The default map over-rides the tab color, and it's quite limited, so we need to use UI Kit. UI Kit is equivalent to the iOS 17+ Map API, it's just more verbose. In fact, the iOS 17+ Map API is just an abstraction over UI Kit.
@@ -35,10 +31,14 @@ The MapsControlContainer is for the blur around the buttons. Previously, I was d
 
 We will have to use this quite a bit, especially because maps are a prominent part of our app.
 
+## ParkContainer Components
+These components are for the views that hold the park image. CarouselViewHorizontal and GridView are for layout, and ParkNav is so when the user clicks on a park image, they get the full park detail view with all the park information.
+
+## RemoteImage Component
+
+A good default for fetching images remotely. It uses Kinfisher to cache the image (AsyncImage doesn't do this) and moves image decoding to a background thread to prevent frame drop issues. Use this when fetching remote images, unless you require more customization (if you do, you can probably even extend this component)
+
+
 ## Summary
 
-| Component(s) | Style   |
-| ------------ | ------- |
-| Form         | SwiftUI |
-| SecureField         | SwiftUI |
-| Map          | UI Kit  |
+Only the Map folder has UIKit components. Everything else is Swift UI.

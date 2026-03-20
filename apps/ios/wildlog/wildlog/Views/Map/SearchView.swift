@@ -36,7 +36,6 @@ struct SearchView: View {
             mapView: $mapView
         )
         // Show filter sheet when the user navigates to the search tab
-        // Potentional TODO: toggle on/off the filter tab
         .onAppear {
             activeSheet = .filters
         }

@@ -183,7 +183,7 @@ class AuthenticationManager {
         }
         
         // Reset Apollo cache
-        try await Network.shared.apolloClient.clearCache()
+        try await apolloClient.store.clearCache()
     }
     
     func deleteAccount(password: String) async throws {

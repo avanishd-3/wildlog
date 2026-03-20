@@ -17,6 +17,9 @@ import z from "zod";
 import { closeDriver } from "@wildlog/graph-db";
 import { insertParksIntoGraph } from "@wildlog/graph-db/seed";
 import { createUser, deleteUser } from "@wildlog/graph-db/mutations/user";
+import { db } from "@wildlog/db";
+import { park } from "@wildlog/db/schema/park";
+import { seedTestData } from "./seed-random";
 
 // ---- So TS doesn't complain when adding decorators ----
 
@@ -181,7 +184,12 @@ app.get("/seed", async (_request, reply) => {
   }
 
   try {
-    await insertParksIntoGraph();
+    // Pass in parks to avoid circular dependency between relational and graph DBs
+    // Relational DB needs to call graph DB to insert likes, bucket list, reviews
+    const parks = await db
+      .select({ id: park.id, publicId: park.publicId, name: park.name })
+      .from(park);
+    await insertParksIntoGraph(parks);
     reply.send({ message: "Relational and graph database seeded successfully" });
   } catch (error) {
     console.error("Error seeding graph database:", error);
@@ -199,6 +207,17 @@ app.get("/seed-s3", async (_request, reply) => {
   } catch {
     // console.error("Error seeding S3:", error);
     reply.status(500).send({ error: "Failed to seed S3" });
+  }
+});
+
+// Seed random users, friends, and reviews for testing
+app.get("/seed-test-data", async (_request, reply) => {
+  try {
+    await seedTestData();
+    reply.send({ message: "Test data seeded successfully" });
+  } catch (error) {
+    console.error("Error seeding test data:", error);
+    reply.status(500).send({ error: "Failed to seed test data" });
   }
 });
 
